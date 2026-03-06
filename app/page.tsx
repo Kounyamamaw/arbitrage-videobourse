@@ -6,7 +6,7 @@ import { Broker } from "@/lib/brokers";
 import { ArrowRight, ShieldCheck, RefreshCw, BarChart3, TrendingUp, Users, Award } from "lucide-react";
 import { CategoryCard } from "@/components/home/CategoryCard";
 
-const TOP_BROKERS = (brokersData as Broker[])
+const TOP_BROKERS = (brokersData as unknown as Broker[])
   .sort((a, z) => z.score_overall - a.score_overall)
   .slice(0, 3);
 
