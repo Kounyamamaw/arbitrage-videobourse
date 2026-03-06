@@ -80,9 +80,9 @@ function extractFees(html: string, brokerName: string) {
   const cto   = textContent.includes("cto") || textContent.includes("compte-titres");
   const av    = textContent.includes("assurance-vie") || textContent.includes("assurance vie");
 
-  if (pea)  { fields.has_pea = true; fieldsFound++; }
-  if (cto)  { fields.has_cto = true; fieldsFound++; }
-  if (av)   { fields.has_av  = true; fieldsFound++; }
+ if (pea) { (fields as any).has_pea = true; fieldsFound++; }
+ if (cto) { (fields as any).has_cto = true; fieldsFound++; }
+ if (av)  { (fields as any).has_av  = true; fieldsFound++; }
 
   // Check for logo URL
   const logoUrl = $('meta[property="og:image"]').attr("content") ||
