@@ -6,7 +6,7 @@ import { BrokerDetailClient } from "@/components/brokers/BrokerDetailClient";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
 export async function generateStaticParams() {
-  return (brokersData as Broker[]).map((b) => ({ slug: b.slug }));
+  return (brokersData as unknown as Broker[]).map((b) => ({ slug: b.slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
