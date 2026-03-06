@@ -41,7 +41,8 @@ export type Broker = {
   custody_fee: number;
   inactivity_fee: number;
   currency_fee: number;
-  features: BrokerFeatures;
+  features?: BrokerFeatures; 
+  withdrawal_fee_details?: string;
   best_for: string[];
   markets_available?: string[];
   order_types?: string[];
