@@ -5,12 +5,15 @@ import { Broker } from "@/lib/brokers";
 import { BrokerDetailClient } from "@/components/brokers/BrokerDetailClient";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
+// On définit une constante propre pour éviter de répéter le "as unknown as Broker[]"
+const allBrokers = brokersData as unknown as Broker[];
+
 export async function generateStaticParams() {
-  return (brokersData as unknown as Broker[]).map((b) => ({ slug: b.slug }));
+  return allBrokers.map((b) => ({ slug: b.slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const broker = (brokersData as Broker[]).find((b) => b.slug === params.slug);
+  const broker = allBrokers.find((b) => b.slug === params.slug);
   if (!broker) return {};
   return {
     title: `${broker.name} — Avis & Frais 2025`,
@@ -19,10 +22,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default function BrokerDetailPage({ params }: { params: { slug: string } }) {
-  const broker = (brokersData as Broker[]).find((b) => b.slug === params.slug);
+  const broker = allBrokers.find((b) => b.slug === params.slug);
   if (!broker) notFound();
-
-  const allBrokers = brokersData as Broker[];
 
   return (
     <div style={{ backgroundColor: "var(--bg)", minHeight: "100vh" }}>
