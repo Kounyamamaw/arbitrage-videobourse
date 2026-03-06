@@ -5,7 +5,7 @@ import { Broker, rankBrokers, estimateAnnualFees } from "@/lib/brokers";
 import { BrokerCard } from "@/components/brokers/BrokerCard";
 import { ArrowLeft, RotateCcw } from "lucide-react";
 
-const brokers = brokersData as Broker[];
+const brokers = (brokersData as unknown) as Broker[];
 
 type SearchParams = {
   objective?:      string;
