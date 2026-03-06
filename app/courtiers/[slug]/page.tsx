@@ -5,8 +5,8 @@ import { Broker } from "@/lib/brokers";
 import { BrokerDetailClient } from "@/components/brokers/BrokerDetailClient";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
-// On définit une constante propre pour éviter de répéter le "as unknown as Broker[]"
-const allBrokers = brokersData as unknown as Broker[];
+// On définit une constante propre pour éviter de répéter le "as unknown as unknown as Broker[]"
+const allBrokers = brokersData as unknown as unknown as Broker[];
 
 export async function generateStaticParams() {
   return allBrokers.map((b) => ({ slug: b.slug }));

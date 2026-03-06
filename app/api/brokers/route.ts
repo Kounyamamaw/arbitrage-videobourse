@@ -3,7 +3,7 @@ import brokersData from "@/data/brokers.json";
 import { Broker } from "@/lib/brokers";
 
 // @ts-ignore
-const brokers = brokersData as any as Broker[];
+const brokers = brokersData as any as unknown as Broker[];
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);

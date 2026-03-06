@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import brokersData from "@/data/brokers.json";
 import { Broker } from "@/lib/brokers";
 
-const brokers = (brokersData as unknown) as Broker[];
+const brokers = (brokersData as unknown) as unknown as Broker[];
 
 export async function GET(
   request: NextRequest,

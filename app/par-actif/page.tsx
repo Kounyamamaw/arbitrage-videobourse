@@ -77,7 +77,7 @@ export default function ParActifPage() {
   const [selected, setSelected] = useState<string>("etf");
   const asset = ASSET_TYPES.find((a) => a.id === selected)!;
 
-  const brokers = (brokersData as Broker[])
+  const brokers = (brokersData as unknown as Broker[])
     .filter(
       (b) =>
         asset.categories.includes(b.category) &&

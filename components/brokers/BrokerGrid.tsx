@@ -7,7 +7,7 @@ import { BrokerCard } from "./BrokerCard";
 import { Search, X } from "lucide-react";
 import brokersData from "@/data/brokers.json";
 
-const ALL_BROKERS = brokersData as Broker[];
+const ALL_BROKERS = brokersData as unknown as Broker[];
 
 export function BrokerGrid() {
   const { category, accountType, sortBy, maxDeposit } = useFilterStore();
