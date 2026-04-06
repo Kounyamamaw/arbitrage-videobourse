@@ -1,0 +1,359 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@import './theme.css';
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Global scrollbar styling to match ScrollArea */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground);
+  }
+}
+
+/* View Transition Wave Effect */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  /* Ensure the outgoing view (old theme) is beneath */
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  /* Ensure the incoming view (new theme) is always on top */
+  z-index: 1;
+}
+
+@keyframes reveal {
+  from {
+    /* Use CSS variables for the origin, defaulting to center if not set */
+    clip-path: circle(0% at var(--x, 50%) var(--y, 50%));
+    opacity: 0.7;
+  }
+  to {
+    /* Use CSS variables for the origin, defaulting to center if not set */
+    clip-path: circle(150% at var(--x, 50%) var(--y, 50%));
+    opacity: 1;
+  }
+}
+
+::view-transition-new(root) {
+  /* Apply the reveal animation */
+  animation: reveal 0.4s ease-in-out forwards;
+}
+
+
+/* ArbitrAge tokens — bridge for videobourse components */
+/* Uses var() directly since themes use oklch() not raw hsl values */
+:root {
+  --bg: var(--background);
+  --surface: var(--card);
+  --card-bg: var(--card);
+  --border-color: var(--border);
+  --border-light: color-mix(in oklch, var(--border) 50%, transparent);
+  --text: var(--foreground);
+  --text-muted: var(--muted-foreground);
+  --text-faint: color-mix(in oklch, var(--muted-foreground) 60%, transparent);
+  --accent: var(--primary);
+  --accent-hover: color-mix(in oklch, var(--primary) 90%, black);
+  --accent-light: color-mix(in oklch, var(--primary) 10%, var(--background));
+  --accent-mid: color-mix(in oklch, var(--primary) 30%, var(--background));
+  --accent-text: var(--primary);
+  --positive: #10936a;
+  --positive-bg: #edfaf4;
+  --negative: #d1412a;
+  --negative-bg: #fef2f0;
+  --warning: #c07a10;
+  --warning-bg: #fef9ec;
+  --green: #10936a;
+  --amber: #c07a10;
+  --tint-blue: color-mix(in oklch, var(--primary) 5%, var(--background));
+  --tint-amber: color-mix(in oklch, oklch(0.75 0.15 70) 6%, var(--background));
+  --tint-purple: color-mix(in oklch, oklch(0.55 0.2 300) 6%, var(--background));
+  --tint-rose: color-mix(in oklch, oklch(0.6 0.2 350) 6%, var(--background));
+  --tint-green: color-mix(in oklch, oklch(0.6 0.15 160) 6%, var(--background));
+  --tint-orange: color-mix(in oklch, oklch(0.7 0.15 50) 6%, var(--background));
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 28px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.04);
+  --font-sora: var(--font-sans);
+  --font-dm-sans: var(--font-sans);
+}
+
+/* Dark mode overrides for hardcoded colors */
+.dark {
+  --positive-bg: color-mix(in oklch, #10936a 15%, var(--background));
+  --negative-bg: color-mix(in oklch, #d1412a 15%, var(--background));
+  --warning-bg: color-mix(in oklch, #c07a10 15%, var(--background));
+}
+
+/* Utility classes for videobourse components */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+}
+.tag-accent {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+  background-color: var(--accent-light);
+  border: 1px solid var(--accent-mid);
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-foreground);
+  background-color: var(--primary);
+  border: none;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+  text-decoration: none;
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 150ms ease;
+  text-decoration: none;
+}
+.btn-secondary:hover { background-color: var(--accent); color: var(--accent-foreground); }
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+.btn-ghost:hover { color: var(--foreground); }
+.spinner {
+  border: 2px solid transparent;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Table styles for fee tier tables in broker detail */
+.broker-card table,
+[style*="borderRadius"] table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.broker-card th,
+[style*="borderRadius"] th,
+.broker-card td,
+[style*="borderRadius"] td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.broker-card th,
+[style*="borderRadius"] th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+  background-color: var(--muted);
+}
+
+
+/* ===================================================================
+   CHART COLORS — Override mono theme's all-gray charts
+   =================================================================== */
+[data-theme='mono'] {
+  --chart-1: oklch(0.55 0.15 250);   /* Bleu */
+  --chart-2: oklch(0.6 0.18 160);    /* Vert */
+  --chart-3: oklch(0.65 0.15 40);    /* Orange */
+  --chart-4: oklch(0.5 0.2 300);     /* Violet */
+  --chart-5: oklch(0.6 0.15 350);    /* Rose */
+}
+[data-theme='mono'].dark {
+  --chart-1: oklch(0.7 0.15 250);
+  --chart-2: oklch(0.7 0.18 160);
+  --chart-3: oklch(0.75 0.15 40);
+  --chart-4: oklch(0.65 0.2 300);
+  --chart-5: oklch(0.7 0.15 350);
+}
+
+/* ===================================================================
+   RESPONSIVE FIXES — mobile/tablet adaptations
+   =================================================================== */
+
+/* Broker detail: stack stat cards on mobile */
+@media (max-width: 768px) {
+  .broker-card {
+    padding: 14px !important;
+  }
+}
+
+/* Recharts responsive — prevent overflow */
+.recharts-wrapper {
+  max-width: 100%;
+}
+
+/* ETF page grid on mobile */
+@media (max-width: 640px) {
+  [style*="gridTemplateColumns: repeat(2"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*='gridTemplateColumns: selectedETF'] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Compare wizard — single column objectives on mobile */
+@media (max-width: 640px) {
+  [style*="gridTemplateColumns: repeat(2, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Conseiller IA — full width on mobile */
+@media (max-width: 640px) {
+  [style*="gridTemplateColumns: repeat(2, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ===================================================================
+   ARBITRAGE THEME SOUL — Refined blue accent on mono base
+   Keeps the mono minimalism but adds a signature color
+   =================================================================== */
+[data-theme='mono'] {
+  /* Signature blue — refined, not flashy */
+  --primary: oklch(0.52 0.12 250);
+  --primary-foreground: oklch(0.98 0 0);
+  --ring: oklch(0.52 0.12 250);
+  
+  /* Slightly warm backgrounds instead of pure white */
+  --background: oklch(0.988 0.002 250);
+  --card: oklch(1 0 0);
+  --muted: oklch(0.965 0.003 250);
+  
+  /* Subtle border with a hint of blue */
+  --border: oklch(0.91 0.005 250);
+  --input: oklch(0.91 0.005 250);
+  
+  /* Sidebar with personality */
+  --sidebar: oklch(0.975 0.003 250);
+  --sidebar-primary: oklch(0.52 0.12 250);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.95 0.01 250);
+  --sidebar-border: oklch(0.91 0.005 250);
+  
+  /* Subtle radius — not brutalist, not bubbly */
+  --radius: 0.5rem;
+}
+
+[data-theme='mono'].dark {
+  /* Dark mode — deep navy-black instead of pure black */
+  --primary: oklch(0.65 0.12 250);
+  --primary-foreground: oklch(0.1 0 0);
+  --ring: oklch(0.65 0.12 250);
+  
+  --background: oklch(0.12 0.008 250);
+  --foreground: oklch(0.93 0 0);
+  --card: oklch(0.15 0.01 250);
+  --card-foreground: oklch(0.93 0 0);
+  --muted: oklch(0.2 0.01 250);
+  --muted-foreground: oklch(0.6 0 0);
+  
+  --border: oklch(0.25 0.01 250);
+  --input: oklch(0.25 0.01 250);
+  
+  --sidebar: oklch(0.13 0.008 250);
+  --sidebar-foreground: oklch(0.93 0 0);
+  --sidebar-primary: oklch(0.65 0.12 250);
+  --sidebar-primary-foreground: oklch(0.1 0 0);
+  --sidebar-accent: oklch(0.18 0.01 250);
+  --sidebar-accent-foreground: oklch(0.93 0 0);
+  --sidebar-border: oklch(0.25 0.01 250);
+}
+
+/* Force light theme on landing page regardless of system preference */
+.force-light {
+  color-scheme: light !important;
+  --background: oklch(0.988 0.002 250) !important;
+  --foreground: oklch(0.1448 0 0) !important;
+  --card: oklch(1 0 0) !important;
+  --card-foreground: oklch(0.1448 0 0) !important;
+  --primary: oklch(0.52 0.12 250) !important;
+  --primary-foreground: oklch(0.98 0 0) !important;
+  --muted: oklch(0.965 0.003 250) !important;
+  --muted-foreground: oklch(0.5486 0 0) !important;
+  --border: oklch(0.91 0.005 250) !important;
+  --input: oklch(0.91 0.005 250) !important;
+  --accent: oklch(0.965 0.003 250) !important;
+  --accent-foreground: oklch(0.2046 0 0) !important;
+  --ring: oklch(0.52 0.12 250) !important;
+}

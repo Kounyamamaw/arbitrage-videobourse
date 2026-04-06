@@ -1,0 +1,1469 @@
+[
+  {
+    "id": "bourse-direct",
+    "slug": "bourse-direct",
+    "name": "Bourse Direct",
+    "category": "broker",
+    "logo": "/logos/bourse-direct.svg",
+    "logoColor": "#E84A1C",
+    "tagline": "Le courtier low-cost de référence depuis 1995",
+    "deposit_minimum": 0,
+    "accounts": [
+      "PEA",
+      "CTO",
+      "PEA-PME"
+    ],
+    "founded": 1995,
+    "country": "FR",
+    "regulation": [
+      "AMF",
+      "ACPR"
+    ],
+    "trustpilot_score": 3.4,
+    "trustpilot_count": 1240,
+    "affiliate_url": "https://www.boursedirect.fr",
+    "score_overall": 8.2,
+    "score_fees": 9.1,
+    "score_reliability": 8.5,
+    "score_ux": 6.5,
+    "pros": [
+      "Frais parmi les plus bas du marché pour petits ordres",
+      "PEA, CTO, PEA-PME disponibles sans dépôt minimum",
+      "Acteur français régulé AMF depuis 30 ans",
+      "Accès complet aux marchés Euronext et européens"
+    ],
+    "cons": [
+      "Interface web datée, peu intuitive",
+      "Application mobile basique",
+      "Frais US parmi les plus élevés de notre sélection"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": 500,
+          "type": "flat",
+          "amount": 0.99
+        },
+        {
+          "min": 500,
+          "max": 2000,
+          "type": "flat",
+          "amount": 1.9
+        },
+        {
+          "min": 2000,
+          "max": 50000,
+          "type": "percentage",
+          "amount": 0.09
+        },
+        {
+          "min": 50000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.09
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": 500,
+          "type": "flat",
+          "amount": 3.8
+        },
+        {
+          "min": 500,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.2
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 5.7
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "0€ droits de garde sur tous marchés — avantage majeur",
+    "inactivity_fee": 0,
+    "inactivity_fee_details": "Aucun frais d'inactivité",
+    "currency_fee": 0.5,
+    "currency_fee_details": "0,50% sur change €/USD, minimum 5€",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "1% retenu à la source sur dividendes étrangers (hors convention fiscale)",
+    "ost_fee": "Gratuit pour OST ordinaires (split, dividendes). OPA/OPAS : 7,50€",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "25€ par ligne transférée vers un autre établissement",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Déclenchement",
+      "Stop"
+    ],
+    "markets_available": [
+      "Euronext Paris",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
+      "NYSE",
+      "NASDAQ",
+      "Frankfurt",
+      "London"
+    ],
+    "etf_count": 1200,
+    "welcome_offer": "Aucune offre active en 2025",
+    "pea_max_deposit": 150000,
+    "best_for": [
+      "Investisseur régulier PEA",
+      "Petits ordres français",
+      "Budget serré"
+    ],
+    "website": "boursedirect.fr",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "options",
+      "futures",
+      "obligations"
+    ],
+    "level": "intermediaire",
+    "is_foreign": false,
+    "provides_ifu": true,
+    "platforms": [
+      "prt"
+    ],
+    "has_dca": true,
+    "has_fractions": false
+  },
+  {
+    "id": "fortuneo",
+    "slug": "fortuneo",
+    "name": "Fortuneo",
+    "category": "broker",
+    "logo": "/logos/fortuneo.svg",
+    "logoColor": "#00A651",
+    "tagline": "Banque en ligne + courtier, le meilleur compromis",
+    "deposit_minimum": 0,
+    "accounts": [
+      "PEA",
+      "CTO",
+      "PEA-PME",
+      "AV"
+    ],
+    "founded": 2000,
+    "country": "FR",
+    "regulation": [
+      "AMF",
+      "ACPR"
+    ],
+    "trustpilot_score": 4.1,
+    "trustpilot_count": 3820,
+    "affiliate_url": "https://www.fortuneo.fr",
+    "score_overall": 8.6,
+    "score_fees": 8.0,
+    "score_reliability": 9.0,
+    "score_ux": 8.0,
+    "pros": [
+      "Banque + courtier dans la même application",
+      "Carte Mastercard gratuite (sous condition activité)",
+      "Groupe Crédit Mutuel Arkéa — très solide",
+      "Interface web et mobile moderne et ergonomique",
+      "Assurance-vie Fortuneo Vie de qualité"
+    ],
+    "cons": [
+      "Frais US et Europe plus élevés que les néo-brokers",
+      "Frais de change 0,50% minimum 9€ — pénalisant",
+      "Certaines fonctionnalités avancées absentes"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": 500,
+          "type": "flat",
+          "amount": 1.95
+        },
+        {
+          "min": 500,
+          "max": 2000,
+          "type": "flat",
+          "amount": 3.9
+        },
+        {
+          "min": 2000,
+          "max": 50000,
+          "type": "percentage",
+          "amount": 0.2
+        },
+        {
+          "min": 50000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.1
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": 1000,
+          "type": "flat",
+          "amount": 3.9
+        },
+        {
+          "min": 1000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.25
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": 1000,
+          "type": "flat",
+          "amount": 5.9
+        },
+        {
+          "min": 1000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.35
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "0€ droits de garde depuis 2020",
+    "inactivity_fee": 0,
+    "inactivity_fee_details": "Aucun frais d'inactivité",
+    "currency_fee": 0.5,
+    "currency_fee_details": "0,50% minimum 9€ — à éviter pour les petits ordres US",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "Prélèvement automatique selon convention fiscale. Remboursement possible sur demande.",
+    "ost_fee": "Gratuit pour OST courants",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "25€ par ligne + 50€ frais de dossier de transfert PEA",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Stop loss",
+      "Stop limit",
+      "Trailing stop"
+    ],
+    "markets_available": [
+      "Euronext Paris",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
+      "NYSE",
+      "NASDAQ",
+      "London",
+      "Frankfurt",
+      "Madrid"
+    ],
+    "etf_count": 1500,
+    "welcome_offer": "Jusqu'à 100€ offerts pour toute ouverture PEA en 2025 (sous conditions)",
+    "pea_max_deposit": 150000,
+    "best_for": [
+      "Tout profil",
+      "PEA + compte courant",
+      "Investisseur moyen terme"
+    ],
+    "website": "fortuneo.fr",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "obligations"
+    ],
+    "level": "debutant",
+    "is_foreign": false,
+    "provides_ifu": true,
+    "platforms": [],
+    "has_dca": true,
+    "has_fractions": false
+  },
+  {
+    "id": "xtb",
+    "slug": "xtb",
+    "name": "XTB",
+    "category": "broker",
+    "logo": "/logos/xtb.svg",
+    "logoColor": "#FF5000",
+    "tagline": "0% frais sur actions et ETF jusqu'à 100 000€/mois",
+    "deposit_minimum": 0,
+    "accounts": [
+      "PEA",
+      "CTO"
+    ],
+    "founded": 2002,
+    "country": "PL",
+    "regulation": [
+      "AMF",
+      "KNF",
+      "FCA"
+    ],
+    "trustpilot_score": 4.5,
+    "trustpilot_count": 28400,
+    "affiliate_url": "https://www.xtb.com/fr",
+    "score_overall": 8.8,
+    "score_fees": 9.8,
+    "score_reliability": 8.5,
+    "score_ux": 8.5,
+    "pros": [
+      "0% frais de courtage jusqu'à 100 000€ d'ordres/mois",
+      "PEA ouvert depuis 2025 — réel avantage fiscal",
+      "Plateforme xStation ultra moderne et rapide",
+      "Rémunération des liquidités jusqu'à 4,2% (annualisé)",
+      "Actions fractionnées disponibles"
+    ],
+    "cons": [
+      "Au-delà de 100k€/mois : 0,2% de frais sur l'excédent",
+      "Frais d'inactivité 10€/mois après 12 mois sans activité",
+      "Siège en Pologne — garantie dépôts hors France (KNF)"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": 100000,
+          "type": "flat",
+          "amount": 0
+        },
+        {
+          "min": 100000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.2
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": 100000,
+          "type": "flat",
+          "amount": 0
+        },
+        {
+          "min": 100000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.2
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": 100000,
+          "type": "flat",
+          "amount": 0
+        },
+        {
+          "min": 100000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.2
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "Aucun droit de garde",
+    "inactivity_fee": 10,
+    "inactivity_fee_details": "10€/mois après 12 mois sans ordre passé ET sans connexion",
+    "currency_fee": 0.5,
+    "currency_fee_details": "0,50% sur conversion de devises — inclus dans le 0% jusqu'à 100k€/mois",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "Dividendes crédités automatiquement, withholding tax selon pays",
+    "ost_fee": "Gratuit",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "Gratuit (transfert espèces). Transfert titres : non disponible",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Stop loss",
+      "Stop limit",
+      "OCO"
+    ],
+    "markets_available": [
+      "Euronext Paris",
+      "Euronext Amsterdam",
+      "NYSE",
+      "NASDAQ",
+      "London",
+      "Frankfurt",
+      "Warsaw"
+    ],
+    "etf_count": 3000,
+    "cash_remuneration": "4.2% annualisé sur liquidités en compte (variable, SARON-based)",
+    "welcome_offer": "Aucun bonus cash — modèle 0% de frais",
+    "pea_max_deposit": 150000,
+    "best_for": [
+      "DCA ETF",
+      "Investisseur actif",
+      "Gros volumes mensuels"
+    ],
+    "website": "xtb.com",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "forex",
+      "cfd"
+    ],
+    "level": "intermediaire",
+    "is_foreign": true,
+    "provides_ifu": false,
+    "platforms": [
+      "tradingview"
+    ],
+    "has_dca": true,
+    "has_fractions": true
+  },
+  {
+    "id": "trade-republic",
+    "slug": "trade-republic",
+    "name": "Trade Republic",
+    "category": "neobanque",
+    "logo": "/logos/trade-republic.svg",
+    "logoColor": "#0A2533",
+    "tagline": "1€ par ordre. Rémunération des liquidités incluse.",
+    "deposit_minimum": 0,
+    "accounts": [
+      "PEA",
+      "CTO"
+    ],
+    "founded": 2015,
+    "country": "DE",
+    "regulation": [
+      "AMF",
+      "BaFin"
+    ],
+    "trustpilot_score": 4.3,
+    "trustpilot_count": 45200,
+    "affiliate_url": "https://traderepublic.com/fr-fr",
+    "score_overall": 8.4,
+    "score_fees": 8.5,
+    "score_reliability": 8.0,
+    "score_ux": 9.2,
+    "pros": [
+      "Frais fixes 1€ par ordre — simple, lisible, prévisible",
+      "PEA ouvert depuis janvier 2025",
+      "Rémunération des liquidités jusqu'à 3% (variable)",
+      "UX mobile la plus aboutie du marché — vraiment simple",
+      "Actions fractionnées dès 1€, plans d'épargne automatiques",
+      "Aucun frais de garde, aucun frais d'inactivité"
+    ],
+    "cons": [
+      "Plateforme web très limitée — quasi uniquement mobile",
+      "Sélection d'actifs plus réduite que les courtiers pro",
+      "Banque allemande — garantie dépôts BaFin (100k€)"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 1.0
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 1.0
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 1.0
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "Aucun droit de garde",
+    "inactivity_fee": 0,
+    "inactivity_fee_details": "Aucun frais d'inactivité",
+    "currency_fee": 0,
+    "currency_fee_details": "0€ de frais de change — avantage majeur pour les ordres US",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "Automatique selon convention fiscale pays. Pas de frais supplémentaires.",
+    "ost_fee": "Gratuit",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "Gratuit (espèces). Transfert titres : 25€/ligne",
+    "order_types": [
+      "Marché",
+      "Cours limité"
+    ],
+    "markets_available": [
+      "Euronext",
+      "NYSE",
+      "NASDAQ",
+      "XETRA",
+      "London"
+    ],
+    "etf_count": 2500,
+    "cash_remuneration": "3% annualisé sur liquidités (variable, mis à jour trimestriellement)",
+    "savings_plan": "Disponible — investissement automatique mensuel sans frais supplémentaires",
+    "welcome_offer": "1 action ou ETF offert (loterie) à l'ouverture — valeur max 200€",
+    "pea_max_deposit": 150000,
+    "best_for": [
+      "Débutant",
+      "DCA mensuel automatique",
+      "Mobile-first"
+    ],
+    "website": "traderepublic.com",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "crypto",
+      "obligations"
+    ],
+    "level": "debutant",
+    "is_foreign": true,
+    "provides_ifu": false,
+    "platforms": [],
+    "has_dca": true,
+    "has_fractions": true
+  },
+  {
+    "id": "interactive-brokers",
+    "slug": "interactive-brokers",
+    "name": "Interactive Brokers",
+    "category": "broker",
+    "logo": "/logos/ibkr.svg",
+    "logoColor": "#E31937",
+    "tagline": "La référence mondiale — interface ProRealTime disponible",
+    "deposit_minimum": 0,
+    "accounts": [
+      "PEA",
+      "CTO"
+    ],
+    "founded": 1978,
+    "country": "US",
+    "regulation": [
+      "AMF",
+      "SEC",
+      "FCA",
+      "FINRA"
+    ],
+    "trustpilot_score": 3.9,
+    "trustpilot_count": 5600,
+    "affiliate_url": "https://trading.prorealtime.com/fr/partner_redirect.phtml?pr_page=brokerage_main_ib&from=videobourse-comparatif",
+    "score_overall": 8.9,
+    "score_fees": 9.5,
+    "score_reliability": 9.8,
+    "score_ux": 7.5,
+    "pros": [
+      "Frais parmi les plus bas sur gros volumes (0,05%)",
+      "Interface ProRealTime (PRT) disponible avec compte IBKR",
+      "Accès à 150 marchés dans 33 pays",
+      "Rémunération des liquidités compétitive (IBKR Savings)",
+      "46 ans d'existence — la fiabilité la plus éprouvée",
+      "PEA disponible depuis juillet 2024",
+      "Options, futures, forex disponibles"
+    ],
+    "cons": [
+      "Interface Trader Workstation (TWS) très complexe",
+      "Non adapté aux débutants absolus",
+      "Support client peu réactif"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": 6000,
+          "type": "percentage",
+          "amount": 0.05
+        },
+        {
+          "min": 6000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.05
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.05
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 0.35
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "0€ depuis le passage au modèle IBKR Lite",
+    "inactivity_fee": 0,
+    "inactivity_fee_details": "Aucun frais d'inactivité depuis 2021 (anciennement 10$/mois)",
+    "currency_fee": 0.002,
+    "currency_fee_details": "0,002% sur conversion (minimum 2$) — l'un des moins chers du marché",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "Withholding tax selon convention. Remboursement automatique possible via W8-BEN.",
+    "ost_fee": "Variables selon type (split, dividendes, OPA). Consulter le site.",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "Gratuit (ACATS pour transferts US). Transfert titres FR : variable",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Stop",
+      "Stop limité",
+      "Trailing stop",
+      "OCO",
+      "Pegged",
+      "Iceberg"
+    ],
+    "markets_available": [
+      "150+ marchés mondiaux",
+      "NYSE",
+      "NASDAQ",
+      "Euronext",
+      "LSE",
+      "TSX",
+      "ASX",
+      "SGX",
+      "Hong Kong"
+    ],
+    "etf_count": 10000,
+    "cash_remuneration": "Jusqu'à 4,33% sur USD, 3,7% sur EUR (variable, taux directeurs)",
+    "welcome_offer": "Aucune",
+    "pea_max_deposit": 150000,
+    "best_for": [
+      "Investisseur avancé",
+      "Gros portefeuille",
+      "Multi-marchés mondiaux"
+    ],
+    "website": "interactivebrokers.com",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "options",
+      "futures",
+      "forex",
+      "cfd",
+      "obligations"
+    ],
+    "level": "expert",
+    "is_foreign": true,
+    "provides_ifu": false,
+    "platforms": [
+      "tradingview",
+      "metatrader",
+      "prt",
+      "ninjatrader",
+      "atas"
+    ],
+    "has_dca": false,
+    "has_fractions": true
+  },
+  {
+    "id": "saxo-banque",
+    "slug": "saxo-banque",
+    "name": "Saxo Banque",
+    "category": "broker",
+    "logo": "/logos/saxo.svg",
+    "logoColor": "#0A2240",
+    "tagline": "Plateforme professionnelle, 70 000+ instruments",
+    "deposit_minimum": 0,
+    "accounts": [
+      "PEA",
+      "CTO",
+      "PEA-PME"
+    ],
+    "founded": 1992,
+    "country": "DK",
+    "regulation": [
+      "AMF",
+      "DFSA",
+      "FCA"
+    ],
+    "trustpilot_score": 3.7,
+    "trustpilot_count": 7800,
+    "affiliate_url": "https://www.home.saxo/fr-fr",
+    "score_overall": 8.1,
+    "score_fees": 7.2,
+    "score_reliability": 9.5,
+    "score_ux": 8.8,
+    "pros": [
+      "Accès à 70 000+ instruments (actions, ETF, options, futures, obligations)",
+      "Plateforme SaxoTraderGO parmi les meilleures du marché",
+      "Frais réduits sur compte Platinum (>200k€ de volume)",
+      "Solide régulation danoise depuis 33 ans"
+    ],
+    "cons": [
+      "Frais élevés sur compte Classic pour petits ordres",
+      "Frais d'inactivité 100€/an après 6 mois sans activité",
+      "Frais de garde sur marchés hors Euronext"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": 2000,
+          "type": "flat",
+          "amount": 3.0
+        },
+        {
+          "min": 2000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.15
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": 2000,
+          "type": "flat",
+          "amount": 4.0
+        },
+        {
+          "min": 2000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.2
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 5.0
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "0€ sur Euronext Paris. 0,12%/an min 5€/trimestre sur marchés étrangers.",
+    "inactivity_fee": 100,
+    "inactivity_fee_details": "100€/an si aucun ordre passé sur 6 mois et solde < 10 000€",
+    "currency_fee": 0.25,
+    "currency_fee_details": "0,25% sur conversion, minimum 3€",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "Automatique, withholding tax applicable selon pays",
+    "ost_fee": "OPA/OPAS : 30€. Split : gratuit. Augmentation capital : variable.",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "50€ frais de clôture + 25€/ligne titre transférée",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Stop",
+      "Stop limité",
+      "Trailing stop",
+      "OCO",
+      "If Done"
+    ],
+    "markets_available": [
+      "Euronext",
+      "NYSE",
+      "NASDAQ",
+      "LSE",
+      "XETRA",
+      "Borsa Italiana",
+      "TSX",
+      "ASX",
+      "Tokyo",
+      "Hong Kong",
+      "Singapour"
+    ],
+    "etf_count": 6700,
+    "welcome_offer": "Aucune",
+    "pea_max_deposit": 150000,
+    "best_for": [
+      "Trader professionnel",
+      "Accès multi-instruments",
+      "Options et futures"
+    ],
+    "website": "home.saxo",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "options",
+      "futures",
+      "forex",
+      "cfd",
+      "obligations"
+    ],
+    "level": "expert",
+    "is_foreign": false,
+    "provides_ifu": true,
+    "platforms": [
+      "tradingview"
+    ],
+    "has_dca": false,
+    "has_fractions": true
+  },
+  {
+    "id": "degiro",
+    "slug": "degiro",
+    "name": "Degiro",
+    "category": "broker",
+    "logo": "/logos/degiro.svg",
+    "logoColor": "#FF6600",
+    "tagline": "CTO ultra low-cost, leader européen",
+    "deposit_minimum": 0,
+    "accounts": [
+      "CTO"
+    ],
+    "founded": 2013,
+    "country": "NL",
+    "regulation": [
+      "AMF",
+      "AFM"
+    ],
+    "trustpilot_score": 4.2,
+    "trustpilot_count": 98000,
+    "affiliate_url": "https://www.degiro.fr",
+    "score_overall": 8.3,
+    "score_fees": 9.0,
+    "score_reliability": 8.5,
+    "score_ux": 8.0,
+    "pros": [
+      "Frais de courtage parmi les plus bas d'Europe",
+      "1 ETF Core gratuit par mois (liste Degiro)",
+      "Grande fiabilité, acteur majeur depuis 2013",
+      "Interface épurée et intuitive"
+    ],
+    "cons": [
+      "Pas de PEA — manque fiscal majeur pour résident français",
+      "Droits de garde 2,50€/an (faible mais existant)",
+      "Service client parfois lent"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 1.0
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 1.0
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 0.5
+        }
+      ]
+    },
+    "custody_fee": 2.5,
+    "custody_fee_details": "2,50€/an par bourse fréquentée (max 10€/an) — très faible",
+    "inactivity_fee": 0,
+    "inactivity_fee_details": "Aucun frais d'inactivité",
+    "currency_fee": 0.25,
+    "currency_fee_details": "0,25% + 0,25€ sur conversion — l'un des moins chers",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "Withholding tax pays source + 1€ frais de traitement Degiro",
+    "ost_fee": "Participation à OPA/OPAS : 5€. Exercice options : 5€.",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "Gratuit (espèces). Transfert titres : 10€/ligne",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Stop loss",
+      "Stop limité"
+    ],
+    "markets_available": [
+      "Euronext Paris",
+      "Euronext Amsterdam",
+      "NYSE",
+      "NASDAQ",
+      "LSE",
+      "XETRA",
+      "Madrid",
+      "Milan",
+      "Stockholm"
+    ],
+    "etf_count": 2000,
+    "etf_free": "1 ETF Core par mois offert — liste disponible sur le site Degiro",
+    "welcome_offer": "Jusqu'à 100€ en réduction de frais la 1ère année (programme parrainage)",
+    "best_for": [
+      "CTO low-cost",
+      "Investisseur international",
+      "ETF Core gratuits"
+    ],
+    "website": "degiro.fr",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "options",
+      "futures",
+      "obligations"
+    ],
+    "level": "intermediaire",
+    "is_foreign": true,
+    "provides_ifu": false,
+    "platforms": [],
+    "has_dca": false,
+    "has_fractions": false
+  },
+  {
+    "id": "boursobank",
+    "slug": "boursobank",
+    "name": "BoursoBank",
+    "category": "bank",
+    "logo": "/logos/boursobank.svg",
+    "logoColor": "#00A0DC",
+    "tagline": "La banque en ligne n°1 avec bourse intégrée",
+    "deposit_minimum": 0,
+    "accounts": [
+      "PEA",
+      "CTO",
+      "AV"
+    ],
+    "founded": 2006,
+    "country": "FR",
+    "regulation": [
+      "AMF",
+      "ACPR"
+    ],
+    "trustpilot_score": 4.0,
+    "trustpilot_count": 52000,
+    "affiliate_url": "https://www.boursobank.com",
+    "score_overall": 7.9,
+    "score_fees": 6.5,
+    "score_reliability": 9.0,
+    "score_ux": 8.5,
+    "pros": [
+      "Banque complète + courtier + AV dans une seule app",
+      "Carte bancaire Visa gratuite (avec conditions)",
+      "Groupe Société Générale — très haute sécurité",
+      "Grande communauté, service client solide"
+    ],
+    "cons": [
+      "Frais de courtage US parmi les plus élevés (9,90€ min)",
+      "Pas adapté pour trader actif",
+      "Frais de change élevés : 1% minimum 9€"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": 500,
+          "type": "flat",
+          "amount": 1.99
+        },
+        {
+          "min": 500,
+          "max": 2000,
+          "type": "percentage",
+          "amount": 0.5
+        },
+        {
+          "min": 2000,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.5
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 9.9
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 9.9
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "0€ droits de garde depuis 2020",
+    "inactivity_fee": 0,
+    "inactivity_fee_details": "Aucun frais d'inactivité",
+    "currency_fee": 1.0,
+    "currency_fee_details": "1% sur conversion, minimum 9€ — pénalisant pour petits ordres",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "Withholding tax automatique, remboursement possible via formulaire",
+    "ost_fee": "OPA/OPAS : 15€. Split : gratuit.",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "50€ frais de dossier + 10€/ligne",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "À seuil",
+      "À plage"
+    ],
+    "markets_available": [
+      "Euronext Paris",
+      "Euronext Amsterdam",
+      "NYSE",
+      "NASDAQ"
+    ],
+    "etf_count": 800,
+    "welcome_offer": "Jusqu'à 130€ offerts sous conditions d'activité (2025)",
+    "pea_max_deposit": 150000,
+    "best_for": [
+      "Débutant prudent",
+      "Compte courant + bourse",
+      "Tout-en-un famille"
+    ],
+    "website": "boursobank.com",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "obligations"
+    ],
+    "level": "debutant",
+    "is_foreign": false,
+    "provides_ifu": true,
+    "platforms": [],
+    "has_dca": false,
+    "has_fractions": false
+  },
+  {
+    "id": "etoro",
+    "slug": "etoro",
+    "name": "eToro",
+    "category": "broker",
+    "logo": "/logos/etoro.svg",
+    "logoColor": "#6CBE45",
+    "tagline": "Le broker social avec CopyTrading intégré",
+    "deposit_minimum": 50,
+    "accounts": [
+      "CTO"
+    ],
+    "founded": 2007,
+    "country": "IL",
+    "regulation": [
+      "AMF",
+      "CySEC",
+      "FCA"
+    ],
+    "trustpilot_score": 4.3,
+    "trustpilot_count": 31000,
+    "affiliate_url": "https://www.etoro.com/fr",
+    "score_overall": 7.5,
+    "score_fees": 6.0,
+    "score_reliability": 7.5,
+    "score_ux": 9.0,
+    "pros": [
+      "CopyTrading unique : copier les meilleurs traders automatiquement",
+      "Interface grand public la plus simple à prendre en main",
+      "Actions fractionnées dès 10€",
+      "50+ crypto-actifs disponibles dans la même app",
+      "Réseau social d'investissement actif"
+    ],
+    "cons": [
+      "Frais de retrait 5$ — à prévoir",
+      "Spread implicite sur actions (frais cachés dans le prix)",
+      "Pas de PEA disponible",
+      "Siège en Israël — régulation non européenne au principal"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 0
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 0
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 0
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "0€ affichés — mais un spread est inclus dans le prix d'achat/vente",
+    "inactivity_fee": 10,
+    "inactivity_fee_details": "10$/mois après 12 mois sans connexion au compte",
+    "currency_fee": 1.5,
+    "currency_fee_details": "1,50% de conversion EUR→USD sur tous les ordres — coût majeur à ne pas négliger",
+    "withdrawal_fee": 5,
+    "withdrawal_fee_details": "5$ par retrait, minimum de retrait 30$",
+    "deposit_fee": 0,
+    "dividend_fee": "Actions : dividendes crédités. CFD actions : dividende ajusté sur position.",
+    "ost_fee": "Gratuit",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "Pas de transfert de titres possible — liquidation obligatoire",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Stop loss",
+      "Stop limité",
+      "Take profit"
+    ],
+    "markets_available": [
+      "NYSE",
+      "NASDAQ",
+      "LSE",
+      "Euronext",
+      "Crypto 24/7"
+    ],
+    "etf_count": 700,
+    "welcome_offer": "Aucune",
+    "best_for": [
+      "Débutant social",
+      "CopyTrading",
+      "Actions US et crypto combinés"
+    ],
+    "website": "etoro.com",
+    "asset_classes": [
+      "actions",
+      "etf",
+      "crypto",
+      "forex",
+      "cfd"
+    ],
+    "level": "debutant",
+    "is_foreign": true,
+    "provides_ifu": false,
+    "platforms": [],
+    "has_dca": true,
+    "has_fractions": true
+  },
+  {
+    "id": "linxea",
+    "slug": "linxea",
+    "name": "Linxea",
+    "category": "insurance",
+    "logo": "/logos/linxea.svg",
+    "logoColor": "#0066CC",
+    "tagline": "Le spécialiste de l'assurance-vie sans frais d'entrée",
+    "deposit_minimum": 0,
+    "accounts": [
+      "AV",
+      "PER"
+    ],
+    "founded": 2003,
+    "country": "FR",
+    "regulation": [
+      "ACPR",
+      "AMF"
+    ],
+    "trustpilot_score": 4.5,
+    "trustpilot_count": 6700,
+    "affiliate_url": "https://www.linxea.com",
+    "score_overall": 9.0,
+    "score_fees": 9.3,
+    "score_reliability": 9.0,
+    "score_ux": 8.0,
+    "pros": [
+      "0% frais d'entrée, 0% frais d'arbitrage sur tous les contrats",
+      "Parmi les meilleures AV du marché : Avenir 2 (Suravenir) et Spirit 2 (Spirica)",
+      "Accès aux SCPI en AV — rare et très avantageux fiscalement",
+      "Large sélection d'UC : ETF, SCPI, fonds actifs, immobilier",
+      "Courtier indépendant depuis 22 ans, très solide réputation"
+    ],
+    "cons": [
+      "Pas de compte bourse classique (PEA/CTO)",
+      "Uniquement AV et PER",
+      "Pas d'application mobile dédiée"
+    ],
+    "fees": {
+      "AV": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.5
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "Frais de gestion AV : 0,50%/an sur les UC (fonds euros : 0,60%/an inclus)",
+    "inactivity_fee": 0,
+    "entry_fee": 0,
+    "entry_fee_details": "0% frais d'entrée sur versements — avantage majeur vs banques traditionnelles",
+    "arbitrage_fee": 0,
+    "arbitrage_fee_details": "0% frais d'arbitrage — réallocation gratuite",
+    "currency_fee": 0,
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "av_fund_euro_rate": "Avenir 2 : 2,50% en 2024 (net de frais de gestion). Spirit 2 : 3,13%.",
+    "av_uc_selection": "700+ UC disponibles dont ETF Amundi, SCPI Corum, Remake, fonds ISR",
+    "per_fiscalite": "Déduction des versements du revenu imposable (dans la limite des plafonds légaux)",
+    "welcome_offer": "Aucun bonus cash — modèle low-cost sur les frais",
+    "best_for": [
+      "Assurance-vie long terme",
+      "PER retraite",
+      "Accès SCPI via AV"
+    ],
+    "website": "linxea.com"
+  },
+  {
+    "id": "wh-selfinvest",
+    "slug": "wh-selfinvest",
+    "name": "WH SelfInvest",
+    "website": "whselfinvest.fr",
+    "category": "broker",
+    "logo": "",
+    "logoColor": "#D4A017",
+    "tagline": "Spécialiste futures et CFD depuis 1998 — NanoTrader, 30 000 instruments",
+    "deposit_minimum": 500,
+    "accounts": [
+      "CTO",
+      "CFD"
+    ],
+    "founded": 1998,
+    "country": "LU",
+    "regulation": [
+      "CSSF",
+      "ACPR",
+      "BaFin"
+    ],
+    "trustpilot_score": 4.0,
+    "trustpilot_count": 371,
+    "affiliate_url": "https://www.whselfinvest.fr/fr-fr/",
+    "score_overall": 7.6,
+    "score_fees": 7.2,
+    "score_reliability": 8.8,
+    "score_ux": 7.8,
+    "pros": [
+      "Spécialiste futures et CFD avec accès DMA (Direct Market Access)",
+      "Plateforme NanoTrader Full avancée incluse gratuitement",
+      "Régulé CSSF Luxembourg + ACPR France + BaFin Allemagne",
+      "30 000 instruments sur 30 pays, dont Freestoxx CTO US à 0€/ordre"
+    ],
+    "cons": [
+      "Dépôt minimum 500€ (CFD) ou 5 000€ (Futures)",
+      "Pas de PEA ni assurance-vie",
+      "Frais de dépôt 5€ par virement (< 30 000€)"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.09
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.09
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.09
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "Aucun droit de garde",
+    "inactivity_fee": 5,
+    "inactivity_fee_details": "15€/trimestre si moins de 2 ordres par mois",
+    "currency_fee": 0.3,
+    "currency_fee_details": "0,30% sur conversion de devises",
+    "withdrawal_fee": 0,
+    "deposit_fee": 5,
+    "dividend_fee": "Standard selon marché",
+    "ost_fee": "Variable selon opération",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "Variable",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Stop",
+      "Stop-limit",
+      "OCO",
+      "Trailing stop"
+    ],
+    "markets_available": [
+      "Euronext Paris",
+      "Euronext Amsterdam",
+      "NYSE",
+      "NASDAQ",
+      "CME",
+      "Eurex",
+      "LIFFE"
+    ],
+    "etf_count": 5000,
+    "welcome_offer": null,
+    "pea_max_deposit": null,
+    "best_for": [
+      "Trading actif",
+      "Futures & CFD",
+      "Investisseur expérimenté"
+    ]
+  },
+  {
+    "id": "ig",
+    "slug": "ig",
+    "name": "IG",
+    "website": "ig.com",
+    "category": "cfd",
+    "logo": "",
+    "logoColor": "#009DE0",
+    "tagline": "Leader mondial CFD et actions depuis 1974 — 17 000 marchés, CTO 0€",
+    "deposit_minimum": 10,
+    "accounts": [
+      "CTO",
+      "CFD"
+    ],
+    "founded": 1974,
+    "country": "UK",
+    "regulation": [
+      "BaFin",
+      "AMF"
+    ],
+    "trustpilot_score": 3.9,
+    "trustpilot_count": 35147,
+    "affiliate_url": "https://upl.inc/videobourse-upvstk",
+    "score_overall": 7.4,
+    "score_fees": 6.8,
+    "score_reliability": 9.0,
+    "score_ux": 8.2,
+    "pros": [
+      "0€ de commission sur actions et ETF au comptant (CTO)",
+      "Plus de 17 000 instruments : actions, CFD, indices, Forex, crypto",
+      "Régulé BaFin + passeport AMF, fonds ségrégués chez HSBC France",
+      "Dépôt minimum 10€ — parmi les plus accessibles du marché"
+    ],
+    "cons": [
+      "Pas de PEA",
+      "CFD actions facturés 0,05% (min 5€) par ordre",
+      "Frais d'inactivité 14€/mois après 24 mois sans activité"
+    ],
+    "fees": {
+      "FR": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 0
+        }
+      ],
+      "EU": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "flat",
+          "amount": 0
+        }
+      ],
+      "US": [
+        {
+          "min": 0,
+          "max": null,
+          "type": "percentage",
+          "amount": 0.05
+        }
+      ]
+    },
+    "custody_fee": 0,
+    "custody_fee_details": "Aucun droit de garde sur actions",
+    "inactivity_fee": 14,
+    "inactivity_fee_details": "14€/mois après 24 mois d'inactivité consécutifs",
+    "currency_fee": 0.5,
+    "currency_fee_details": "0,50% de frais de change",
+    "withdrawal_fee": 0,
+    "deposit_fee": 0,
+    "dividend_fee": "Ajustement dividende sur CFD (long: crédit, short: débit)",
+    "ost_fee": "Non applicable sur CFD",
+    "account_opening_fee": 0,
+    "account_closing_fee": 0,
+    "transfer_out_fee": "Non applicable",
+    "order_types": [
+      "Marché",
+      "Cours limité",
+      "Stop",
+      "Stop-limit",
+      "Trailing stop",
+      "OCO"
+    ],
+    "markets_available": [
+      "Euronext Paris",
+      "NYSE",
+      "NASDAQ",
+      "LSE",
+      "DAX",
+      "Forex",
+      "Matières premières",
+      "Indices",
+      "Crypto"
+    ],
+    "etf_count": 6000,
+    "welcome_offer": null,
+    "pea_max_deposit": null,
+    "best_for": [
+      "Trading CFD",
+      "Marchés multiples",
+      "Trader expérimenté"
+    ],
+    "asset_classes": [
+      "actions",
+      "etf",
+      "forex",
+      "cfd",
+      "options",
+      "futures"
+    ],
+    "level": "expert",
+    "is_foreign": false,
+    "provides_ifu": true,
+    "platforms": [
+      "prt",
+      "tradingview",
+      "metatrader"
+    ],
+    "has_dca": false,
+    "has_fractions": false
+  }
+]

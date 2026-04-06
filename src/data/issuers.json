@@ -1,0 +1,74 @@
+[
+  {
+    "id": "amundi",
+    "name": "Amundi",
+    "country": "FR",
+    "aum_total_bn": 2100,
+    "founded": 2010,
+    "logo_domain": "amundi.com",
+    "description": "1er gestionnaire d'actifs européen, filiale de Crédit Agricole. Spécialiste des ETF PEA-éligibles via réplication synthétique.",
+    "strengths": ["ETF PEA-éligibles", "Frais compétitifs", "Gamme complète indices mondiaux"],
+    "etf_count": 160,
+    "known_for": "PEA synthétique"
+  },
+  {
+    "id": "ishares",
+    "name": "iShares (BlackRock)",
+    "country": "US",
+    "aum_total_bn": 3700,
+    "founded": 2000,
+    "logo_domain": "ishares.com",
+    "description": "Division ETF de BlackRock, plus grand gestionnaire d'actifs mondial. Référence mondiale en réplication physique.",
+    "strengths": ["TER ultra-bas", "Liquidité maximale", "Réplication physique"], 
+    "etf_count": 900,
+    "known_for": "Référence mondiale"
+  },
+  {
+    "id": "vanguard",
+    "name": "Vanguard",
+    "country": "US",
+    "aum_total_bn": 2200,
+    "founded": 1975,
+    "logo_domain": "vanguard.com",
+    "description": "Pionnier des fonds indiciels, structure mutuelle unique (appartient aux investisseurs). Phare de l'investissement passif.",
+    "strengths": ["Philosophie long terme", "Frais très bas", "Structure alignée investisseurs"],
+    "etf_count": 80,
+    "known_for": "Investissement passif"
+  },
+  {
+    "id": "invesco",
+    "name": "Invesco",
+    "country": "US",
+    "aum_total_bn": 1600,
+    "founded": 1978,
+    "logo_domain": "invesco.com",
+    "description": "Gestionnaire américain avec une forte gamme de produits alternatifs. Connu pour ses ETFs Or et thématiques.",
+    "strengths": ["ETF Or physique", "ETFs thématiques", "Innovation produits"],
+    "etf_count": 250,
+    "known_for": "Or physique & thématiques"
+  },
+  {
+    "id": "lyxor",
+    "name": "Lyxor (Société Générale)",
+    "country": "FR",
+    "aum_total_bn": 180,
+    "founded": 1998,
+    "logo_domain": "lyxor.com",
+    "description": "Pioneer français des ETF, absorbé par Amundi en 2022. Gamme maintenant intégrée sous la marque Amundi.",
+    "strengths": ["Pionnière ETF FR", "Gamme obligataire", "PEA-éligibles"],
+    "etf_count": 120,
+    "known_for": "Pionnier français ETF"
+  },
+  {
+    "id": "vaneck",
+    "name": "VanEck",
+    "country": "US",
+    "aum_total_bn": 110,
+    "founded": 1955,
+    "logo_domain": "vaneck.com",
+    "description": "Spécialiste des marchés de niche : crypto, matières premières, marchés émergents. ETF Bitcoin au comptant aux USA.",
+    "strengths": ["Crypto ETFs", "Matières premières", "Marchés émergents spécialisés"],
+    "etf_count": 70,
+    "known_for": "Crypto & niche"
+  }
+]

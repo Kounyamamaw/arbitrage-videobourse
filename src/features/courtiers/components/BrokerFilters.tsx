@@ -1,0 +1,235 @@
+"use client";
+
+import { useState } from "react";
+import { useFilterStore } from "@/lib/store";
+import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
+
+const CATEGORIES = [
+  { value: "all",       label: "Tous les acteurs" },
+  { value: "broker",    label: "Courtiers bourse" },
+  { value: "neobanque", label: "Néobanques"        },
+  { value: "bank",      label: "Banques"          },
+  { value: "insurance", label: "Assurances-vie"    },
+  { value: "crypto",    label: "Crypto"             },
+];
+
+const ACCOUNTS = [
+  { value: "all", label: "Toutes"  },
+  { value: "PEA", label: "PEA"    },
+  { value: "CTO", label: "CTO"    },
+  { value: "AV",  label: "AV"     },
+  { value: "PER", label: "PER"    },
+];
+
+const SORTS = [
+  { value: "score",      label: "Meilleur score"  },
+  { value: "fees",       label: "Moins de frais"  },
+  { value: "trustpilot", label: "Avis Trustpilot" },
+  { value: "name",       label: "Alphabétique"    },
+];
+
+const ASSET_CLASSES = [
+  { value: "all",         label: "Tous les actifs" },
+  { value: "actions",     label: "Actions"         },
+  { value: "etf",         label: "ETF"             },
+  { value: "crypto",      label: "Crypto"          },
+  { value: "cfd",         label: "CFD"             },
+  { value: "options",     label: "Options"         },
+  { value: "futures",     label: "Futures"         },
+  { value: "forex",       label: "Forex"           },
+  { value: "obligations", label: "Obligations"     },
+];
+
+const LEVELS = [
+  { value: "all",           label: "Tous niveaux"   },
+  { value: "debutant",      label: "Débutant"       },
+  { value: "intermediaire", label: "Intermédiaire"  },
+  { value: "expert",        label: "Expert"         },
+];
+
+const FISCALITIES = [
+  { value: "all",      label: "Toutes"                },
+  { value: "france",   label: "Compte en France"      },
+  { value: "etranger", label: "Compte à l'étranger"   },
+  { value: "ifu",      label: "IFU fourni"            },
+];
+
+const PLATFORMS = [
+  { value: "all",         label: "Toutes"            },
+  { value: "tradingview", label: "TradingView"       },
+  { value: "metatrader",  label: "MetaTrader"        },
+  { value: "prt",         label: "ProRealTime"       },
+  { value: "ninjatrader", label: "NinjaTrader"       },
+  { value: "atas",        label: "ATAS"              },
+];
+
+function SectionTitle({ label }: { label: string }) {
+  return (
+    <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text-faint)", letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 8 }}>
+      {label}
+    </p>
+  );
+}
+
+function FilterBtn({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
+  return (
+    <button onClick={onClick} style={{
+      width: "100%", textAlign: "left", padding: "8px 12px", borderRadius: 8,
+      fontSize: 13, fontWeight: active ? 600 : 400,
+      color: active ? "var(--accent)" : "var(--text-muted)",
+      backgroundColor: active ? "var(--accent-light)" : "transparent",
+      border: active ? "1px solid var(--accent-mid)" : "1px solid transparent",
+      cursor: "pointer", transition: "all 150ms ease",
+    }}>{label}</button>
+  );
+}
+
+function Toggle({ checked, label, onChange }: { checked: boolean; label: string; onChange: (v: boolean) => void }) {
+  return (
+    <label style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 8, cursor: "pointer", backgroundColor: checked ? "var(--accent-light)" : "transparent", border: checked ? "1px solid var(--accent-mid)" : "1px solid transparent", transition: "all 150ms" }}>
+      <div onClick={() => onChange(!checked)} style={{
+        width: 32, height: 18, borderRadius: 9, flexShrink: 0,
+        backgroundColor: checked ? "var(--accent)" : "var(--border)",
+        position: "relative", transition: "background 200ms",
+        cursor: "pointer",
+      }}>
+        <div style={{ position: "absolute", top: 3, left: checked ? 17 : 3, width: 12, height: 12, borderRadius: "50%", backgroundColor: "#fff", transition: "left 200ms" }} />
+      </div>
+      <span style={{ fontSize: 13, color: checked ? "var(--accent)" : "var(--text-muted)", fontWeight: checked ? 600 : 400 }}>{label}</span>
+    </label>
+  );
+}
+
+export function BrokerFilters() {
+  const {
+    category, setCategory, accountType, setAccountType, sortBy, setSortBy, maxDeposit, setMaxDeposit,
+    assetClass, setAssetClass, level, setLevel, fiscality, setFiscality,
+    platform, setPlatform, hasDCA, setHasDCA, hasFractions, setHasFractions, reset,
+  } = useFilterStore();
+
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
+  const hasActiveAdvanced = assetClass !== "all" || level !== "all" || fiscality !== "all" || platform !== "all" || hasDCA || hasFractions;
+
+  return (
+    <aside className="hidden lg:flex w-60 shrink-0 flex-col gap-5">
+
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <SlidersHorizontal size={13} color="var(--accent)" />
+          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)" }}>Filtres</span>
+        </div>
+        <button onClick={reset} style={{ fontSize: 11, color: "var(--text-faint)", cursor: "pointer", background: "none", border: "none", padding: 0 }}>
+          Réinitialiser
+        </button>
+      </div>
+
+      {/* Catégorie */}
+      <div>
+        <SectionTitle label="Catégorie" />
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {CATEGORIES.map((c) => <FilterBtn key={c.value} active={category === c.value} label={c.label} onClick={() => setCategory(c.value)} />)}
+        </div>
+      </div>
+
+      {/* Enveloppe */}
+      <div>
+        <SectionTitle label="Enveloppe" />
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {ACCOUNTS.map((a) => <FilterBtn key={a.value} active={accountType === a.value} label={a.label} onClick={() => setAccountType(a.value)} />)}
+        </div>
+      </div>
+
+      {/* Dépôt max */}
+      <div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+          <SectionTitle label="Dépôt min" />
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--accent)", fontFamily: "var(--font-sora)" }}>
+            {maxDeposit >= 10000 ? "Illimité" : `${maxDeposit.toLocaleString("fr-FR")} €`}
+          </span>
+        </div>
+        <input type="range" min={0} max={10000} step={100} value={maxDeposit} onChange={(e) => setMaxDeposit(Number(e.target.value))} style={{ width: "100%" }} />
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4 }}>
+          <span style={{ fontSize: 11, color: "var(--text-faint)" }}>0 €</span>
+          <span style={{ fontSize: 11, color: "var(--text-faint)" }}>Illimité</span>
+        </div>
+      </div>
+
+      {/* Tri */}
+      <div>
+        <SectionTitle label="Trier par" />
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {SORTS.map((s) => <FilterBtn key={s.value} active={sortBy === s.value} label={s.label} onClick={() => setSortBy(s.value)} />)}
+        </div>
+      </div>
+
+      {/* ── Filtres avancés ── */}
+      <div style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: hasActiveAdvanced ? "var(--accent)" : "var(--text-faint)" }}>
+              Filtres avancés
+            </span>
+            {hasActiveAdvanced && (
+              <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 7px", borderRadius: 100, backgroundColor: "var(--accent)", color: "#fff" }}>
+                {[assetClass !== "all", level !== "all", fiscality !== "all", platform !== "all", hasDCA, hasFractions].filter(Boolean).length}
+              </span>
+            )}
+          </div>
+          {showAdvanced ? <ChevronUp size={14} color="var(--text-faint)" /> : <ChevronDown size={14} color="var(--text-faint)" />}
+        </button>
+
+        {showAdvanced && (
+          <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 16 }}>
+
+            {/* Classe d'actif */}
+            <div>
+              <SectionTitle label="Classe d'actif" />
+              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {ASSET_CLASSES.map((a) => <FilterBtn key={a.value} active={assetClass === a.value} label={a.label} onClick={() => setAssetClass(a.value)} />)}
+              </div>
+            </div>
+
+            {/* Niveau */}
+            <div>
+              <SectionTitle label="Niveau" />
+              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {LEVELS.map((l) => <FilterBtn key={l.value} active={level === l.value} label={l.label} onClick={() => setLevel(l.value)} />)}
+              </div>
+            </div>
+
+            {/* Fiscalité */}
+            <div>
+              <SectionTitle label="Fiscalité" />
+              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {FISCALITIES.map((f) => <FilterBtn key={f.value} active={fiscality === f.value} label={f.label} onClick={() => setFiscality(f.value)} />)}
+              </div>
+            </div>
+
+            {/* Plateforme */}
+            <div>
+              <SectionTitle label="Plateforme compatible" />
+              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {PLATFORMS.map((p) => <FilterBtn key={p.value} active={platform === p.value} label={p.label} onClick={() => setPlatform(p.value)} />)}
+              </div>
+            </div>
+
+            {/* Toggles */}
+            <div>
+              <SectionTitle label="Fonctionnalités" />
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <Toggle checked={hasDCA} label="DCA / Investissement auto" onChange={setHasDCA} />
+                <Toggle checked={hasFractions} label="Fractions d'actions" onChange={setHasFractions} />
+              </div>
+            </div>
+
+          </div>
+        )}
+      </div>
+    </aside>
+  );
+}
