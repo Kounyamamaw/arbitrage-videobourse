@@ -102,10 +102,16 @@ export function RecentSales() {
                 className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-muted/60 group"
               >
                 <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 overflow-hidden group-hover:bg-primary/20 transition-colors">
-                  {broker.logo_url ? (
+                  {broker.logo_url && !broker.logo_url.startsWith("data:") ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={broker.logo_url} alt={broker.name} className="size-7 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                  ) : (
+                    <img
+                      src={broker.logo_url}
+                      alt={broker.name}
+                      className="size-7 object-contain"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling && ((e.target as HTMLImageElement).nextElementSibling as HTMLElement).classList.remove("hidden"); }}
+                    />
+                  ) : null}
+                  {(!broker.logo_url || broker.logo_url.startsWith("data:")) && (
                     <span className="text-xs font-bold text-primary">{broker.name.slice(0, 2).toUpperCase()}</span>
                   )}
                 </div>

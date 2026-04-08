@@ -94,21 +94,13 @@ export function AddPartnerClient() {
     if (!form.name || !form.slug) return;
     setSaving(true);
 
-    let finalLogoUrl = form.logo_url;
-    if (logoFile) {
-      finalLogoUrl = await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target?.result as string);
-        reader.readAsDataURL(logoFile);
-      });
-    }
-
     const primaryCategory = form.categories[0] || "broker";
 
-    // Ne jamais envoyer une data URL base64 dans le payload PATCH/POST
-    // (trop volumineux → erreur 500). L'upload des logos se fait séparément.
-    const isBase64Logo = finalLogoUrl?.startsWith("data:");
-    const logoForPayload = isBase64Logo ? undefined : (finalLogoUrl || undefined);
+    // Payload sans logo — le logo est uploadé séparément via /api/admin/upload-logo
+    // pour éviter d'envoyer des données base64 volumineuses à PostgREST
+    const logoForPayload = (!form.logo_url || form.logo_url.startsWith("data:"))
+      ? undefined
+      : form.logo_url;
 
     const payload: Record<string, any> = {
       name: form.name, category: primaryCategory, categories: form.categories,
@@ -140,6 +132,8 @@ export function AddPartnerClient() {
     if (form.regulation) payload.regulation = parseArr(form.regulation);
 
     try {
+      const targetSlug = editingSlug || form.slug;
+
       if (editingSlug) {
         const res = await fetch(`/api/brokers/${editingSlug}`, {
           method: "PATCH", headers: { "Content-Type": "application/json" },
@@ -175,6 +169,20 @@ export function AddPartnerClient() {
           return;
         }
       }
+
+      // Upload du logo via Supabase Storage si un fichier a été sélectionné
+      if (logoFile && targetSlug) {
+        const fd = new FormData();
+        fd.append("file", logoFile);
+        fd.append("slug", targetSlug);
+        const logoRes = await fetch("/api/admin/upload-logo", { method: "POST", body: fd });
+        if (logoRes.ok) {
+          const { logo_url } = await logoRes.json();
+          setPartners(prev => prev.map(p => p.slug === targetSlug ? { ...p, logo_url } : p));
+        }
+        // Ne pas bloquer si le logo échoue (bucket peut ne pas être configuré)
+      }
+
       if (editingSlug && enrichResult && !enrichResult.error) {
         await fetch("/api/admin/scraping/save", {
           method: "POST", headers: { "Content-Type": "application/json" },
