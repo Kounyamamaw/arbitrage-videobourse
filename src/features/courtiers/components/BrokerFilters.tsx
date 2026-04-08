@@ -56,9 +56,9 @@ const FISCALITIES = [
 
 const PLATFORMS = [
   { value: "all",         label: "Toutes"            },
+  { value: "prt",         label: "ProRealTime"       },
   { value: "tradingview", label: "TradingView"       },
   { value: "metatrader",  label: "MetaTrader"        },
-  { value: "prt",         label: "ProRealTime"       },
   { value: "ninjatrader", label: "NinjaTrader"       },
   { value: "atas",        label: "ATAS"              },
 ];

@@ -20,6 +20,8 @@ type ClickStats = {
   byBroker: { broker_id: string; broker_name: string; total: number; sources: Record<string, number> }[];
   total: number;
   recent: { broker_id: string; broker_name: string; source: string; created_at: string }[];
+  tableExists?: boolean;
+  tableError?: string;
 };
 
 function fmt(n: number) { return n > 0 ? n.toLocaleString("fr-FR") : "—"; }
@@ -151,10 +153,19 @@ export default function TrafficPage() {
 
           {clicksLoading ? (
             <p className="text-sm text-muted-foreground">Chargement…</p>
-          ) : !clicks || clicks.total === 0 ? (
+          ) : clicks?.tableError ? (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/20 p-4 text-sm text-amber-800 dark:text-amber-300">
+              <strong>Erreur de lecture de la table affiliate_clicks.</strong> Vérifiez que la migration SQL a bien été exécutée et que la policy RLS autorise la lecture via <code className="bg-amber-100 dark:bg-amber-900/40 px-1 rounded">service_role</code>.<br/>
+              <span className="text-xs opacity-70 mt-1 block">{clicks.tableError}</span>
+            </div>
+          ) : !clicks || (!clicks.tableExists && clicks.total === 0) ? (
             <div className="rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
-              Aucun clic enregistré. Les clics sur "Ouvrir un compte" s'afficheront ici dès que la table{" "}
+              Aucun clic enregistré. Les clics sur &quot;Ouvrir un compte&quot; s&apos;afficheront ici dès que la table{" "}
               <code className="bg-muted px-1 rounded">affiliate_clicks</code> sera créée en base.
+            </div>
+          ) : clicks.total === 0 ? (
+            <div className="rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
+              Table <code className="bg-muted px-1 rounded">affiliate_clicks</code> prête — aucun clic enregistré sur les 30 derniers jours.
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

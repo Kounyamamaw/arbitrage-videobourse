@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model: "llama3-70b-8192",
         messages: [{ role: "system", content: systemPrompt }, ...messages.slice(-6)],
         max_tokens: 600,
         temperature: 0.3,
@@ -179,7 +179,8 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const err = await response.text();
-      return NextResponse.json({ error: `Groq error: ${err}` }, { status: 500 });
+      console.error('Groq API error:', response.status, err);
+      return NextResponse.json({ error: `Groq error ${response.status}: ${err}` }, { status: 500 });
     }
 
     const data = await response.json();

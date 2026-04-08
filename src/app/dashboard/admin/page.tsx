@@ -2,12 +2,11 @@
 
 import PageContainer from '@/components/layout/page-container';
 import Link from 'next/link';
-import { IconDatabase, IconLink, IconUsers, IconPencil, IconChartBar, IconClipboardCheck, IconMail, IconCurrencyDollar, IconChartLine, IconBuildingBank, IconChartAreaLine } from '@tabler/icons-react';
+import { IconDatabase, IconLink, IconUsers, IconChartBar, IconClipboardCheck, IconMail, IconCurrencyDollar, IconChartLine, IconBuildingBank, IconChartAreaLine } from '@tabler/icons-react';
 
 const adminPages = [
   { title: 'Intermédiaires', desc: 'Ajouter, modifier ou supprimer des intermédiaires', href: '/dashboard/admin/partenaires', icon: IconUsers, color: 'text-blue-500 bg-blue-500/10' },
   { title: 'Affiliations', desc: 'Gérer les liens d\'affiliation', href: '/dashboard/admin/affiliations', icon: IconLink, color: 'text-emerald-500 bg-emerald-500/10' },
-  { title: 'Contenu du site', desc: 'Modifier les textes visibles', href: '/dashboard/admin/contenu', icon: IconPencil, color: 'text-amber-500 bg-amber-500/10' },
   { title: 'Données', desc: 'Enrichir les données — scraping + saisie assistée IA', href: '/dashboard/admin/scraping', icon: IconDatabase, color: 'text-rose-500 bg-rose-500/10' },
   { title: 'État des données', desc: 'Complétude des fiches courtiers', href: '/dashboard/admin/donnees', icon: IconClipboardCheck, color: 'text-teal-500 bg-teal-500/10' },
   { title: 'Waitlist', desc: 'Consulter et exporter les inscrits', href: '/dashboard/admin/waitlist', icon: IconMail, color: 'text-cyan-500 bg-cyan-500/10' },

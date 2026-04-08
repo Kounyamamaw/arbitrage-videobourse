@@ -13,8 +13,12 @@ export async function GET() {
       .gte('created_at', thirtyDaysAgo.toISOString())
       .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    if (!data || data.length === 0) return NextResponse.json({ byBroker: [], total: 0, recent: [] });
+    // Si erreur Supabase (table inexistante, RLS, etc.) → on le signale explicitement
+    if (error) {
+      console.error('affiliate_clicks fetch error:', error);
+      return NextResponse.json({ byBroker: [], total: 0, recent: [], tableError: error.message });
+    }
+    if (!data || data.length === 0) return NextResponse.json({ byBroker: [], total: 0, recent: [], tableExists: true });
 
     // Agréger par broker
     const counts: Record<string, { broker_id: string; broker_name: string; total: number; sources: Record<string, number> }> = {};
@@ -31,9 +35,10 @@ export async function GET() {
     return NextResponse.json({
       byBroker,
       total: data.length,
+      tableExists: true,
       recent: data.slice(0, 20), // 20 derniers clics pour le feed
     });
   } catch {
-    return NextResponse.json({ byBroker: [], total: 0, recent: [] });
+    return NextResponse.json({ byBroker: [], total: 0, recent: [], tableError: 'unknown' });
   }
 }
