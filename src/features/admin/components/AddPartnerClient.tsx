@@ -104,12 +104,18 @@ export function AddPartnerClient() {
     }
 
     const primaryCategory = form.categories[0] || "broker";
+
+    // Ne jamais envoyer une data URL base64 dans le payload PATCH/POST
+    // (trop volumineux → erreur 500). L'upload des logos se fait séparément.
+    const isBase64Logo = finalLogoUrl?.startsWith("data:");
+    const logoForPayload = isBase64Logo ? undefined : (finalLogoUrl || undefined);
+
     const payload: Record<string, any> = {
       name: form.name, category: primaryCategory, categories: form.categories,
       website: form.website, affiliate_url: form.affiliate_url, tagline: form.tagline,
       demo_url: form.demo_url || null, is_partner: form.is_partner,
       partner_rank: form.is_partner ? 10 : 999,
-      logo_url: finalLogoUrl || undefined,
+      ...(logoForPayload !== undefined ? { logo_url: logoForPayload } : {}),
     };
 
     const scoreKeys = ["score_overall","score_fees","score_reliability","score_ux","score_envergure","score_support"] as const;
@@ -142,6 +148,11 @@ export function AddPartnerClient() {
         if (res.ok) {
           const updated = await res.json();
           setPartners(prev => prev.map(p => p.slug === editingSlug ? { ...p, ...updated } : p));
+        } else {
+          const errData = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+          alert(`Erreur mise à jour : ${errData.error || res.status}`);
+          setSaving(false);
+          return;
         }
       } else {
         const res = await fetch("/api/admin/partners", {
@@ -157,6 +168,11 @@ export function AddPartnerClient() {
               body: JSON.stringify({ broker_slug: form.slug, extracted: enrichResult }),
             });
           }
+        } else {
+          const errData = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+          alert(`Erreur création : ${errData.error || res.status}`);
+          setSaving(false);
+          return;
         }
       }
       if (editingSlug && enrichResult && !enrichResult.error) {
@@ -166,7 +182,9 @@ export function AddPartnerClient() {
         });
       }
       closeModal();
-    } catch { /* */ }
+    } catch (err: unknown) {
+      alert(`Erreur réseau : ${err instanceof Error ? err.message : String(err)}`);
+    }
     setSaving(false);
   };
 
