@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET(
   request: NextRequest,
@@ -8,7 +8,7 @@ export async function GET(
   const { slug } = await params;
 
   // 1. Récupérer les infos du broker
-  const { data } = await supabase
+  const { data } = await supabaseAdmin
     .from('brokers')
     .select('affiliate_url, name')
     .eq('slug', slug)
@@ -21,19 +21,18 @@ export async function GET(
   // 2. Lire la source depuis le query param
   const source = request.nextUrl.searchParams.get('src') || 'direct';
 
-  // 3. Enregistrer le clic (Version corrigée pour TypeScript)
-  // On utilise un bloc try/catch simple au lieu de .then().catch()
+  // 3. Enregistrer le clic via service_role (contourne RLS)
   try {
-    await supabase
+    const { error } = await supabaseAdmin
       .from('affiliate_clicks')
       .insert({ 
         broker_id: slug, 
         broker_name: data.name, 
         source 
       });
-  } catch (error) {
-    // On log l'erreur en console pour le debug mais on ne bloque pas l'utilisateur
-    console.error('Tracking error:', error);
+    if (error) console.error('Tracking insert error:', error.message);
+  } catch (err) {
+    console.error('Tracking error:', err);
   }
 
   // 4. Redirection

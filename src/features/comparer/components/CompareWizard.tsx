@@ -98,35 +98,36 @@ export function CompareWizard() {
   return (
     <>
       {/* Step indicator */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 32 }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 4, marginBottom: 32, flexWrap: "wrap" }}>
         {STEPS.map(({ num, label, icon: Icon }) => {
           const active = step === num;
           const done   = step > num;
           return (
-            <div key={num} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div key={num} style={{ display: "flex", alignItems: "center", gap: 4 }}>
               <div style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "8px 14px", borderRadius: 100,
+                display: "flex", alignItems: "center", gap: 6,
+                padding: "7px 12px", borderRadius: 100,
                 backgroundColor: active ? "var(--accent)" : done ? "var(--accent-light)" : "var(--bg)",
                 border: `1px solid ${active ? "var(--accent)" : done ? "var(--accent-mid)" : "var(--border)"}`,
                 transition: "all 200ms ease",
+                whiteSpace: "nowrap",
               }}>
                 {done ? (
                   <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
                     <path d="M1 5L4.5 8.5L11 1" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 ) : (
-                  <Icon size={13} color={active ? "#fff" : "var(--text-faint)"} />
+                  <Icon size={12} color={active ? "#fff" : "var(--text-faint)"} />
                 )}
                 <span style={{
-                  fontSize: 12, fontWeight: 600,
+                  fontSize: 11, fontWeight: 600,
                   color: active ? "#fff" : done ? "var(--accent-text)" : "var(--text-faint)",
                 }}>
                   {label}
                 </span>
               </div>
               {num < 3 && (
-                <div style={{ width: 20, height: 1, backgroundColor: "var(--border)" }} />
+                <div style={{ width: 14, height: 1, backgroundColor: "var(--border)", flexShrink: 0 }} />
               )}
             </div>
           );
@@ -138,11 +139,13 @@ export function CompareWizard() {
         backgroundColor: "var(--card)",
         border: "1px solid var(--border)",
         borderRadius: 16,
-        padding: "32px",
+        padding: "clamp(16px, 5vw, 32px)",
         boxShadow: "var(--shadow-md)",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(12px)",
         transition: "opacity 200ms ease, transform 200ms ease",
+        minWidth: 0,
+        overflow: "hidden",
       }}>
 
         {/* STEP 1 */}
@@ -156,7 +159,7 @@ export function CompareWizard() {
                 Sélectionnez le type de placement qui vous correspond
               </p>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))", gap: 10 }}>
               {OBJECTIVES.map(({ value, label, icon: Icon, desc }) => {
                 const active = config.objective === value;
                 return (
@@ -364,6 +367,7 @@ export function CompareWizard() {
           display: "flex", alignItems: "center", justifyContent: "space-between",
           marginTop: 28, paddingTop: 20,
           borderTop: "1px solid var(--border)",
+          gap: 12, flexWrap: "wrap",
         }}>
           <button
             onClick={() => animateStep(step - 1)}

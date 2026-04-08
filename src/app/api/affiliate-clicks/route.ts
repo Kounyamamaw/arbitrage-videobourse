@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET() {
   try {
@@ -7,18 +7,14 @@ export async function GET() {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('affiliate_clicks')
       .select('broker_id, broker_name, source, created_at')
       .gte('created_at', thirtyDaysAgo.toISOString())
       .order('created_at', { ascending: false });
 
-    // Si erreur Supabase (table inexistante, RLS, etc.) → on le signale explicitement
-    if (error) {
-      console.error('affiliate_clicks fetch error:', error);
-      return NextResponse.json({ byBroker: [], total: 0, recent: [], tableError: error.message });
-    }
-    if (!data || data.length === 0) return NextResponse.json({ byBroker: [], total: 0, recent: [], tableExists: true });
+    if (error) throw error;
+    if (!data || data.length === 0) return NextResponse.json({ byBroker: [], total: 0, recent: [] });
 
     // Agréger par broker
     const counts: Record<string, { broker_id: string; broker_name: string; total: number; sources: Record<string, number> }> = {};
@@ -35,10 +31,9 @@ export async function GET() {
     return NextResponse.json({
       byBroker,
       total: data.length,
-      tableExists: true,
       recent: data.slice(0, 20), // 20 derniers clics pour le feed
     });
   } catch {
-    return NextResponse.json({ byBroker: [], total: 0, recent: [], tableError: 'unknown' });
+    return NextResponse.json({ byBroker: [], total: 0, recent: [] });
   }
 }

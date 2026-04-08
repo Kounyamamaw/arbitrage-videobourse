@@ -142,6 +142,10 @@ export async function POST(req: NextRequest) {
     const { messages } = await req.json();
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) return NextResponse.json({ error: "GROQ_API_KEY non configurée" }, { status: 500 });
+    if (!apiKey.startsWith('gsk_')) {
+      console.error('GROQ_API_KEY invalide — doit commencer par gsk_');
+      return NextResponse.json({ error: "GROQ_API_KEY invalide (doit commencer par gsk_)" }, { status: 500 });
+    }
 
     let brokers: Record<string, unknown>[] = [];
     let etfs: Record<string, unknown>[] = [];
@@ -179,8 +183,7 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const err = await response.text();
-      console.error('Groq API error:', response.status, err);
-      return NextResponse.json({ error: `Groq error ${response.status}: ${err}` }, { status: 500 });
+      return NextResponse.json({ error: `Groq error: ${err}` }, { status: 500 });
     }
 
     const data = await response.json();

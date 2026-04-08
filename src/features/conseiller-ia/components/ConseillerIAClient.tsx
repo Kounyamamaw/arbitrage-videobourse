@@ -324,7 +324,7 @@ export function ConseillerIAClient() {
           {/* Suggestion chips */}
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
             gap: 8,
             marginBottom: 20,
             width: "100%",
