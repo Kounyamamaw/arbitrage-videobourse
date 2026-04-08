@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useFilterStore } from "@/lib/store";
 import { Broker } from "@/lib/brokers";
 import { BrokerCard } from "./BrokerCard";
-import { Search, X } from "lucide-react";
+import { Search, X, Share2, Check } from "lucide-react";
 
 export function BrokerGrid() {
   const {
@@ -17,7 +17,35 @@ export function BrokerGrid() {
   const [search, setSearch] = useState("");
   const [allBrokers, setAllBrokers] = useState<Broker[]>([]);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
   const searchParams = useSearchParams();
+
+  const buildShareUrl = useCallback(() => {
+    if (typeof window === "undefined") return "";
+    const {
+      category, accountType, sortBy, assetClass, level, fiscality, platform, hasDCA, hasFractions,
+    } = useFilterStore.getState();
+    const params = new URLSearchParams();
+    if (category    !== "all")   params.set("category",     category);
+    if (accountType !== "all")   params.set("accountType",  accountType);
+    if (sortBy      !== "score") params.set("sortBy",       sortBy);
+    if (assetClass  !== "all")   params.set("assetClass",   assetClass);
+    if (level       !== "all")   params.set("level",        level);
+    if (fiscality   !== "all")   params.set("fiscality",    fiscality);
+    if (platform    !== "all")   params.set("platform",     platform);
+    if (hasDCA)                  params.set("hasDCA",       "1");
+    if (hasFractions)            params.set("hasFractions", "1");
+    const qs = params.toString();
+    return `${window.location.origin}/dashboard/courtiers${qs ? `?${qs}` : ""}`;
+  }, []);
+
+  const handleShare = () => {
+    const url = buildShareUrl();
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   // Restaurer tous les filtres depuis les query params (liens partagés)
   useEffect(() => {
@@ -131,20 +159,36 @@ export function BrokerGrid() {
 
   return (
     <div className="flex-1 space-y-5">
-      <div className="relative">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Rechercher un courtier ou banque..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-9 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-        />
-        {search && (
-          <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2">
-            <X size={13} className="text-muted-foreground" />
-          </button>
-        )}
+      {/* Barre de recherche + bouton partage */}
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1 min-w-0">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Rechercher un courtier ou banque..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-9 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          {search && (
+            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2">
+              <X size={13} className="text-muted-foreground" />
+            </button>
+          )}
+        </div>
+        {/* Bouton partager la vue filtrée */}
+        <button
+          onClick={handleShare}
+          title="Copier le lien de cette vue filtrée"
+          className="shrink-0 flex items-center justify-center rounded-lg border border-border bg-background transition-all hover:border-primary/50"
+          style={{
+            width: 38, height: 38,
+            color: copied ? "var(--positive, #22c55e)" : "var(--text-muted)",
+            transition: "color 150ms, border-color 150ms",
+          }}
+        >
+          {copied ? <Check size={14} /> : <Share2 size={14} />}
+        </button>
       </div>
       <div className="flex items-center justify-between">
         <p className="text-xs text-muted-foreground">{filtered.length} résultat{filtered.length !== 1 ? "s" : ""}</p>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useFilterStore } from "@/lib/store";
-import { SlidersHorizontal, ChevronDown, ChevronUp, Share2, Check } from "lucide-react";
+import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 
 const CATEGORIES = [
   { value: "all",       label: "Tous les acteurs" },
@@ -108,34 +108,8 @@ export function BrokerFilters() {
   } = useFilterStore();
 
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const hasActiveAdvanced = assetClass !== "all" || level !== "all" || fiscality !== "all" || platform !== "all" || hasDCA || hasFractions;
-
-  // Construit l'URL partageable avec les filtres actifs en query params
-  const buildShareUrl = useCallback(() => {
-    if (typeof window === "undefined") return "";
-    const params = new URLSearchParams();
-    if (category    !== "all")   params.set("category",    category);
-    if (accountType !== "all")   params.set("accountType", accountType);
-    if (sortBy      !== "score") params.set("sortBy",      sortBy);
-    if (assetClass  !== "all")   params.set("assetClass",  assetClass);
-    if (level       !== "all")   params.set("level",       level);
-    if (fiscality   !== "all")   params.set("fiscality",   fiscality);
-    if (platform    !== "all")   params.set("platform",    platform);
-    if (hasDCA)                  params.set("hasDCA",      "1");
-    if (hasFractions)            params.set("hasFractions","1");
-    const qs = params.toString();
-    return `${window.location.origin}/dashboard/courtiers${qs ? `?${qs}` : ""}`;
-  }, [category, accountType, sortBy, assetClass, level, fiscality, platform, hasDCA, hasFractions]);
-
-  const handleShare = () => {
-    const url = buildShareUrl();
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
 
   return (
     <aside className="hidden lg:flex w-60 shrink-0 flex-col gap-5">
@@ -147,22 +121,6 @@ export function BrokerFilters() {
           <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)" }}>Filtres</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {/* Bouton partager la vue filtrée */}
-          <button
-            onClick={handleShare}
-            title="Copier le lien de cette vue filtrée"
-            style={{
-              display: "flex", alignItems: "center", gap: 4,
-              fontSize: 11, color: copied ? "var(--positive)" : "var(--text-faint)",
-              cursor: "pointer", background: "none", border: "none", padding: 0,
-              transition: "color 150ms",
-            }}
-          >
-            {copied
-              ? <><Check size={11} /> Copié</>
-              : <><Share2 size={11} /> Partager</>
-            }
-          </button>
           <button onClick={reset} style={{ fontSize: 11, color: "var(--text-faint)", cursor: "pointer", background: "none", border: "none", padding: 0 }}>
             Réinit.
           </button>
