@@ -16,6 +16,7 @@ type BrokerRow = {
   score_support?: number;
   affiliate_url: string | null;
   category: string;
+  logo_url?: string;
 };
 
 const TABS = [
@@ -37,7 +38,13 @@ const FALLBACK: BrokerRow[] = [
 ];
 
 function scoreColor(v: number) {
-  return v >= 7.5 ? "var(--positive)" : v >= 6 ? "var(--warning)" : "var(--negative)";
+  if (v >= 8.0) return "var(--positive)";
+  if (v >= 6.7) {
+    const t = (v - 6.7) / 1.2;
+    return `hsl(${Math.round(30 + t * 12)},${Math.round(90 - t * 5)}%,${Math.round(48 + t * 4)}%)`;
+  }
+  const t = v / 6.7;
+  return `hsl(${Math.round(4 + t * 11)},${Math.round(80 - t * 10)}%,${Math.round(46 + t * 4)}%)`;
 }
 
 export function RecentSales() {
@@ -65,12 +72,12 @@ export function RecentSales() {
       <CardHeader className="pb-2">
         <CardTitle>Top intermédiaires</CardTitle>
         <CardDescription>Les mieux notés par catégorie</CardDescription>
-        <div className="flex flex-wrap gap-1.5 pt-2">
+        <div className="flex gap-1 pt-2 overflow-x-auto scrollbar-none" style={{ scrollbarWidth: "none" }}>
           {TABS.map((t) => (
             <button
               key={t.key}
               onClick={() => setActiveTab(t.key)}
-              className={`rounded-lg px-3 py-1 text-xs font-semibold transition-colors ${
+              className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors ${
                 activeTab === t.key
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -94,8 +101,13 @@ export function RecentSales() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-muted/60 group"
               >
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary group-hover:bg-primary/20 transition-colors">
-                  {broker.name.slice(0, 2).toUpperCase()}
+                <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 overflow-hidden group-hover:bg-primary/20 transition-colors">
+                  {broker.logo_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={broker.logo_url} alt={broker.name} className="size-7 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                  ) : (
+                    <span className="text-xs font-bold text-primary">{broker.name.slice(0, 2).toUpperCase()}</span>
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium leading-none truncate group-hover:text-primary transition-colors">

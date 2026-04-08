@@ -1,5 +1,5 @@
 import { AreaGraph } from '@/features/overview/components/area-graph';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
 // On définit une interface propre pour éviter le "typeof data[0]" qui fait planter le build
 interface BrokerData {

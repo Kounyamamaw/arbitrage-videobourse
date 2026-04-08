@@ -145,9 +145,8 @@ export type BrokerDetail = Broker & {
 };
 
 // ── Calcul cohérent du score global ──────────────────────────────────────
-// Toujours calculé à partir des critères affichés, jamais depuis la valeur
-// stockée en base (qui peut dater d'avant l'ajout de nouveaux critères).
-// Formule 5 critères si envergure+support renseignés, sinon 3 critères.
+// Formule : moyenne simple des 5 critères disponibles.
+// Si envergure ou support sont absents (0), on fait la moyenne des critères renseignés.
 export function computeOverallScore(broker: Broker): number {
   const fees        = broker.score_fees        || 0;
   const reliability = broker.score_reliability || 0;
@@ -156,29 +155,42 @@ export function computeOverallScore(broker: Broker): number {
   const support     = (broker as any).score_support   ?? 0;
 
   // Sans les 3 scores de base, on retourne la valeur stockée (fallback sûr)
-  if (!fees || !reliability || !ux) return broker.score_overall;
+  if (!fees && !reliability && !ux) return broker.score_overall;
 
-  if (envergure > 0 && support > 0) {
-    // Pondération 5 critères : Frais 25% | Fiabilité 25% | Interface 20% | Envergure 15% | Support 15%
-    return Math.min(Math.round((
-      fees * 0.25 + reliability * 0.25 + ux * 0.20 + envergure * 0.15 + support * 0.15
-    ) * 10) / 10, 10);
-  }
-  // Pondération 3 critères : Frais 40% | Fiabilité 35% | Interface 25%
-  return Math.min(Math.round((
-    fees * 0.40 + reliability * 0.35 + ux * 0.25
-  ) * 10) / 10, 10);
+  const scores  = [fees, reliability, ux, envergure, support].filter(s => s > 0);
+  const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+  return Math.min(Math.round(average * 10) / 10, 10);
 }
 
-// ── Couleurs des scores ──────────────────────────────────────────────────
-// Palier validé : vert ≥ 7.5 | orange ≥ 6 | rouge < 6
-// Centralisé ici pour éviter toute divergence entre les composants.
+// ── Couleurs des scores — dégradé fluide ─────────────────────────────────
+// Vert   : 10 → 8.0
+// Orange : 7.9 → 6.7
+// Rouge  : < 6.7
+// Interpolation HSL pour une transition douce sans saut brutal de couleur.
 export function scoreColor(value: number): string {
-  return value >= 7.5 ? "var(--positive)" : value >= 6 ? "var(--warning)" : "var(--negative)";
+  const v = Math.max(0, Math.min(10, value));
+  if (v >= 8.0) {
+    // Vert fixe — pas de dégradé
+    return "var(--positive)";
+  }
+  if (v >= 6.7) {
+    // Orange vif (6.7) → Jaune-orange (7.9)
+    const t = (v - 6.7) / 1.2;
+    const h = Math.round(30  + t * 12);
+    const s = Math.round(90  - t * 5);
+    const l = Math.round(48  + t * 4);
+    return `hsl(${h},${s}%,${l}%)`;
+  }
+  // Rouge (< 6.7)
+  const t = v / 6.7;
+  const h = Math.round(4   + t * 11);
+  const s = Math.round(80  - t * 10);
+  const l = Math.round(46  + t * 4);
+  return `hsl(${h},${s}%,${l}%)`;
 }
 export function scoreBg(value: number): string {
-  return value >= 7.5 ? "var(--positive-bg)" : value >= 6 ? "var(--warning-bg)" : "var(--negative-bg)";
+  return value >= 8.0 ? "var(--positive-bg)" : value >= 6.7 ? "var(--warning-bg)" : "var(--negative-bg)";
 }
 export function scoreTailwind(value: number): string {
-  return value >= 7.5 ? "text-green-600" : value >= 6 ? "text-amber-600" : "text-red-500";
+  return value >= 8.0 ? "text-green-600" : value >= 6.7 ? "text-amber-600" : "text-red-500";
 }

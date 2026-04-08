@@ -1,5 +1,5 @@
 import { PieGraph } from '@/features/overview/components/pie-graph';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
 const CAT_LABELS: Record<string, string> = {
   broker: 'Courtiers', bank: 'Banques', neobanque: 'Néobanques',

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
 // GET single broker
 export async function GET(
@@ -12,15 +12,21 @@ export async function GET(
   return NextResponse.json(data);
 }
 
-// PATCH — update broker
+// PATCH — update broker by slug
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  const { id } = await params; // id param contains the slug
   const body = await req.json();
-  const { data, error } = await supabase.from('brokers').update(body).eq('id', id).select().single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  // Try by slug first (most common case from admin), fallback to id
+  const { data, error } = await supabase.from('brokers').update(body).eq('slug', id).select().single();
+  if (error) {
+    // Fallback: try by id column
+    const { data: d2, error: e2 } = await supabase.from('brokers').update(body).eq('id', id).select().single();
+    if (e2) return NextResponse.json({ error: e2.message }, { status: 500 });
+    return NextResponse.json(d2);
+  }
   return NextResponse.json(data);
 }
 

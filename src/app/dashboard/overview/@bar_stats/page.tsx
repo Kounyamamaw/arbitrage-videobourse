@@ -1,5 +1,5 @@
 import { BarGraph } from '@/features/overview/components/bar-graph';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
 async function getBrokerScores() {
   try {

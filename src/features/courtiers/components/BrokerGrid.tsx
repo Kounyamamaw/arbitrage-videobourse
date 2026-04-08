@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useFilterStore } from "@/lib/store";
-import { Broker } from "@/lib/brokers";
+import { Broker, computeOverallScore } from "@/lib/brokers";
 import { BrokerCard } from "./BrokerCard";
 import { Search, X, Share2, Check } from "lucide-react";
 
@@ -109,7 +109,11 @@ export function BrokerGrid() {
 
   const filtered = useMemo(() => {
     let list = [...enrichedBrokers];
-    if (category && category !== "all") list = list.filter((b) => b.category === category);
+    if (category && category !== "all") list = list.filter((b) => {
+      // Check primary category OR multi-category array
+      const cats: string[] = (b as any).categories || [];
+      return b.category === category || cats.includes(category);
+    });
     if (accountType && accountType !== "all") list = list.filter((b) => b.accounts?.includes(accountType));
     if (maxDeposit < 10000) list = list.filter((b) => b.deposit_minimum <= maxDeposit);
 
@@ -140,7 +144,7 @@ export function BrokerGrid() {
       case "fees": list.sort((a, z) => z.score_fees - a.score_fees); break;
       case "trustpilot": list.sort((a, z) => z.trustpilot_score - a.trustpilot_score); break;
       case "name": list.sort((a, z) => a.name.localeCompare(z.name)); break;
-      default: list.sort((a, z) => z.score_overall - a.score_overall);
+      default: list.sort((a, z) => computeOverallScore(z) - computeOverallScore(a));
     }
     // Partners always float to top
     list.sort((a, z) => {

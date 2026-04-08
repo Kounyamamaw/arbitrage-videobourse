@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
 export async function GET() {
   const { data, error } = await supabase
     .from('brokers')
-    .select('id, name, slug, category, website, affiliate_url, tagline, is_partner, demo_url, created_at')
+    .select('id, name, slug, category, website, affiliate_url, tagline, is_partner, demo_url, logo_url, created_at')
     .order('name');
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);

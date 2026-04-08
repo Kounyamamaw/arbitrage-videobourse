@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 export function BarGraph({ data }: { data: { name: string; score: number; frais: number }[] }) {
   return (
-    <Card className='@container/card'>
+    <Card className='h-full' style={{ minHeight: 340 }}>
       <CardHeader>
         <CardTitle>Classement des courtiers</CardTitle>
         <CardDescription>Score global et score frais</CardDescription>
