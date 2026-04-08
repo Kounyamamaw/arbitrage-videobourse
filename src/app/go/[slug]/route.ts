@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const { slug } = await params;
 
-  // Récupérer les infos du broker
+  // 1. Récupérer les infos du broker
   const { data } = await supabase
     .from('brokers')
     .select('affiliate_url, name')
@@ -18,15 +18,24 @@ export async function GET(
     return NextResponse.redirect(new URL('/dashboard/courtiers', request.url));
   }
 
-  // Lire la source depuis le query param (?src=card|detail|overview|compare|ia)
+  // 2. Lire la source depuis le query param
   const source = request.nextUrl.searchParams.get('src') || 'direct';
 
-  // Enregistrer le clic en base (fire-and-forget — ne bloque pas la redirection)
-  supabase
-    .from('affiliate_clicks')
-    .insert({ broker_id: slug, broker_name: data.name, source })
-    .then(() => {}) // ignoré intentionnellement
-    .catch(() => {}); // silencieux — le tracking ne doit jamais bloquer l'UX
+  // 3. Enregistrer le clic (Version corrigée pour TypeScript)
+  // On utilise un bloc try/catch simple au lieu de .then().catch()
+  try {
+    await supabase
+      .from('affiliate_clicks')
+      .insert({ 
+        broker_id: slug, 
+        broker_name: data.name, 
+        source 
+      });
+  } catch (error) {
+    // On log l'erreur en console pour le debug mais on ne bloque pas l'utilisateur
+    console.error('Tracking error:', error);
+  }
 
+  // 4. Redirection
   return NextResponse.redirect(data.affiliate_url);
 }
