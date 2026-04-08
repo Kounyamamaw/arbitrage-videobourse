@@ -29,10 +29,10 @@ import { OrgSwitcher } from '../org-switcher';
 import { NavItem } from '@/types';
 
 const SECTIONS = [
-  { label: "Outils", items: ["Vue d'ensemble"] },
-  { label: 'Courtiers', items: ['Courtiers'] },
-  { label: 'Actifs', items: ['Actifs'] },
-  { label: 'Intelligence', items: ['Intelligence'] },
+  { label: "Outils",       items: ["Vue d'ensemble"] },
+  { label: 'Courtiers',    items: ['Courtiers'] },
+  { label: 'Actifs',       items: ['Actifs'] },
+  { label: 'Intelligence', items: ['Conseiller IA'] },
 ];
 
 function SubItem({ subItem, pathname }: { subItem: NavItem; pathname: string }) {
@@ -112,9 +112,10 @@ function CollapsibleNavItem({ item, pathname }: { item: NavItem; pathname: strin
     );
   }
 
-  // On mobile and desktop expanded: show full collapsible with sub-items always open
+  // On mobile and desktop expanded: show full collapsible
+  // Actifs est fermé par défaut, les autres restent ouverts
   return (
-    <Collapsible asChild defaultOpen={true} className='group/collapsible'>
+    <Collapsible asChild defaultOpen={item.title !== 'Actifs'} className='group/collapsible'>
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
           <SidebarMenuButton tooltip={item.title} isActive={!!isActive}>

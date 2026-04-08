@@ -8,16 +8,37 @@ import { BrokerCard } from "./BrokerCard";
 import { Search, X } from "lucide-react";
 
 export function BrokerGrid() {
-  const { category, accountType, sortBy, maxDeposit, assetClass, level, fiscality, platform, hasDCA, hasFractions, setCategory } = useFilterStore();
+  const {
+    category, accountType, sortBy, maxDeposit,
+    assetClass, level, fiscality, platform, hasDCA, hasFractions,
+    setCategory, setAccountType, setSortBy, setAssetClass,
+    setLevel, setFiscality, setPlatform, setHasDCA, setHasFractions,
+  } = useFilterStore();
   const [search, setSearch] = useState("");
   const [allBrokers, setAllBrokers] = useState<Broker[]>([]);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
 
-  // Pre-filter from URL param ?category=broker|bank|crypto
+  // Restaurer tous les filtres depuis les query params (liens partagés)
   useEffect(() => {
-    const urlCat = searchParams.get("category");
-    if (urlCat) setCategory(urlCat);
+    const cat = searchParams.get("category");
+    const acc = searchParams.get("accountType");
+    const srt = searchParams.get("sortBy");
+    const cls = searchParams.get("assetClass");
+    const lvl = searchParams.get("level");
+    const fsc = searchParams.get("fiscality");
+    const plt = searchParams.get("platform");
+    const dca = searchParams.get("hasDCA");
+    const frx = searchParams.get("hasFractions");
+    if (cat) setCategory(cat);
+    if (acc) setAccountType(acc);
+    if (srt) setSortBy(srt);
+    if (cls) setAssetClass(cls);
+    if (lvl) setLevel(lvl);
+    if (fsc) setFiscality(fsc);
+    if (plt) setPlatform(plt);
+    if (dca === "1") setHasDCA(true);
+    if (frx === "1") setHasFractions(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Broker } from "@/lib/brokers";
+import { Broker, computeOverallScore, scoreColor, scoreBg } from "@/lib/brokers";
 import { FireDCACalculator } from "./FireDCACalculator";
 import {
   RadarChart, PolarGrid, PolarAngleAxis, Radar,
@@ -121,8 +121,8 @@ function FeaturedIcon({ icon: Icon, color = "brand", size = "md" }: {
 
 // ── Score Badge ───────────────────────────────────────────────────────────
 function ScoreBadge({ value }: { value: number }) {
-  const color = value >= 8.5 ? "var(--positive)" : value >= 7 ? "var(--warning)" : "var(--negative)";
-  const bg    = value >= 8.5 ? "var(--positive-bg)" : value >= 7 ? "var(--warning-bg)" : "var(--negative-bg)";
+  const color = scoreColor(value);
+  const bg    = scoreBg(value);
   return (
     <div style={{
       display: "inline-flex", alignItems: "center", gap: 5,
@@ -274,7 +274,7 @@ function FeeComparisonChart({ broker, allBrokers }: { broker: Broker; allBrokers
 
 // ── Score breakdown row ────────────────────────────────────────────────────
 function ScoreRow({ label, value, description }: { label: string; value: number; description: string }) {
-  const color = value >= 8.5 ? "var(--positive)" : value >= 7 ? "var(--warning)" : "var(--negative)";
+  const color = scoreColor(value);
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 0", borderBottom: "1px solid var(--border-light)", minWidth: 0 }}>
       <div style={{ flex: 1 }}>
@@ -338,13 +338,16 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
   }, [rawBroker, allBrokers]);
 
   // Merge auto-scores with broker (auto-scores override only if current score is 0)
-  const broker = useMemo(() => ({
-    ...rawBroker,
-    score_fees: rawBroker.score_fees > 0 ? rawBroker.score_fees : autoScores.score_fees,
-    score_reliability: rawBroker.score_reliability > 0 ? rawBroker.score_reliability : autoScores.score_reliability,
-    score_ux: rawBroker.score_ux > 0 ? rawBroker.score_ux : autoScores.score_ux,
-    score_overall: rawBroker.score_overall > 0 ? rawBroker.score_overall : autoScores.score_overall,
-  }), [rawBroker, autoScores]);
+  const broker = useMemo(() => {
+    const merged = {
+      ...rawBroker,
+      score_fees:        rawBroker.score_fees        > 0 ? rawBroker.score_fees        : autoScores.score_fees,
+      score_reliability: rawBroker.score_reliability > 0 ? rawBroker.score_reliability : autoScores.score_reliability,
+      score_ux:          rawBroker.score_ux          > 0 ? rawBroker.score_ux          : autoScores.score_ux,
+    };
+    // score_overall recalculé systématiquement à partir des critères réels
+    return { ...merged, score_overall: computeOverallScore(merged as Broker) };
+  }, [rawBroker, autoScores]);
 
   const markets = Object.keys(broker.fees || {}) as ("FR" | "EU" | "US")[];
 

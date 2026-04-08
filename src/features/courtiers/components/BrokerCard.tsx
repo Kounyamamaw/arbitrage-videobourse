@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Broker, estimateAnnualFees } from "@/lib/brokers";
+import { Broker, estimateAnnualFees, computeOverallScore, scoreColor } from "@/lib/brokers";
 import { Star, ArrowUpRight, Check, Minus, TrendingUp } from "lucide-react";
 import { useState } from "react";
 
@@ -147,7 +147,7 @@ function BrokerLogo({ broker }: { broker: Broker }) {
 }
 
 function ScoreBar({ value, color }: { value: number; color?: string }) {
-  const c = color || (value >= 8.5 ? "var(--positive)" : value >= 7 ? "var(--warning)" : "var(--negative)");
+  const c = color || scoreColor(value);
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
       <div style={{ flex: 1, height: 3, backgroundColor: "var(--border)", borderRadius: 2, overflow: "hidden" }}>
@@ -168,6 +168,8 @@ export function BrokerCard({
     ? estimateAnnualFees(broker, orderAmount, ordersPerMonth, market)
     : null;
 
+  // Score affiché = toujours calculé depuis les critères (cohérence garantie)
+  const displayScore = computeOverallScore(broker);
   const isTop = rank === 1;
 
   return (
@@ -233,11 +235,11 @@ export function BrokerCard({
         <span style={{
           fontSize: 20, fontWeight: 800,
           fontFamily: "var(--font-sora)",
-          color: broker.score_overall >= 8.5 ? "var(--positive)" : broker.score_overall >= 7 ? "var(--warning)" : "var(--negative)",
+          color: scoreColor(displayScore),
           flexShrink: 0,
           lineHeight: 1,
         }}>
-          {broker.score_overall.toFixed(1)}
+          {displayScore.toFixed(1)}
         </span>
       </div>
 

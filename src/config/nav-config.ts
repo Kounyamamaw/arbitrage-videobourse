@@ -26,24 +26,22 @@ export const navItems: NavItem[] = [
     isActive: true,
     items: [
       { title: 'Vue globale', url: '/dashboard/par-actif', icon: 'chartPie' },
-      { title: 'ETF', url: '/dashboard/etf', icon: 'chartLine', shortcut: ['e', 'e'] },
-      { title: 'Actions', url: '#', icon: 'bolt' },
-      { title: 'Forex', url: '#', icon: 'world' },
-      { title: 'CFD', url: '#', icon: 'chartBar' },
-      { title: 'Dérivés', url: '#', icon: 'currency', items: [
-        { title: 'Options', url: '#' },
-        { title: 'Futures', url: '#' },
+      { title: 'ETF',        url: '#',                    icon: 'chartLine', shortcut: ['e', 'e'] },
+      { title: 'Actions',    url: '#',                    icon: 'bolt' },
+      { title: 'Forex',      url: '#',                    icon: 'world' },
+      { title: 'CFD',        url: '#',                    icon: 'chartBar' },
+      { title: 'Dérivés',    url: '#',                    icon: 'currency', items: [
+        { title: 'Options',  url: '#' },
+        { title: 'Futures',  url: '#' },
       ]},
     ]
   },
   {
-    title: 'Intelligence',
-    url: '#',
+    title: 'Conseiller IA',
+    url: '/dashboard/conseiller-ia',
     icon: 'sparkles',
     isActive: true,
-    items: [
-      { title: 'Conseiller IA', url: '/dashboard/conseiller-ia', icon: 'chat', shortcut: ['i', 'i'] }
-    ]
+    items: []
   },
 ];
 

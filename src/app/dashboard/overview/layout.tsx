@@ -7,20 +7,19 @@ import { supabase } from '@/lib/supabase';
 
 async function getStats() {
   try {
-    const [{ count: brokerCount }, { count: etfCount }] = await Promise.all([
-      supabase.from('brokers').select('*', { count: 'exact', head: true }),
-      supabase.from('etfs').select('*', { count: 'exact', head: true }),
-    ]);
-    return { brokerCount: brokerCount ?? 12, etfCount: etfCount ?? 15 };
+    const { count: brokerCount } = await supabase
+      .from('brokers')
+      .select('*', { count: 'exact', head: true });
+    return { brokerCount: brokerCount ?? 12 };
   } catch {
-    return { brokerCount: 12, etfCount: 15 };
+    return { brokerCount: 12 };
   }
 }
 
 export default async function OverViewLayout({ sales, pie_stats, bar_stats, area_stats }: {
   sales: React.ReactNode; pie_stats: React.ReactNode; bar_stats: React.ReactNode; area_stats: React.ReactNode;
 }) {
-  const { brokerCount, etfCount } = await getStats();
+  const { brokerCount } = await getStats();
   return (
     <PageContainer>
       <div className='flex flex-1 flex-col space-y-2'>
@@ -29,7 +28,8 @@ export default async function OverViewLayout({ sales, pie_stats, bar_stats, area
           <span className='rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'>Bêta</span>
         </div>
 
-        <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-2 lg:grid-cols-4'>
+        {/* 3 cartes — ETF supprimée temporairement */}
+        <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-3'>
           <Card className='@container/card'>
             <CardHeader>
               <CardDescription>Intermédiaires analysés</CardDescription>
@@ -39,18 +39,6 @@ export default async function OverViewLayout({ sales, pie_stats, bar_stats, area
             <CardFooter className='flex-col items-start gap-1.5 text-sm'>
               <div className='line-clamp-1 flex gap-2 font-medium'>Courtiers, banques, néobanques, crypto <IconTrendingUp className='size-4' /></div>
               <div className='text-muted-foreground'>Données enrichies en continu</div>
-            </CardFooter>
-          </Card>
-
-          <Card className='@container/card'>
-            <CardHeader>
-              <CardDescription>ETF référencés</CardDescription>
-              <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>{etfCount}</CardTitle>
-              <CardAction><Badge variant='outline'><IconTrendingUp />+récents</Badge></CardAction>
-            </CardHeader>
-            <CardFooter className='flex-col items-start gap-1.5 text-sm'>
-              <div className='line-clamp-1 flex gap-2 font-medium'>MSCI World, S&amp;P500, Nasdaq, Obligations <IconTrendingUp className='size-4' /></div>
-              <div className='text-muted-foreground'>Avec calcul de coût total réel</div>
             </CardFooter>
           </Card>
 
@@ -74,7 +62,7 @@ export default async function OverViewLayout({ sales, pie_stats, bar_stats, area
             </CardHeader>
             <CardFooter className='flex-col items-start gap-1.5 text-sm'>
               <div className='line-clamp-1 flex gap-2 font-medium'>Zéro conflit d&apos;intérêt <IconTrendingUp className='size-4' /></div>
-              <div className='text-muted-foreground'>Données objectives et non manipulées</div>
+              <div className='text-muted-foreground'>Données objectives</div>
             </CardFooter>
           </Card>
         </div>

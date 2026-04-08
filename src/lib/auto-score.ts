@@ -110,8 +110,19 @@ export function calculateAutoScores(broker: Broker, allBrokers: Broker[]): {
   scoreUX = Math.min(Math.max(scoreUX, 1), 10);
 
   // ── Score Overall ──
-  // Weighted: fees 40%, reliability 35%, UX 25%
-  const scoreOverall = Math.round((scoreFees * 0.4 + scoreReliability * 0.35 + scoreUX * 0.25) * 10) / 10;
+  // Même pondération que computeOverallScore dans brokers.ts.
+  // Ici on est dans le cas "auto-calcul" donc envergure/support = 0
+  // → on applique la formule 3 critères : Frais 40% | Fiabilité 35% | Interface 25%
+  const scoreEnvergure = (broker as any).score_envergure ?? 0;
+  const scoreSupport   = (broker as any).score_support   ?? 0;
+
+  let scoreOverall: number;
+  if (scoreEnvergure > 0 && scoreSupport > 0) {
+    scoreOverall = scoreFees * 0.25 + scoreReliability * 0.25 + scoreUX * 0.20
+                 + scoreEnvergure * 0.15 + scoreSupport * 0.15;
+  } else {
+    scoreOverall = scoreFees * 0.40 + scoreReliability * 0.35 + scoreUX * 0.25;
+  }
 
   return {
     score_fees: Math.round(scoreFees * 10) / 10,

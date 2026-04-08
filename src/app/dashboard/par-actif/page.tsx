@@ -2,7 +2,7 @@
 
 import PageContainer from '@/components/layout/page-container';
 import brokersData from '@/data/brokers.json';
-import { Broker } from '@/lib/brokers';
+import { Broker, computeOverallScore, scoreTailwind } from '@/lib/brokers';
 import { useState } from 'react';
 import Link from 'next/link';
 import { IconTrendingUp, IconShield, IconCurrencyBitcoin, IconHome, IconBolt, IconBuildingBank, IconChartBar, IconDiamond } from '@tabler/icons-react';
@@ -52,15 +52,15 @@ export default function ParActifPage() {
             <h3 className="text-lg font-semibold">{filtered.length} courtier{filtered.length > 1 ? 's' : ''} pour {asset.label}</h3>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
               {filtered.map((b, i) => (
-                <Link key={b.id} href={`/dashboard/courtiers/${b.slug}`}
+                  <Link key={b.id} href={`/dashboard/courtiers/${b.slug}`}
                   className="flex items-center gap-4 rounded-xl border border-border p-4 transition-all hover:border-primary/40 hover:shadow-sm">
                   <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">{i + 1}</span>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm">{b.name}</p>
                     <p className="text-xs text-muted-foreground truncate">{b.tagline}</p>
                   </div>
-                  <span className={`text-lg font-bold ${b.score_overall >= 8.5 ? 'text-green-600' : b.score_overall >= 7 ? 'text-amber-600' : 'text-red-500'}`}>
-                    {b.score_overall.toFixed(1)}
+                  <span className={`text-lg font-bold ${scoreTailwind(computeOverallScore(b))}`}>
+                    {computeOverallScore(b).toFixed(1)}
                   </span>
                 </Link>
               ))}

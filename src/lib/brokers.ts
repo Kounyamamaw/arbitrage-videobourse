@@ -143,3 +143,42 @@ export type BrokerDetail = Broker & {
   av_fund_euro_rate?:      string;
   av_uc_selection?:        string;
 };
+
+// ── Calcul cohérent du score global ──────────────────────────────────────
+// Toujours calculé à partir des critères affichés, jamais depuis la valeur
+// stockée en base (qui peut dater d'avant l'ajout de nouveaux critères).
+// Formule 5 critères si envergure+support renseignés, sinon 3 critères.
+export function computeOverallScore(broker: Broker): number {
+  const fees        = broker.score_fees        || 0;
+  const reliability = broker.score_reliability || 0;
+  const ux          = broker.score_ux          || 0;
+  const envergure   = (broker as any).score_envergure ?? 0;
+  const support     = (broker as any).score_support   ?? 0;
+
+  // Sans les 3 scores de base, on retourne la valeur stockée (fallback sûr)
+  if (!fees || !reliability || !ux) return broker.score_overall;
+
+  if (envergure > 0 && support > 0) {
+    // Pondération 5 critères : Frais 25% | Fiabilité 25% | Interface 20% | Envergure 15% | Support 15%
+    return Math.min(Math.round((
+      fees * 0.25 + reliability * 0.25 + ux * 0.20 + envergure * 0.15 + support * 0.15
+    ) * 10) / 10, 10);
+  }
+  // Pondération 3 critères : Frais 40% | Fiabilité 35% | Interface 25%
+  return Math.min(Math.round((
+    fees * 0.40 + reliability * 0.35 + ux * 0.25
+  ) * 10) / 10, 10);
+}
+
+// ── Couleurs des scores ──────────────────────────────────────────────────
+// Palier validé : vert ≥ 7.5 | orange ≥ 6 | rouge < 6
+// Centralisé ici pour éviter toute divergence entre les composants.
+export function scoreColor(value: number): string {
+  return value >= 7.5 ? "var(--positive)" : value >= 6 ? "var(--warning)" : "var(--negative)";
+}
+export function scoreBg(value: number): string {
+  return value >= 7.5 ? "var(--positive-bg)" : value >= 6 ? "var(--warning-bg)" : "var(--negative-bg)";
+}
+export function scoreTailwind(value: number): string {
+  return value >= 7.5 ? "text-green-600" : value >= 6 ? "text-amber-600" : "text-red-500";
+}
