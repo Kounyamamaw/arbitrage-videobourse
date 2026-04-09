@@ -23,7 +23,7 @@ export function OrgSwitcher() {
                   />
                 </Link>
               </SidebarMenuButton>
-              <a href='https://videobourse.fr' target='_blank' rel='noopener noreferrer'
+              <a href='https://videobourse.fr' rel='noopener noreferrer'
                 className='flex shrink-0 items-center rounded-md p-1.5 opacity-70 transition-opacity hover:opacity-100' title='VideoBourse.fr'>
                 <img src='/logos/videobourse.svg' alt='VideoBourse' className='h-7 w-7 object-contain' />
               </a>
