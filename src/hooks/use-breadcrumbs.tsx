@@ -18,7 +18,7 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
   '/dashboard/courtiers': [
     { title: 'Accueil', link: '/' },
     { title: 'Tableau de bord', link: '/dashboard/overview' },
-    { title: 'Courtiers', link: '/dashboard/courtiers' }
+    { title: 'Intermédiaires', link: '/dashboard/courtiers' }
   ],
   '/dashboard/comparer': [
     { title: 'Accueil', link: '/' },
@@ -114,11 +114,21 @@ const routeMapping: Record<string, BreadcrumbItem[]> = {
     { title: 'Admin', link: '/dashboard/admin' },
     { title: 'État des données', link: '/dashboard/admin/donnees' }
   ],
+  '/dashboard/offres': [
+    { title: 'Accueil', link: '/' },
+    { title: 'Tableau de bord', link: '/dashboard/overview' },
+    { title: 'Offres Exclusives', link: '/dashboard/offres' }
+  ],
+  '/dashboard/admin/offres': [
+    { title: 'Accueil', link: '/' },
+    { title: 'Admin', link: '/dashboard/admin' },
+    { title: 'Offres', link: '/dashboard/admin/offres' }
+  ],
 };
 
 // Dynamic slug mapping
 const slugLabels: Record<string, string> = {
-  courtiers: 'Courtiers',
+  courtiers: 'Intermédiaires',
   admin: 'Admin',
   etf: 'ETF',
 };
@@ -156,7 +166,7 @@ export function useBreadcrumbs() {
       if (knownNames[key]) label = knownNames[key];
       return [
         { title: 'Accueil', link: '/' },
-        { title: 'Courtiers', link: '/dashboard/courtiers' },
+        { title: 'Intermédiaires', link: '/dashboard/courtiers' },
         { title: label, link: pathname }
       ];
     }

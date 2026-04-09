@@ -43,6 +43,13 @@ export const navItems: NavItem[] = [
     isActive: true,
     items: []
   },
+  {
+    title: 'Offres Exclusives',
+    url: '/dashboard/offres',
+    icon: 'gift',
+    isActive: true,
+    items: []
+  },
 ];
 
 export const adminItems: NavItem[] = [
@@ -64,6 +71,7 @@ export const adminItems: NavItem[] = [
       { title: 'Données', url: '/dashboard/admin/scraping', icon: 'notification' },
       { title: 'Waitlist', url: '/dashboard/admin/waitlist', icon: 'user' },
       { title: 'Trafic', url: '/dashboard/admin/traffic', icon: 'chartLine' },
+      { title: 'Offres', url: '/dashboard/admin/offres', icon: 'gift' },
     ]
   }
 ];

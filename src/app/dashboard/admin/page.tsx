@@ -2,7 +2,7 @@
 
 import PageContainer from '@/components/layout/page-container';
 import Link from 'next/link';
-import { IconDatabase, IconLink, IconUsers, IconChartBar, IconClipboardCheck, IconMail, IconCurrencyDollar, IconChartLine, IconBuildingBank, IconChartAreaLine } from '@tabler/icons-react';
+import { IconDatabase, IconLink, IconUsers, IconChartBar, IconClipboardCheck, IconMail, IconCurrencyDollar, IconChartLine, IconBuildingBank, IconChartAreaLine, IconGift } from '@tabler/icons-react';
 
 const adminPages = [
   { title: 'Intermédiaires', desc: 'Ajouter, modifier ou supprimer des intermédiaires', href: '/dashboard/admin/partenaires', icon: IconUsers, color: 'text-blue-500 bg-blue-500/10' },
@@ -11,6 +11,7 @@ const adminPages = [
   { title: 'État des données', desc: 'Complétude des fiches courtiers', href: '/dashboard/admin/donnees', icon: IconClipboardCheck, color: 'text-teal-500 bg-teal-500/10' },
   { title: 'Waitlist', desc: 'Consulter et exporter les inscrits', href: '/dashboard/admin/waitlist', icon: IconMail, color: 'text-cyan-500 bg-cyan-500/10' },
   { title: 'Trafic', desc: 'Visiteurs, pages vues, audience', href: '/dashboard/admin/traffic', icon: IconChartAreaLine, color: 'text-violet-500 bg-violet-500/10' },
+  { title: 'Offres', desc: 'Gérer les offres exclusives affichées sur le site', href: '/dashboard/admin/offres', icon: IconGift, color: 'text-orange-500 bg-orange-500/10' },
 ];
 
 const assetPages = [

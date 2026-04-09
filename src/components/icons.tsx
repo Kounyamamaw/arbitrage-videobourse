@@ -49,6 +49,7 @@ import {
   IconSparkles,
   IconLock,
   IconChartPie,
+  IconGift,
 } from '@tabler/icons-react';
 
 export type Icon = React.ComponentType<IconProps>;
@@ -105,4 +106,5 @@ export const Icons = {
   sparkles: IconSparkles,
   lock: IconLock,
   chartPie: IconChartPie,
+  gift: IconGift,
 };

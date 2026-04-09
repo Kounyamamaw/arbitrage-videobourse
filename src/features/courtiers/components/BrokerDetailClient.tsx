@@ -430,8 +430,14 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
 
         {/* Row 2b: badges catégories */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 8 }}>
-          {/* Catégorie principale */}
-          <span className="tag" style={{ fontSize: 10 }}>
+          {/* Catégorie principale — style coloré */}
+          <span style={{
+            fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 5,
+            color:           CAT_COLORS[broker.category]?.color || "var(--accent)",
+            backgroundColor: CAT_COLORS[broker.category]?.bg    || "var(--accent-light)",
+            border: `1px solid ${CAT_COLORS[broker.category]?.color || "var(--accent)"}33`,
+            display: "inline-flex", alignItems: "center", lineHeight: "1.4",
+          }}>
             {CAT_LABELS[broker.category] || broker.category}
           </span>
           {/* Catégories supplémentaires */}

@@ -29,10 +29,11 @@ import { OrgSwitcher } from '../org-switcher';
 import { NavItem } from '@/types';
 
 const SECTIONS = [
-  { label: "Outils",       items: ["Vue d'ensemble"] },
+  { label: "",              items: ["Vue d'ensemble"] },
   { label: 'Intermédiaires', items: ['Intermédiaires'] },
   { label: 'Actifs',       items: ['Actifs'] },
   { label: 'Intelligence', items: ['Conseiller IA'] },
+  { label: 'Promotions',    items: ['Offres Exclusives'] },
 ];
 
 function SubItem({ subItem, pathname }: { subItem: NavItem; pathname: string }) {
@@ -156,7 +157,7 @@ export default function AppSidebar() {
 
           return (
             <SidebarGroup key={section.label}>
-              <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
+              {section.label && <SidebarGroupLabel>{section.label}</SidebarGroupLabel>}
               <SidebarMenu>
                 {sectionItems.map((item) => {
                   const Icon = item.icon ? Icons[item.icon] : Icons.logo;
