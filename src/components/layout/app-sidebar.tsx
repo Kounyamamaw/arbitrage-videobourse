@@ -36,6 +36,11 @@ const SECTIONS = [
 ];
 
 function SubItem({ subItem, pathname }: { subItem: NavItem; pathname: string }) {
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  // Fermer la sidebar mobile après navigation
+  const handleClick = () => { if (isMobile) setOpenMobile(false); };
+
   if (subItem.items && subItem.items.length > 0) {
     return (
       <SidebarMenuSubItem>
@@ -73,7 +78,7 @@ function SubItem({ subItem, pathname }: { subItem: NavItem; pathname: string }) 
         </SidebarMenuSubButton>
       ) : (
         <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
-          <Link href={subItem.url}><span>{subItem.title}</span></Link>
+          <Link href={subItem.url} onClick={handleClick}><span>{subItem.title}</span></Link>
         </SidebarMenuSubButton>
       )}
     </SidebarMenuSubItem>
@@ -81,7 +86,7 @@ function SubItem({ subItem, pathname }: { subItem: NavItem; pathname: string }) 
 }
 
 function CollapsibleNavItem({ item, pathname }: { item: NavItem; pathname: string }) {
-  const { state, isMobile } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const router = useRouter();
   const Icon = item.icon ? Icons[item.icon] : Icons.logo;
   const isCollapsed = state === 'collapsed' && !isMobile;
@@ -93,10 +98,9 @@ function CollapsibleNavItem({ item, pathname }: { item: NavItem; pathname: strin
     ) ||
     (item.url !== '#' && pathname.startsWith(item.url));
 
-  // First navigable child (for collapsed click-through)
   const firstUrl = item.items?.find((s) => s.url !== '#')?.url;
 
-  // In collapsed mode (desktop only): clicking navigates to first child instead of toggling
+  // Mode collapsed desktop : clic = navigation directe
   if (isCollapsed && firstUrl) {
     return (
       <SidebarMenuItem>
@@ -112,8 +116,6 @@ function CollapsibleNavItem({ item, pathname }: { item: NavItem; pathname: strin
     );
   }
 
-  // On mobile and desktop expanded: show full collapsible
-  // Actifs est fermé par défaut, les autres restent ouverts
   return (
     <Collapsible asChild defaultOpen={item.title !== 'Actifs'} className='group/collapsible'>
       <SidebarMenuItem>
@@ -138,6 +140,9 @@ function CollapsibleNavItem({ item, pathname }: { item: NavItem; pathname: strin
 
 export default function AppSidebar() {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleDirectLinkClick = () => { if (isMobile) setOpenMobile(false); };
 
   return (
     <Sidebar collapsible='icon'>
@@ -163,7 +168,7 @@ export default function AppSidebar() {
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild tooltip={item.title} isActive={pathname === item.url}>
-                        <Link href={item.url}>
+                        <Link href={item.url} onClick={handleDirectLinkClick}>
                           <Icon />
                           <span>{item.title}</span>
                         </Link>

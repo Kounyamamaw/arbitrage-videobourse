@@ -288,7 +288,12 @@ export function AddPartnerClient() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <p className="font-medium text-sm">{p.name}</p>
+                  {/* Badge catégorie principale */}
                   <span className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">{p.category}</span>
+                  {/* Badges catégories supplémentaires */}
+                  {((p as any).categories || []).filter((c: string) => c !== p.category).map((c: string) => (
+                    <span key={c} className="rounded-md bg-muted/70 border border-border px-2 py-0.5 text-xs text-muted-foreground">{c}</span>
+                  ))}
                   {p.is_partner && <span className="rounded-md bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">Partenaire</span>}
                 </div>
                 <p className="text-xs text-muted-foreground truncate">{p.tagline || p.website || "—"}</p>

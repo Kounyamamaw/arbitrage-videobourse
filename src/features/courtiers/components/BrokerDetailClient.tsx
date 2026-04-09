@@ -12,6 +12,25 @@ import {
   Check, X, Info, Star, Globe, Shield, TrendingUp,
   CreditCard, BarChart2, ArrowUpRight, Zap, Award,
 } from "lucide-react";
+const CAT_LABELS: Record<string, string> = {
+  broker:    "Courtier",
+  bank:      "Banque",
+  neobanque: "Néobanque",
+  insurance: "Assurance-vie",
+  crypto:    "Crypto",
+  cfd:       "CFD",
+  scpi:      "SCPI",
+};
+
+const CAT_COLORS: Record<string, { bg: string; color: string }> = {
+  broker:    { bg: "var(--tint-blue)",   color: "#2563EB" },
+  bank:      { bg: "var(--tint-green)",  color: "var(--accent)" },
+  neobanque: { bg: "var(--tint-green)",  color: "#059669" },
+  insurance: { bg: "var(--tint-purple)", color: "#7C3AED" },
+  crypto:    { bg: "var(--tint-amber)",  color: "#D97706" },
+  cfd:       { bg: "var(--tint-rose)",   color: "#DB2777" },
+  scpi:      { bg: "var(--tint-rose)",   color: "#DB2777" },
+};
 
 // ── Logo helpers (same multi-source as BrokerCard) ────────────────────────
 const LOGO_DOMAINS: Record<string, string> = {
@@ -407,6 +426,29 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
               <span style={{ fontSize: 10, fontWeight: 700, color: "#2563eb" }}>Partenaire</span>
             </div>
           )}
+        </div>
+
+        {/* Row 2b: badges catégories */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 8 }}>
+          {/* Catégorie principale */}
+          <span className="tag" style={{ fontSize: 10 }}>
+            {CAT_LABELS[broker.category] || broker.category}
+          </span>
+          {/* Catégories supplémentaires */}
+          {((broker as any).categories || [])
+            .filter((c: string) => c !== broker.category)
+            .map((c: string) => (
+              <span key={c} style={{
+                fontSize: 9, fontWeight: 700, padding: "2px 7px", borderRadius: 4,
+                color: CAT_COLORS[c]?.color || "var(--accent)",
+                backgroundColor: CAT_COLORS[c]?.bg || "var(--accent-light)",
+                border: `1px solid ${CAT_COLORS[c]?.color || "var(--accent)"}33`,
+                lineHeight: "1.4",
+              }}>
+                {CAT_LABELS[c] || c}
+              </span>
+            ))
+          }
         </div>
 
         {/* Row 3: tagline */}

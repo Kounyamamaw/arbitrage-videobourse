@@ -1,5 +1,5 @@
 import PageContainer from '@/components/layout/page-container';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 import { Broker } from '@/lib/brokers';
 import { BrokerDetailClient } from '@/features/courtiers/components/BrokerDetailClient';
 import { notFound } from 'next/navigation';

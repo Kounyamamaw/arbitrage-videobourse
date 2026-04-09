@@ -16,7 +16,10 @@ type BrokerRow = {
   score_support?: number;
   affiliate_url: string | null;
   category: string;
+  categories?: string[];
   logo_url?: string;
+  is_partner?: boolean;
+  partner_rank?: number;
 };
 
 const TABS = [
@@ -26,16 +29,6 @@ const TABS = [
   { key: "insurance", label: "Assurances" },
   { key: "crypto",    label: "Crypto"     },
 ] as const;
-
-const FALLBACK: BrokerRow[] = [
-  { name: "Interactive Brokers", slug: "interactive-brokers", tagline: "PEA + CTO mondial",     score_overall: 8.9, score_fees: 9.5, score_reliability: 9.8, score_ux: 8.0, affiliate_url: null, category: "broker"    },
-  { name: "XTB",                 slug: "xtb",                 tagline: "0% actions et ETF",     score_overall: 8.8, score_fees: 9.8, score_reliability: 8.5, score_ux: 8.5, affiliate_url: null, category: "broker"    },
-  { name: "Trade Republic",      slug: "trade-republic",      tagline: "1€ par ordre",           score_overall: 8.4, score_fees: 8.5, score_reliability: 8.0, score_ux: 9.2, affiliate_url: null, category: "broker"    },
-  { name: "BNP Paribas",         slug: "bnp-paribas",         tagline: "1ère banque européenne", score_overall: 6.0, score_fees: 4.0, score_reliability: 9.0, score_ux: 6.5, affiliate_url: null, category: "bank"      },
-  { name: "BoursoBank",          slug: "boursobank",          tagline: "Néobanque n°1 France",   score_overall: 7.9, score_fees: 6.5, score_reliability: 9.0, score_ux: 8.5, affiliate_url: null, category: "neobanque" },
-  { name: "Linxea",              slug: "linxea",              tagline: "AV sans frais d'entrée", score_overall: 9.0, score_fees: 9.3, score_reliability: 9.0, score_ux: 8.0, affiliate_url: null, category: "insurance" },
-  { name: "Binance",             slug: "binance",             tagline: "Leader mondial crypto",  score_overall: 7.8, score_fees: 9.0, score_reliability: 7.0, score_ux: 8.0, affiliate_url: null, category: "crypto"    },
-];
 
 function scoreColor(v: number) {
   if (v >= 8.0) return "var(--positive)";
@@ -56,15 +49,22 @@ export function RecentSales() {
       .then((r) => r.json())
       .then((data: BrokerRow[]) => {
         if (Array.isArray(data) && data.length > 0) setAllBrokers(data);
-        else setAllBrokers(FALLBACK);
       })
-      .catch(() => setAllBrokers(FALLBACK));
+      .catch(() => {});
   }, []);
 
   const filtered = allBrokers
-    .filter((b) => b.category === activeTab)
+    // Même logique que BrokerGrid : catégorie principale OU dans le tableau categories
+    .filter((b) => b.category === activeTab || (b.categories || []).includes(activeTab))
     .map((b) => ({ ...b, _display: computeOverallScore(b as any) }))
-    .sort((a, z) => z._display - a._display)
+    // Tri : partenaires d'abord (par partner_rank), puis par score décroissant
+    .sort((a, z) => {
+      const aP = a.is_partner ? 1 : 0;
+      const zP = z.is_partner ? 1 : 0;
+      if (aP !== zP) return zP - aP;
+      if (aP && zP) return (a.partner_rank ?? 999) - (z.partner_rank ?? 999);
+      return z._display - a._display;
+    })
     .slice(0, 5);
 
   return (
@@ -101,6 +101,7 @@ export function RecentSales() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-muted/60 group"
               >
+                {/* Logo */}
                 <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 overflow-hidden group-hover:bg-primary/20 transition-colors">
                   {broker.logo_url && !broker.logo_url.startsWith("data:") ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -108,19 +109,27 @@ export function RecentSales() {
                       src={broker.logo_url}
                       alt={broker.name}
                       className="size-7 object-contain"
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling && ((e.target as HTMLImageElement).nextElementSibling as HTMLElement).classList.remove("hidden"); }}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                     />
-                  ) : null}
-                  {(!broker.logo_url || broker.logo_url.startsWith("data:")) && (
+                  ) : (
                     <span className="text-xs font-bold text-primary">{broker.name.slice(0, 2).toUpperCase()}</span>
                   )}
                 </div>
+                {/* Infos */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium leading-none truncate group-hover:text-primary transition-colors">
-                    {broker.name}
-                  </p>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="text-sm font-medium leading-none truncate group-hover:text-primary transition-colors">
+                      {broker.name}
+                    </p>
+                    {broker.is_partner && (
+                      <span className="shrink-0 rounded px-1.5 py-0.5 text-[9px] font-bold text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400">
+                        Partenaire
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground mt-0.5 truncate">{broker.tagline || "—"}</p>
                 </div>
+                {/* Score */}
                 <div className="font-semibold text-sm shrink-0" style={{ color: scoreColor(broker._display) }}>
                   {broker._display.toFixed(1)}/10
                 </div>

@@ -221,9 +221,30 @@ export function BrokerCard({
             <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", fontFamily: "var(--font-sora)" }}>
               {broker.name}
             </span>
+            {/* Badge catégorie principale */}
             <span className="tag" style={{ fontSize: 10 }}>
               {CAT_LABELS[broker.category] || broker.category}
             </span>
+            {/* Badges catégories supplémentaires (multi-catégorie) */}
+            {(() => {
+              const extra: string[] = ((broker as any).categories || []).filter(
+                (c: string) => c !== broker.category
+              );
+              return extra.map((c) => (
+                <span
+                  key={c}
+                  style={{
+                    fontSize: 9, fontWeight: 700, padding: "2px 7px", borderRadius: 4,
+                    color: CAT_COLORS[c]?.color || "var(--accent)",
+                    backgroundColor: CAT_COLORS[c]?.bg || "var(--accent-light)",
+                    border: `1px solid ${CAT_COLORS[c]?.color || "var(--accent)"}33`,
+                    lineHeight: "1.4",
+                  }}
+                >
+                  {CAT_LABELS[c] || c}
+                </span>
+              ));
+            })()}
             {(broker as any).is_partner && (
               <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 5, color: "#2563eb", backgroundColor: "#dbeafe", border: "1px solid #93c5fd" }}>Partenaire</span>
             )}
