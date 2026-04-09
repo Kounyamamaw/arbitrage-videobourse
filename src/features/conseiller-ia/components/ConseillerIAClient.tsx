@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import { Send, RefreshCw, TrendingUp, BarChart2, ShieldCheck, Zap, ArrowDown } from "lucide-react";
 
 type Message = {
@@ -18,45 +19,11 @@ const SUGGESTIONS = [
   { icon: BarChart2,  text: "Quels sont les frais cachés à surveiller chez les courtiers ?", color: "var(--tint-green)" },
 ];
 
-// Map broker names → affiliate URL for clickable name post-processing
-// This runs CLIENT-SIDE only — no prompt modification needed
-const BROKER_LINKS: Record<string, string> = {
-  "Interactive Brokers":  "https://trading.prorealtime.com/fr/partner_redirect.phtml?pr_page=brokerage_main_ib&from=videobourse-comparatif",
-  "IBKR":                 "https://trading.prorealtime.com/fr/partner_redirect.phtml?pr_page=brokerage_main_ib&from=videobourse-comparatif",
-  "XTB":                  "https://geolink.xtb.com/l1oBG",
-  "Trade Republic":       "https://traderepublic.com/fr-fr",
-  "Degiro":               "https://www.degiro.fr",
-  "DEGIRO":               "https://www.degiro.fr",
-  "Fortuneo":             "https://www.fortuneo.fr",
-  "Boursobank":           "https://www.boursobank.com",
-  "BoursoBank":           "https://www.boursobank.com",
-  "Saxo":                 "https://www.home.saxo/fr-fr",
-  "Saxo Banque":          "https://www.home.saxo/fr-fr",
-  "IG":                   "https://upl.inc/videobourse-upvstk",
-  "eToro":                "https://med.etoro.com/B217_A102387_TClick_SVideoBourse.aspx",
-  "Bourse Direct":        "https://www.boursedirect.fr/",
-  "Linxea":               "https://linxea.mention-me.com/m/ol/mp1tv-fabien-labrousse",
-  "Kraken":               "https://kraken.pxf.io/E00ayW",
-  "Binance":              "https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00B6TUTGSV",
-  "Revolut":              "https://www.revolut.com/",
-  "N26":                  "https://n26.com/",
-  "Wise":                 "https://wise.com/",
-  "Pepperstone":          "https://pepperstone.sjv.io/gRRYBX",
-  "SwissBorg":            "https://swissborg.com/fr/r/fabienFV5TN5DD",
-  "OKX":                  "https://usokx.pxf.io/X44EoG",
-  "Coinbase":             "https://www.coinbase.com/",
-  "Bitpanda":             "https://www.bitpanda.com/",
-  "Bitvavo":              "https://bitvavo.com/",
-  "WH SelfInvest":        "https://www.whselfinvest.fr/fr-fr/",
-  "Yomoni":               "https://www.yomoni.fr/",
-  "Capital.com":          "https://capital.com/",
-};
-
 // Post-process AI response: detect broker names and make them clickable
-// This does NOT modify the prompt — purely client-side rendering
-function makeBrokersClickable(text: string): React.ReactNode[] {
+// brokerLinks is fetched live from Supabase — never hardcoded
+function makeBrokersClickable(text: string, brokerLinks: Record<string, string>): React.ReactNode[] {
   // Build a sorted list of broker names (longest first to avoid partial matches)
-  const names = Object.keys(BROKER_LINKS).sort((a, b) => b.length - a.length);
+  const names = Object.keys(brokerLinks).sort((a, b) => b.length - a.length);
   
   // Escape special regex chars in broker names
   const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -71,7 +38,7 @@ function makeBrokersClickable(text: string): React.ReactNode[] {
   const result: React.ReactNode[] = [];
 
   parts.forEach((part, i) => {
-    const url = BROKER_LINKS[part];
+    const url = brokerLinks[part];
     if (url) {
       result.push(
         <a
@@ -116,7 +83,7 @@ function TypingIndicator() {
   );
 }
 
-function MessageBubble({ msg }: { msg: Message }) {
+function MessageBubble({ msg, brokerLinks }: { msg: Message; brokerLinks: Record<string, string> }) {
   const isUser = msg.role === "user";
 
   // Render content: **bold**, [text](url) markdown links, then broker name detection
@@ -141,14 +108,14 @@ function MessageBubble({ msg }: { msg: Message }) {
           );
         } else {
           // Apply broker clickable detection to plain text
-          result.push(...makeBrokersClickable(part).map((n, j) =>
+          result.push(...makeBrokersClickable(part, brokerLinks).map((n, j) =>
             React.isValidElement(n) ? React.cloneElement(n as React.ReactElement, { key: `${i}-${j}` }) : n
           ));
         }
       } else {
         // Apply broker clickable detection to plain text
         if (!isUser) {
-          result.push(...makeBrokersClickable(part).map((n, j) =>
+          result.push(...makeBrokersClickable(part, brokerLinks).map((n, j) =>
             React.isValidElement(n) ? React.cloneElement(n as React.ReactElement, { key: `${i}-${j}` }) : n
           ));
         } else {
@@ -211,9 +178,34 @@ export function ConseillerIAClient() {
   const [input, setInput]         = useState("");
   const [loading, setLoading]     = useState(false);
   const [error, setError]         = useState("");
+  const [brokerLinks, setBrokerLinks] = useState<Record<string, string>>({});
   const messagesEndRef             = useRef<HTMLDivElement>(null);
   const inputRef                   = useRef<HTMLTextAreaElement>(null);
   const hasMessages                = messages.length > 0;
+
+  // Fetch affiliate URLs live from Supabase — never use hardcoded links
+  useEffect(() => {
+    supabase
+      .from("brokers")
+      .select("name, slug, affiliate_url")
+      .then(({ data }) => {
+        if (!data) return;
+        const map: Record<string, string> = {};
+        for (const b of data) {
+          if (!b.name) continue;
+          const url = b.affiliate_url?.trim()
+            ? b.affiliate_url
+            : `/dashboard/courtiers/${b.slug}`;
+          map[b.name] = url;
+          // Common alternate spellings / abbreviations
+          if (b.name === "Interactive Brokers") map["IBKR"] = url;
+          if (b.name === "Degiro") map["DEGIRO"] = url;
+          if (b.name === "BoursoBank") map["Boursobank"] = url;
+          if (b.name === "Saxo Banque") map["Saxo"] = url;
+        }
+        setBrokerLinks(map);
+      });
+  }, []);
 
   useEffect(() => {
     if (hasMessages) {
@@ -370,7 +362,7 @@ export function ConseillerIAClient() {
           width: "100%",
         }}>
           {messages.map((msg) => (
-            <MessageBubble key={msg.id} msg={msg} />
+            <MessageBubble key={msg.id} msg={msg} brokerLinks={brokerLinks} />
           ))}
           {loading && (
             <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 16 }}>
