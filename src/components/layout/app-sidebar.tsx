@@ -30,7 +30,7 @@ import { NavItem } from '@/types';
 
 const SECTIONS = [
   { label: "Outils",       items: ["Vue d'ensemble"] },
-  { label: 'Courtiers',    items: ['Courtiers'] },
+  { label: 'Intermédiaires', items: ['Intermédiaires'] },
   { label: 'Actifs',       items: ['Actifs'] },
   { label: 'Intelligence', items: ['Conseiller IA'] },
 ];
