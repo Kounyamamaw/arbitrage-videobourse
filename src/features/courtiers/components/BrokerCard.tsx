@@ -346,7 +346,7 @@ export function BrokerCard({
             Détails
           </Link>
           {(broker as any).demo_url && (
-            <a href={(broker as any).demo_url} target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ padding: "5px 12px", fontSize: 12 }}>
+            <a href={`/go/${broker.slug}/demo?src=demo-card`} target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ padding: "5px 12px", fontSize: 12 }}>
               Démo
             </a>
           )}

@@ -1,9 +1,34 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+type ClickRow = {
+  broker_id: string;
+  broker_name: string;
+  source: string;
+  created_at: string;
+};
+
+type AggregatedBroker = {
+  broker_id: string;
+  broker_name: string;
+  total: number;
+  sources: Record<string, number>;
+};
+
+function aggregate(rows: ClickRow[]): AggregatedBroker[] {
+  const counts: Record<string, AggregatedBroker> = {};
+  for (const row of rows) {
+    if (!counts[row.broker_id]) {
+      counts[row.broker_id] = { broker_id: row.broker_id, broker_name: row.broker_name, total: 0, sources: {} };
+    }
+    counts[row.broker_id].total++;
+    counts[row.broker_id].sources[row.source] = (counts[row.broker_id].sources[row.source] || 0) + 1;
+  }
+  return Object.values(counts).sort((a, b) => b.total - a.total);
+}
+
 export async function GET() {
   try {
-    // Total des 30 derniers jours, groupé par broker
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -14,26 +39,37 @@ export async function GET() {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    if (!data || data.length === 0) return NextResponse.json({ byBroker: [], total: 0, recent: [] });
-
-    // Agréger par broker
-    const counts: Record<string, { broker_id: string; broker_name: string; total: number; sources: Record<string, number> }> = {};
-    for (const row of data) {
-      if (!counts[row.broker_id]) {
-        counts[row.broker_id] = { broker_id: row.broker_id, broker_name: row.broker_name, total: 0, sources: {} };
-      }
-      counts[row.broker_id].total++;
-      counts[row.broker_id].sources[row.source] = (counts[row.broker_id].sources[row.source] || 0) + 1;
+    if (!data || data.length === 0) {
+      return NextResponse.json({
+        affiliate: { byBroker: [], total: 0, recent: [] },
+        demo:      { byBroker: [], total: 0, recent: [] },
+        tableExists: true,
+      });
     }
 
-    const byBroker = Object.values(counts).sort((a, b) => b.total - a.total);
+    // Séparer clics affiliés (source ne commence pas par 'demo') et démo (commence par 'demo')
+    const affiliateRows = data.filter((r) => !r.source.startsWith('demo'));
+    const demoRows      = data.filter((r) =>  r.source.startsWith('demo'));
 
     return NextResponse.json({
-      byBroker,
-      total: data.length,
-      recent: data.slice(0, 20), // 20 derniers clics pour le feed
+      tableExists: true,
+      affiliate: {
+        byBroker: aggregate(affiliateRows),
+        total:    affiliateRows.length,
+        recent:   affiliateRows.slice(0, 20),
+      },
+      demo: {
+        byBroker: aggregate(demoRows),
+        total:    demoRows.length,
+        recent:   demoRows.slice(0, 20),
+      },
     });
-  } catch {
-    return NextResponse.json({ byBroker: [], total: 0, recent: [] });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({
+      affiliate: { byBroker: [], total: 0, recent: [] },
+      demo:      { byBroker: [], total: 0, recent: [] },
+      tableError: msg,
+    });
   }
 }

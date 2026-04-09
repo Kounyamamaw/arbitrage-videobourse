@@ -478,7 +478,7 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
             <ArrowUpRight size={13} />
           </a>
           {(broker as any).demo_url && (
-            <a href={(broker as any).demo_url} target="_blank" rel="noopener noreferrer"
+            <a href={`/go/${broker.slug}/demo?src=demo-detail`} target="_blank" rel="noopener noreferrer"
               style={{ flex: "1 1 120px", padding: "11px 16px", fontSize: 13, gap: 6, borderRadius: 10, border: "1px solid var(--border)", color: "var(--text-muted)", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", fontWeight: 600 }}>
               Compte démo
               <ArrowUpRight size={13} />
