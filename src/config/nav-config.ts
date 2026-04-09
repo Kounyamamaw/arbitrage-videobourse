@@ -10,12 +10,12 @@ export const navItems: NavItem[] = [
     items: []
   },
   {
-    title: 'Courtiers',
+    title: 'Intermédiaires',
     url: '#',
     icon: 'bank',
     isActive: true,
     items: [
-      { title: 'Tous les courtiers', url: '/dashboard/courtiers', icon: 'product', shortcut: ['c', 'c'] },
+      { title: 'Tous les acteurs', url: '/dashboard/courtiers', icon: 'product', shortcut: ['c', 'c'] },
       { title: 'Comparer', url: '/dashboard/comparer', icon: 'compare', shortcut: ['k', 'k'] }
     ]
   },
