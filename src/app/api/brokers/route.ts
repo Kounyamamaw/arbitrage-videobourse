@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin as supabase } from '@/lib/supabase';
 
 // GET — list all brokers (with optional filters)
+// is_visible: seuls les courtiers visibles sont renvoyés (côté public)
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const category = searchParams.get('category');
   const accountType = searchParams.get('accountType');
 
-  let query = supabase.from('brokers').select('*').order('score_overall', { ascending: false });
+  let query = supabase
+    .from('brokers')
+    .select('*')
+    .eq('is_visible', true)            // ← filtre visibilité
+    .order('score_overall', { ascending: false });
 
   if (category && category !== 'all') {
     query = query.eq('category', category);

@@ -21,7 +21,7 @@ const ALL_CATEGORIES = [
 
 const EMPTY_FORM = {
   name: "", slug: "", categories: ["broker"] as string[], website: "",
-  affiliate_url: "", tagline: "", demo_url: "", is_partner: false, logo_url: "",
+  affiliate_url: "", tagline: "", demo_url: "", is_partner: false, is_visible: true, logo_url: "",
   score_overall: "" as string, score_fees: "" as string,
   score_reliability: "" as string, score_ux: "" as string,
   score_envergure: "" as string, score_support: "" as string,
@@ -233,7 +233,7 @@ export function AddPartnerClient() {
       categories: full.categories?.length ? full.categories : [full.category || "broker"],
       website: full.website || "", affiliate_url: full.affiliate_url || "",
       tagline: full.tagline || "", demo_url: full.demo_url || "",
-      is_partner: !!full.is_partner, logo_url: full.logo_url || "",
+      is_partner: !!full.is_partner, is_visible: full.is_visible !== false, logo_url: full.logo_url || "",
       score_overall:     full.score_overall     != null ? String(full.score_overall)     : "",
       score_fees:        full.score_fees        != null ? String(full.score_fees)        : "",
       score_reliability: full.score_reliability != null ? String(full.score_reliability) : "",
@@ -399,6 +399,14 @@ export function AddPartnerClient() {
                 <div>
                   <span className="text-sm font-medium">Partenaire VideoBourse</span>
                   <p className="text-xs text-muted-foreground">Badge visible + position prioritaire dans le classement</p>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" checked={form.is_visible !== false} onChange={e => set("is_visible", e.target.checked)} className="size-4 rounded border-border" />
+                <div>
+                  <span className="text-sm font-medium">Visible dans les intermédiaires</span>
+                  <p className="text-xs text-muted-foreground">Décocher pour masquer cet intermédiaire sur la page publique sans le supprimer</p>
                 </div>
               </label>
 

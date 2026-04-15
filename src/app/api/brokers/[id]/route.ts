@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin as supabase } from '@/lib/supabase';
 
 // Champs connus de la table brokers (ceux que PostgREST expose)
-// Note: 'categories' et 'score_envergure/support' doivent exister en base
-// Si erreur "column not found" → exécuter le SQL de migration dans Supabase
 const SCALAR_COLS = new Set([
   'name','slug','category','website','affiliate_url','tagline',
   'demo_url','is_partner','partner_rank','logo_url',
@@ -14,6 +12,7 @@ const SCALAR_COLS = new Set([
   'welcome_offer','level','is_foreign','provides_ifu','has_dca','has_fractions',
   'withdrawal_fee','deposit_fee','dividend_fee','ost_fee',
   'account_opening_fee','account_closing_fee','transfer_out_fee','etf_count','pea_max_deposit',
+  'is_visible',   // ← ajouté
 ]);
 const ARRAY_COLS = new Set([
   'categories','pros','cons','best_for','accounts','regulation',
@@ -50,14 +49,12 @@ export async function PATCH(
     if (SCALAR_COLS.has(k)) { clean[k] = v; continue; }
     if (ARRAY_COLS.has(k)) { clean[k] = Array.isArray(v) ? v : []; continue; }
     if (JSON_COLS.has(k)) { clean[k] = v; continue; }
-    // Ignorer colonnes inconnues silencieusement
   }
 
   if (Object.keys(clean).length === 0) {
     return NextResponse.json({ error: 'No valid fields' }, { status: 400 });
   }
 
-  // Essai UPDATE par slug
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sb = supabase as any;
   let { data, error } = await sb.from('brokers').update(clean).eq('slug', id).select().single();
