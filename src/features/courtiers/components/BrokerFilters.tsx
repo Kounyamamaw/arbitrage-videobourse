@@ -326,6 +326,7 @@ export function BrokerFilters() {
   const hasActiveAdvanced = assetClass !== "all" || level !== "all" || fiscality !== "all" || platform !== "all" || hasDCA || hasFractions;
 
   return (
+    <>
     <MobileFilterDrawer />
     <aside className="hidden lg:flex w-60 shrink-0 flex-col gap-5">
 
@@ -448,5 +449,6 @@ export function BrokerFilters() {
         )}
       </div>
     </aside>
+  </>
   );
 }
