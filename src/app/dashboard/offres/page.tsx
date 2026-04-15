@@ -40,15 +40,34 @@ const CAT_COLORS: Record<string, { bg: string; color: string }> = {
 function OfferCard({ offer }: { offer: Offer }) {
   const cat = offer.broker_category || "";
   const catStyle = CAT_COLORS[cat] || { bg: "var(--muted)", color: "var(--muted-foreground)" };
+  const isExpired = !!offer.expires_at && new Date(offer.expires_at) < new Date();
 
   return (
-    <div className="relative flex flex-col rounded-2xl border border-border bg-card p-6 gap-5 hover:border-primary/30 hover:shadow-md transition-all">
-      {/* Badge offre */}
-      {offer.badge && (
-        <div className="absolute top-4 right-4 rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-primary-foreground tracking-wide">
-          {offer.badge}
-        </div>
-      )}
+    <div
+      className="relative flex flex-col rounded-2xl border border-border bg-card p-6 gap-5 hover:border-primary/30 hover:shadow-md transition-all"
+      style={isExpired ? { opacity: 0.5, filter: "grayscale(0.7)", pointerEvents: "none" } : undefined}
+    >
+      {/* Badge statut — En cours ou Expiré */}
+      <div className="absolute top-4 right-4 flex flex-col items-end gap-1.5">
+        {isExpired ? (
+          <span style={{
+            fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 100,
+            backgroundColor: "#f1f5f9", color: "#94a3b8",
+            border: "1px solid #e2e8f0", letterSpacing: "0.05em", textTransform: "uppercase" as const,
+          }}>Expiré</span>
+        ) : (
+          <span style={{
+            fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 100,
+            backgroundColor: "#dcfce7", color: "#16a34a",
+            border: "1px solid #bbf7d0", letterSpacing: "0.05em", textTransform: "uppercase" as const,
+          }}>✦ En cours</span>
+        )}
+        {offer.badge && !isExpired && (
+          <div className="rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-primary-foreground tracking-wide">
+            {offer.badge}
+          </div>
+        )}
+      </div>
 
       {/* Header : logo + nom + catégorie */}
       <div className="flex items-center gap-3">
