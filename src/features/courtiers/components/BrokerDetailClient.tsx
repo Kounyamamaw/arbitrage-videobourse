@@ -630,7 +630,7 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
       </div>
 
       {/* ── Fee tables ──────────────────────────────────────────────── */}
-      <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px", marginBottom: 24 }}>
+      <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px", marginBottom: 24, overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <FeaturedIcon icon={CreditCard} color="brand" size="sm" />

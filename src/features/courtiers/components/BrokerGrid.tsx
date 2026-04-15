@@ -140,20 +140,23 @@ export function BrokerGrid() {
       const q = search.toLowerCase().trim();
       list = list.filter((b) => b.name.toLowerCase().includes(q) || b.tagline?.toLowerCase().includes(q) || b.category?.toLowerCase().includes(q));
     }
+    // Trier — pour "score" et "fees" le badge partenaire n'a aucun effet
+    const partnerBoostActive = sortBy !== "score" && sortBy !== "fees";
     switch (sortBy) {
-      case "fees": list.sort((a, z) => z.score_fees - a.score_fees); break;
+      case "fees":  list.sort((a, z) => z.score_fees - a.score_fees); break;
       case "trustpilot": list.sort((a, z) => z.trustpilot_score - a.trustpilot_score); break;
-      case "name": list.sort((a, z) => a.name.localeCompare(z.name)); break;
       default: list.sort((a, z) => computeOverallScore(z) - computeOverallScore(a));
     }
-    // Partners always float to top
-    list.sort((a, z) => {
-      const aPartner = (a as any).is_partner ? 1 : 0;
-      const zPartner = (z as any).is_partner ? 1 : 0;
-      if (aPartner !== zPartner) return zPartner - aPartner;
-      if (aPartner && zPartner) return ((a as any).partner_rank || 999) - ((z as any).partner_rank || 999);
-      return 0;
-    });
+    // Partners flottent en tête seulement pour Trustpilot (pas score ni fees)
+    if (partnerBoostActive) {
+      list.sort((a, z) => {
+        const aPartner = (a as any).is_partner ? 1 : 0;
+        const zPartner = (z as any).is_partner ? 1 : 0;
+        if (aPartner !== zPartner) return zPartner - aPartner;
+        if (aPartner && zPartner) return ((a as any).partner_rank || 999) - ((z as any).partner_rank || 999);
+        return 0;
+      });
+    }
     return list;
   }, [category, accountType, sortBy, maxDeposit, search, allBrokers, assetClass, level, fiscality, platform, hasDCA, hasFractions]);
 
