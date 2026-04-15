@@ -45,7 +45,7 @@ function OfferCard({ offer }: { offer: Offer }) {
   return (
     <div
       className="relative flex flex-col rounded-2xl border border-border bg-card p-6 gap-5 hover:border-primary/30 hover:shadow-md transition-all"
-      style={isExpired ? { opacity: 0.5, filter: "grayscale(0.7)", pointerEvents: "none" } : undefined}
+      style={isExpired ? { opacity: 0.65, filter: "grayscale(0.4)" } : undefined}
     >
       {/* Badge statut — En cours ou Expiré */}
       <div className="absolute top-4 right-4 flex flex-col items-end gap-1.5">
@@ -109,7 +109,7 @@ function OfferCard({ offer }: { offer: Offer }) {
       )}
 
       {/* CTA */}
-      {offer.cta_enabled !== false ? (
+      {offer.cta_enabled === true || offer.cta_enabled === undefined || offer.cta_enabled === null ? (
         <a
           href={offer.cta_url}
           target="_blank"
