@@ -9,6 +9,12 @@ const CHECKED_FIELDS = [
   'trustpilot_score', 'founded', 'deposit_minimum'
 ];
 
+// Champs pour lesquels 0 est une valeur valide (ex: "frais : 0€")
+const ZERO_IS_VALID = new Set([
+  'custody_fee', 'currency_fee', 'withdrawal_fee', 'deposit_fee',
+  'inactivity_fee', 'deposit_minimum',
+]);
+
 export async function GET() {
   if (!supabase) return NextResponse.json([]);
 
@@ -19,6 +25,8 @@ export async function GET() {
     let filled = 0;
     for (const field of CHECKED_FIELDS) {
       const val = b[field];
+      // Pour les champs de frais, 0 est une valeur renseignée (= gratuit)
+      if (ZERO_IS_VALID.has(field) && val === 0) { filled++; continue; }
       if (val === null || val === undefined || val === '' || val === 0 ||
           (Array.isArray(val) && val.length === 0) ||
           (typeof val === 'object' && !Array.isArray(val) && Object.keys(val as object).length === 0)) {

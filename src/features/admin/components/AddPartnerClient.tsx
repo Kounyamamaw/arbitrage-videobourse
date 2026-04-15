@@ -107,6 +107,7 @@ export function AddPartnerClient() {
       website: form.website, affiliate_url: form.affiliate_url, tagline: form.tagline,
       demo_url: form.demo_url || null, is_partner: form.is_partner,
       partner_rank: form.is_partner ? 10 : 999,
+      is_visible: form.is_visible !== false,
       ...(logoForPayload !== undefined ? { logo_url: logoForPayload } : {}),
     };
 
