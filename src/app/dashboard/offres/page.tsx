@@ -14,6 +14,7 @@ type Offer = {
   cta_label: string;
   cta_url: string;
   badge?: string;
+  cta_enabled?: boolean;
   expires_at?: string;
 };
 
@@ -39,38 +40,15 @@ const CAT_COLORS: Record<string, { bg: string; color: string }> = {
 function OfferCard({ offer }: { offer: Offer }) {
   const cat = offer.broker_category || "";
   const catStyle = CAT_COLORS[cat] || { bg: "var(--muted)", color: "var(--muted-foreground)" };
-  const isExpired = !!offer.expires_at && new Date(offer.expires_at) < new Date();
 
   return (
-    <div className="relative flex flex-col rounded-2xl border border-border bg-card p-6 gap-5 hover:border-primary/30 hover:shadow-md transition-all"
-      style={isExpired ? { opacity: 0.5, filter: "grayscale(0.7)", pointerEvents: "none" } : undefined}
-    >
-      {/* Badge statut — ouvert ou expiré */}
-      <div className="absolute top-4 right-4 flex flex-col items-end gap-1.5">
-        {isExpired ? (
-          <span style={{
-            fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 100,
-            backgroundColor: "#f1f5f9", color: "#94a3b8",
-            border: "1px solid #e2e8f0", letterSpacing: "0.05em", textTransform: "uppercase",
-          }}>
-            Expiré
-          </span>
-        ) : (
-          <span style={{
-            fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 100,
-            backgroundColor: "#dcfce7", color: "#16a34a",
-            border: "1px solid #bbf7d0", letterSpacing: "0.05em", textTransform: "uppercase",
-          }}>
-            ✦ En cours
-          </span>
-        )}
-        {/* Badge custom si renseigné */}
-        {offer.badge && !isExpired && (
-          <div className="rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-primary-foreground tracking-wide">
-            {offer.badge}
-          </div>
-        )}
-      </div>
+    <div className="relative flex flex-col rounded-2xl border border-border bg-card p-6 gap-5 hover:border-primary/30 hover:shadow-md transition-all">
+      {/* Badge offre */}
+      {offer.badge && (
+        <div className="absolute top-4 right-4 rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-primary-foreground tracking-wide">
+          {offer.badge}
+        </div>
+      )}
 
       {/* Header : logo + nom + catégorie */}
       <div className="flex items-center gap-3">
@@ -112,16 +90,25 @@ function OfferCard({ offer }: { offer: Offer }) {
       )}
 
       {/* CTA */}
-      <a
-        href={offer.cta_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn-primary w-full justify-center"
-        style={{ padding: "11px 16px", fontSize: 13, gap: 6 }}
-      >
-        {offer.cta_label}
-        <ArrowUpRight size={13} />
-      </a>
+      {offer.cta_enabled !== false ? (
+        <a
+          href={offer.cta_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-primary w-full justify-center"
+          style={{ padding: "11px 16px", fontSize: 13, gap: 6 }}
+        >
+          {offer.cta_label}
+          <ArrowUpRight size={13} />
+        </a>
+      ) : (
+        <div
+          className="w-full flex items-center justify-center rounded-lg border border-border"
+          style={{ padding: "11px 16px", fontSize: 13, gap: 6, color: "var(--text-muted)", cursor: "not-allowed", backgroundColor: "var(--muted)" }}
+        >
+          {offer.cta_label}
+        </div>
+      )}
     </div>
   );
 }

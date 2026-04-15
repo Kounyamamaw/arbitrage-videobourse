@@ -14,6 +14,7 @@ type Offer = {
   cta_url: string;
   badge?: string;
   is_active: boolean;
+  cta_enabled: boolean;
   expires_at?: string;
   sort_order: number;
 };
@@ -21,7 +22,7 @@ type Offer = {
 const EMPTY: Omit<Offer, "id"> = {
   broker_slug: "", broker_name: "", broker_logo: "", broker_category: "broker",
   title: "", description: "", cta_label: "Voir l'offre", cta_url: "",
-  badge: "", is_active: true, expires_at: "", sort_order: 999,
+  badge: "", is_active: true, cta_enabled: true, expires_at: "", sort_order: 999,
 };
 
 const CAT_OPTIONS = [
@@ -55,7 +56,7 @@ export function OffresAdminClient() {
 
   const load = () => {
     setLoading(true);
-    fetch("/api/offers")
+    fetch("/api/offers?admin=1")
       .then(r => r.json())
       .then(d => setOffers(Array.isArray(d) ? d : []))
       .catch(() => setOffers([]))
@@ -73,7 +74,7 @@ export function OffresAdminClient() {
       broker_logo: o.broker_logo || "", broker_category: o.broker_category || "broker",
       title: o.title, description: o.description,
       cta_label: o.cta_label, cta_url: o.cta_url,
-      badge: o.badge || "", is_active: o.is_active,
+      badge: o.badge || "", is_active: o.is_active, cta_enabled: o.cta_enabled !== false,
       expires_at: o.expires_at ? o.expires_at.split("T")[0] : "",
       sort_order: o.sort_order,
     });
@@ -237,10 +238,17 @@ export function OffresAdminClient() {
                   <input className={ic} type="number" value={form.sort_order} onChange={e => set("sort_order", parseInt(e.target.value) || 999)} />
                 </Field>
               </div>
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="is_active" checked={form.is_active}
-                  onChange={e => set("is_active", e.target.checked)} className="size-4 accent-primary" />
-                <label htmlFor="is_active" className="text-sm text-muted-foreground">Offre active (visible sur le site)</label>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" id="is_active" checked={form.is_active}
+                    onChange={e => set("is_active", e.target.checked)} className="size-4 accent-primary" />
+                  <label htmlFor="is_active" className="text-sm text-muted-foreground">Offre active (visible sur le site)</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" id="cta_enabled" checked={form.cta_enabled !== false}
+                    onChange={e => set("cta_enabled", e.target.checked)} className="size-4 accent-primary" />
+                  <label htmlFor="cta_enabled" className="text-sm text-muted-foreground">Bouton &quot;Voir l&apos;offre&quot; cliquable</label>
+                </div>
               </div>
             </div>
             <div className="flex justify-end gap-3 p-5 border-t border-border">
