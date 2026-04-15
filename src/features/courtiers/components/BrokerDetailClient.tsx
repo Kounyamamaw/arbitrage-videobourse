@@ -329,7 +329,7 @@ function FeeTier({ tiers, market }: { tiers: { min: number; max: number | null; 
           <tbody>
             {tiers.map((tier, i) => (
               <tr key={i}>
-                <td style={{ fontSize: 12 }}>
+                <td style={{ fontSize: 12, wordBreak: "break-word", maxWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {tier.min.toLocaleString("fr-FR")}€
                   {tier.max ? ` → ${tier.max.toLocaleString("fr-FR")}€` : " et +"}
                 </td>
@@ -626,7 +626,7 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
       </div>
 
       {/* ── Fee tables ──────────────────────────────────────────────── */}
-      <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px", marginBottom: 24 }}>
+      <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px", marginBottom: 24, overflow: "hidden" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <FeaturedIcon icon={CreditCard} color="brand" size="sm" />
