@@ -176,6 +176,8 @@ function BrokerRadarChart({ broker }: { broker: Broker }) {
       border: "1px solid var(--border)",
       borderRadius: 16,
       padding: "20px",
+      overflow: "hidden",
+      minWidth: 0,
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
         <FeaturedIcon icon={BarChart2} color="brand" size="sm" />
@@ -237,6 +239,8 @@ function FeeComparisonChart({ broker, allBrokers }: { broker: Broker; allBrokers
       border: "1px solid var(--border)",
       borderRadius: 16,
       padding: "20px",
+      overflow: "hidden",
+      minWidth: 0,
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
         <FeaturedIcon icon={CreditCard} color="brand" size="sm" />
@@ -329,7 +333,7 @@ function FeeTier({ tiers, market }: { tiers: { min: number; max: number | null; 
           <tbody>
             {tiers.map((tier, i) => (
               <tr key={i}>
-                <td style={{ fontSize: 12, wordBreak: "break-word", maxWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <td style={{ fontSize: 12 }}>
                   {tier.min.toLocaleString("fr-FR")}€
                   {tier.max ? ` → ${tier.max.toLocaleString("fr-FR")}€` : " et +"}
                 </td>
@@ -560,13 +564,13 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
       </div>
 
       {/* ── Charts row ──────────────────────────────────────────────── */}
-      <div style={{ display: "grid",  gap: 16, marginBottom: 24 }} className="grid grid-cols-1 lg:grid-cols-2">
+      <div style={{ display: "grid", gap: 16, marginBottom: 24, minWidth: 0, overflow: "hidden" }} className="grid grid-cols-1 lg:grid-cols-2">
         <BrokerRadarChart broker={broker} />
         <FeeComparisonChart broker={broker} allBrokers={allBrokers} />
       </div>
 
       {/* ── Score breakdown + Pros/Cons ─────────────────────────────── */}
-      <div style={{ display: "grid",  gap: 16, marginBottom: 24 }} className="grid grid-cols-1 lg:grid-cols-2">
+      <div style={{ display: "grid", gap: 16, marginBottom: 24, minWidth: 0, overflow: "hidden" }} className="grid grid-cols-1 lg:grid-cols-2">
 
         {/* Score breakdown */}
         <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px" }}>
@@ -626,7 +630,7 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
       </div>
 
       {/* ── Fee tables ──────────────────────────────────────────────── */}
-      <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px", marginBottom: 24, overflow: "hidden" }}>
+      <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px", marginBottom: 24 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <FeaturedIcon icon={CreditCard} color="brand" size="sm" />
