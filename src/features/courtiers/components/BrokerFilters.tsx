@@ -9,9 +9,9 @@ const CATEGORIES = [
   { value: "broker",    label: "Courtiers bourse" },
   { value: "neobanque", label: "Néobanques"        },
   { value: "bank",      label: "Banques"           },
-  { value: "insurance", label: "Assurances-vie"    },
+  { value: "cfd",       label: "CFD & FOREX"       },
   { value: "crypto",    label: "Crypto"            },
-  { value: "cfd",       label: "CFD"               },
+  { value: "insurance", label: "Assurances-vie"    },
 ];
 
 const ACCOUNTS = [
