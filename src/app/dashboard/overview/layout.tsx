@@ -24,7 +24,7 @@ export default async function OverViewLayout({ sales, pie_stats, bar_stats, area
     <PageContainer>
       <div className='flex flex-1 flex-col space-y-2'>
         <div className='flex items-center gap-3'>
-          <h2 className='text-2xl font-bold tracking-tight'>ArbitrAge — Vue d&apos;ensemble</h2>
+          <h2 className='text-2xl font-bold tracking-tight'>Arbitrage — Vue d&apos;ensemble</h2>
           <span className='rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'>Bêta</span>
         </div>
 

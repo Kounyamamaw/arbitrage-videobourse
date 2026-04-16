@@ -59,7 +59,7 @@ export default function CourtiersPage() {
     <PageContainer scrollable>
       <div className="flex flex-1 flex-col space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold tracking-tight">Comparateur d'intermédiaires financiers</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Tous les intermédiaires</h1>
         </div>
         <div className="flex flex-col gap-6 lg:flex-row w-full overflow-hidden">
           <BrokerFilters />
