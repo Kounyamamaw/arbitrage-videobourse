@@ -17,8 +17,8 @@ const META_THEME_COLORS = {
 };
 
 export const metadata: Metadata = {
-  title: 'Arbitrage by VideoBourse',
-  description: 'Comparateur de courtiers, banque, assurance et classe d\'actif français — Arbitrage by VideoBourse',
+  title: 'Comparateur courtiers, brokers & néobanques France | Arbitrage by VideoBourse',
+  description: 'Comparez les frais de 40+ courtiers, néobanques et brokers CFD en France. Scores indépendants, avis vérifiés et simulateur de frais. Arbitrage by VideoBourse.',
   icons: {
     icon: 'https://framerusercontent.com/images/qimvwYEjN00Vjzt7SSbnQfmuB4.svg',
     shortcut: 'https://framerusercontent.com/images/qimvwYEjN00Vjzt7SSbnQfmuB4.svg',
@@ -26,14 +26,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    title: 'Arbitrage by VideoBourse',
-    description: 'Comparateur de courtiers, banque, assurance et classe d\'actif français — Arbitrage by VideoBourse',
+    title: 'Comparateur courtiers, brokers & néobanques France | Arbitrage by VideoBourse',
+    description: 'Comparez les frais de 40+ courtiers, néobanques et brokers CFD en France. Scores indépendants, avis vérifiés et simulateur de frais. Arbitrage by VideoBourse.',
     images: [{ url: 'https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Arbitrage by VideoBourse',
-    description: 'Comparateur de courtiers, banque, assurance et classe d\'actif français — Arbitrage by VideoBourse',
+    title: 'Comparateur courtiers, brokers & néobanques France | Arbitrage by VideoBourse',
+    description: 'Comparez les frais de 40+ courtiers, néobanques et brokers CFD en France. Scores indépendants, avis vérifiés et simulateur de frais. Arbitrage by VideoBourse.',
     images: ['https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png'],
   },
 };

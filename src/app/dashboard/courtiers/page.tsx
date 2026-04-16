@@ -4,7 +4,7 @@ import { BrokerFilters } from '@/features/courtiers/components/BrokerFilters';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Comparateur courtiers, néobanques & brokers France 2025 | ArbitrAge',
+  title: 'Comparateur courtiers bourse, néobanques & brokers France 2025 | Arbitrage by VideoBourse',
   description: 'Comparez les meilleurs courtiers bourse, néobanques, brokers CFD Forex et plateformes crypto en France. Frais, commissions, avis Trustpilot et scores sur plus de 40 intermédiaires financiers.',
   keywords: [
     'comparateur courtier bourse france',
@@ -22,19 +22,19 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: 'website',
-    title: 'Comparateur courtiers & brokers France | ArbitrAge',
+    title: 'Comparateur courtiers bourse, néobanques & brokers France | Arbitrage by VideoBourse',
     description: 'Comparez les meilleurs courtiers bourse, néobanques, brokers CFD et plateformes crypto en France. Frais, scores et avis sur 40+ intermédiaires.',
-    url: 'https://arbitrage-videobourse.fr/dashboard/courtiers',
+    url: 'https://comparatif.videobourse.fr/dashboard/courtiers',
     images: [{ url: 'https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Comparateur courtiers & brokers France | ArbitrAge',
+    title: 'Comparateur courtiers bourse, néobanques & brokers France | Arbitrage by VideoBourse',
     description: 'Comparez 40+ courtiers, néobanques et brokers CFD en France.',
     images: ['https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png'],
   },
   alternates: {
-    canonical: 'https://arbitrage-videobourse.fr/dashboard/courtiers',
+    canonical: 'https://comparatif.videobourse.fr/dashboard/courtiers',
   },
 };
 

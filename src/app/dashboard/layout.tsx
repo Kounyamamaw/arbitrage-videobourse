@@ -9,9 +9,9 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
-  title: 'ArbitrAge — Dashboard',
-  description: 'Comparateur de courtiers et ETF',
-  robots: { index: false, follow: false }
+  title: 'Arbitrage by VideoBourse',
+  description: 'Comparez courtiers, néobanques, brokers CFD et plateformes crypto en France. Frais, scores et avis indépendants sur 40+ intermédiaires.',
+  // Pas de noindex global — chaque page définit ses propres robots
 };
 
 export default async function DashboardLayout({

@@ -182,7 +182,7 @@ function BrokerRadarChart({ broker }: { broker: Broker }) {
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
         <FeaturedIcon icon={BarChart2} color="brand" size="sm" />
         <div>
-          <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>Score détaillé</p>
+          <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", margin: 0 }}>Score détaillé</h2>
           <p style={{ fontSize: 12, color: "var(--text-faint)" }}>6 critères analysés</p>
         </div>
       </div>
@@ -245,7 +245,7 @@ function FeeComparisonChart({ broker, allBrokers }: { broker: Broker; allBrokers
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
         <FeaturedIcon icon={CreditCard} color="brand" size="sm" />
         <div>
-          <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>Comparaison des frais</p>
+          <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", margin: 0 }}>Comparaison des frais</h2>
           <p style={{ fontSize: 12, color: "var(--text-faint)" }}>Coût annuel estimé — 300€ × 4 ordres/mois · France</p>
         </div>
       </div>
@@ -609,7 +609,7 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
 
         {/* Pros & Cons */}
         <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px" }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginBottom: 16 }}>Points forts & faibles</p>
+          <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginBottom: 16, margin: 0, marginBottom: 16 }}>Points forts & faibles</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
             {broker.pros.map((pro, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
@@ -639,7 +639,7 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <FeaturedIcon icon={CreditCard} color="brand" size="sm" />
             <div>
-              <p style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>Grille tarifaire officielle</p>
+              <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", margin: 0 }}>Grille tarifaire officielle</h2>
               <p style={{ fontSize: 12, color: "var(--text-faint)" }}>Frais de courtage par marché</p>
             </div>
           </div>

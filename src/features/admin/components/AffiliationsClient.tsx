@@ -56,31 +56,31 @@ export function AffiliationsClient() {
       </div>
       <div className="divide-y divide-border">
         {rows.map((broker) => (
-          <div key={broker.id} className="flex items-center gap-4 px-6 py-3">
-            <div className="w-40 shrink-0">
-              <p className="font-medium text-sm">{broker.name}</p>
+          <div key={broker.id} className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-6">
+            <div className="min-w-0 sm:w-40 sm:shrink-0">
+              <p className="font-medium text-sm truncate">{broker.name}</p>
               <p className="text-xs text-muted-foreground">{broker.category}</p>
             </div>
-            <div className="flex flex-1 items-center gap-2">
+            <div className="flex flex-1 items-center gap-2 min-w-0">
               <input
                 type="text"
                 value={editing[broker.id] !== undefined ? editing[broker.id] : broker.affiliate_url}
                 onChange={(e) => setEditing((prev) => ({ ...prev, [broker.id]: e.target.value }))}
-                className="flex-1 rounded-lg border border-border bg-background px-3 py-1.5 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="flex-1 min-w-0 rounded-lg border border-border bg-background px-3 py-1.5 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               />
               <a href={broker.affiliate_url} target="_blank" rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground">
+                className="shrink-0 text-muted-foreground hover:text-foreground">
                 <IconExternalLink className="size-4" />
               </a>
+              <button
+                disabled={saving === broker.id || editing[broker.id] === undefined || editing[broker.id] === broker.affiliate_url}
+                onClick={() => handleSave(broker.id)}
+                className="shrink-0 flex size-8 items-center justify-center rounded-lg border border-border bg-background text-sm disabled:opacity-30 hover:bg-muted">
+                {saving === broker.id ? <IconLoader className="size-3.5 animate-spin" />
+                  : saved[broker.id] ? <IconCheck className="size-3.5 text-green-600" />
+                  : <IconDeviceFloppy className="size-3.5" />}
+              </button>
             </div>
-            <button
-              disabled={saving === broker.id || editing[broker.id] === undefined || editing[broker.id] === broker.affiliate_url}
-              onClick={() => handleSave(broker.id)}
-              className="flex size-8 items-center justify-center rounded-lg border border-border bg-background text-sm disabled:opacity-30 hover:bg-muted">
-              {saving === broker.id ? <IconLoader className="size-3.5 animate-spin" />
-                : saved[broker.id] ? <IconCheck className="size-3.5 text-green-600" />
-                : <IconDeviceFloppy className="size-3.5" />}
-            </button>
           </div>
         ))}
       </div>

@@ -199,14 +199,40 @@ export function BrokerGrid() {
           {copied ? <Check size={14} /> : <Share2 size={14} />}
         </button>
       </div>
-      <div className="flex items-center justify-between gap-2">
+      {/* Compteur résultats + toggle vue pleine largeur */}
+      <div className="flex flex-col gap-2">
         <p className="text-xs text-muted-foreground">{filtered.length} résultat{filtered.length !== 1 ? "s" : ""}</p>
-        <div style={{ display:"flex", gap:3, padding:3, borderRadius:9, backgroundColor:"var(--surface)", border:"1px solid var(--border)" }}>
-          <button onClick={() => setViewMode("cards")} style={{ display:"flex", alignItems:"center", gap:5, padding:"5px 10px", borderRadius:6, border:"none", cursor:"pointer", backgroundColor: viewMode==="cards" ? "var(--card)" : "transparent", color: viewMode==="cards" ? "var(--accent)" : "var(--text-faint)", boxShadow: viewMode==="cards" ? "0 1px 3px rgba(0,0,0,0.08)" : "none", fontSize:12, fontWeight: viewMode==="cards" ? 600 : 400, transition:"all 150ms" }}>
-            <LayoutGrid size={13} /><span>Cartes</span>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+          <button
+            onClick={() => setViewMode("cards")}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              padding: "10px 16px", borderRadius: 10, cursor: "pointer",
+              border: `2px solid ${viewMode === "cards" ? "var(--accent)" : "var(--border)"}`,
+              backgroundColor: viewMode === "cards" ? "var(--accent)" : "var(--surface)",
+              color: viewMode === "cards" ? "#fff" : "var(--text-muted)",
+              fontSize: 13, fontWeight: 600, transition: "all 150ms",
+            }}
+          >
+            <LayoutGrid size={15} />
+            <span>Vue cartes</span>
           </button>
-          <button onClick={() => { if (!category || category === "all") return; setViewMode("table"); }} title={(!category || category === "all") ? "Sélectionnez une catégorie" : "Vue tableau"} style={{ display:"flex", alignItems:"center", gap:5, padding:"5px 10px", borderRadius:6, border:"none", cursor:(!category || category === "all") ? "not-allowed" : "pointer", opacity:(!category || category === "all") ? 0.38 : 1, backgroundColor: viewMode==="table" ? "var(--card)" : "transparent", color: viewMode==="table" ? "var(--accent)" : "var(--text-faint)", boxShadow: viewMode==="table" ? "0 1px 3px rgba(0,0,0,0.08)" : "none", fontSize:12, fontWeight: viewMode==="table" ? 600 : 400, transition:"all 150ms" }}>
-            <LayoutList size={13} /><span>Tableau</span>
+          <button
+            onClick={() => { if (!category || category === "all") return; setViewMode("table"); }}
+            title={(!category || category === "all") ? "Sélectionnez une catégorie pour activer le tableau comparatif" : "Tableau comparatif"}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              padding: "10px 16px", borderRadius: 10,
+              cursor: (!category || category === "all") ? "not-allowed" : "pointer",
+              opacity: (!category || category === "all") ? 0.45 : 1,
+              border: `2px solid ${viewMode === "table" ? "var(--accent)" : "var(--border)"}`,
+              backgroundColor: viewMode === "table" ? "var(--accent)" : "var(--surface)",
+              color: viewMode === "table" ? "#fff" : "var(--text-muted)",
+              fontSize: 13, fontWeight: 600, transition: "all 150ms",
+            }}
+          >
+            <LayoutList size={15} />
+            <span>Tableau comparatif</span>
           </button>
         </div>
       </div>
@@ -280,8 +306,40 @@ const TABLE_COLS: Record<string, TableCol[]> = {
 // ── BrokerTableView ────────────────────────────────────────────────────────
 function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: string }) {
   const cols = TABLE_COLS[category] || TABLE_COLS.broker;
-  // Le tableau trie TOUJOURS par score décroissant — indépendamment du filtre actif
-  const ranked = [...brokers].sort((a, z) => (z.score_overall ?? 0) - (a.score_overall ?? 0));
+  const [sortCol, setSortCol] = useState<string>("score");
+  const [sortAsc, setSortAsc] = useState(false);
+
+  const handleSort = (key: string) => {
+    if (sortCol === key) setSortAsc(p => !p);
+    else { setSortCol(key); setSortAsc(false); }
+  };
+
+  const sorted = [...brokers].sort((a, z) => {
+    let av: number, zv: number;
+    if (sortCol === "score") {
+      av = a.score_overall ?? 0; zv = z.score_overall ?? 0;
+    } else {
+      const col = cols.find(c => c.key === sortCol);
+      if (!col) { av = a.score_overall ?? 0; zv = z.score_overall ?? 0; }
+      else {
+        const parseVal = (s: string) => {
+          if (s === "Gratuit" || s === "Aucun") return 0;
+          if (s === "—") return sortAsc ? Infinity : -Infinity;
+          const n = parseFloat(s.replace(",", ".").replace(/[^\d.]/g, ""));
+          return isNaN(n) ? 0 : n;
+        };
+        av = parseVal(col.getValue(a as Broker)); zv = parseVal(col.getValue(z as Broker));
+      }
+    }
+    return sortAsc ? av - zv : zv - av;
+  });
+
+  const SortIcon = ({ key }: { key: string }) => (
+    <span style={{ marginLeft: 4, opacity: sortCol === key ? 1 : 0.3, fontSize: 10 }}>
+      {sortCol === key ? (sortAsc ? "▲" : "▼") : "▼"}
+    </span>
+  );
+
   return (
     <div className="broker-table-scroll" style={{ borderRadius: 14, border: "1px solid var(--border)", backgroundColor: "var(--card)" }}>
       <table>
@@ -290,13 +348,19 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
             <th style={{ padding:"10px 10px", textAlign:"center", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", width:32 }}>#</th>
             <th style={{ padding:"10px 14px", textAlign:"left", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap" }}>Intermédiaire</th>
             {cols.map(col => (
-              <th key={col.key} style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap" }}>{col.label}</th>
+              <th key={col.key} onClick={() => handleSort(col.key)}
+                style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === col.key ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", cursor:"pointer", userSelect:"none" }}>
+                {col.label}<SortIcon key={col.key} />
+              </th>
             ))}
-            <th style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em" }}>Score</th>
+            <th onClick={() => handleSort("score")}
+              style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === "score" ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", cursor:"pointer", userSelect:"none", whiteSpace:"nowrap" }}>
+              Score<SortIcon key="score" />
+            </th>
           </tr>
         </thead>
         <tbody>
-          {ranked.map((broker, i) => (
+          {sorted.map((broker, i) => (
             <tr key={broker.id}
               style={{ borderBottom: i < brokers.length-1 ? "1px solid var(--border-light,var(--border))" : "none", transition:"background 120ms" }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--surface)")}

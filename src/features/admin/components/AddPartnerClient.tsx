@@ -348,7 +348,7 @@ export function AddPartnerClient() {
         </div>
         <div className="divide-y divide-border">
           {partners.map((p) => (
-            <div key={p.id} className="flex items-center gap-3 px-6 py-3">
+            <div key={p.id} className="flex items-center gap-3 px-4 py-3 sm:px-6">
               <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
                 {p.logo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -358,22 +358,23 @@ export function AddPartnerClient() {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 flex-wrap">
                   <p className="font-medium text-sm">{p.name}</p>
-                  {/* Badge catégorie principale */}
-                  <span className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">{p.category}</span>
-                  {/* Badges catégories supplémentaires */}
-                  {((p as any).categories || []).filter((c: string) => c !== p.category).map((c: string) => (
-                    <span key={c} className="rounded-md bg-muted/70 border border-border px-2 py-0.5 text-xs text-muted-foreground">{c}</span>
+                  <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">{p.category}</span>
+                  {((p as any).categories || []).filter((cat: string) => cat !== p.category).map((cat: string) => (
+                    <span key={cat} className="rounded-md bg-muted/70 border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">{cat}</span>
                   ))}
-                  {p.is_partner && <span className="rounded-md bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">Partenaire</span>}
+                  {p.is_partner && <span className="rounded-md bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">Partenaire</span>}
                 </div>
-                <p className="text-xs text-muted-foreground truncate">{p.tagline || p.website || "—"}</p>
+                <p className="text-[11px] text-muted-foreground truncate">{p.tagline || p.website || "—"}</p>
               </div>
-              <a href={`/dashboard/courtiers/${p.slug}`} className="text-xs text-primary hover:underline shrink-0">Fiche</a>
-              <button onClick={() => openEdit(p)} className="text-muted-foreground hover:text-primary shrink-0"><IconPencil className="size-4" /></button>
-              <a href={p.affiliate_url || p.website} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground shrink-0"><IconExternalLink className="size-4" /></a>
-              <button onClick={() => handleDelete(p.id)} className="text-muted-foreground hover:text-red-500 shrink-0"><IconTrash className="size-4" /></button>
+              {/* Actions — toujours visibles, compactes */}
+              <div className="flex items-center gap-1 shrink-0">
+                <a href={`/dashboard/courtiers/${p.slug}`} className="hidden sm:block text-xs text-primary hover:underline px-1">Fiche</a>
+                <button onClick={() => openEdit(p)} className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-primary"><IconPencil className="size-3.5" /></button>
+                <a href={p.affiliate_url || p.website} target="_blank" rel="noopener noreferrer" className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground"><IconExternalLink className="size-3.5" /></a>
+                <button onClick={() => handleDelete(p.id)} className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-red-500"><IconTrash className="size-3.5" /></button>
+              </div>
             </div>
           ))}
         </div>

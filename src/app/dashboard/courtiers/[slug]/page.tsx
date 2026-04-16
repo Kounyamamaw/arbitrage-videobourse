@@ -38,15 +38,15 @@ export async function generateMetadata({
 
   if (!broker) {
     return {
-      title: 'Intermédiaire introuvable — ArbitrAge',
+      title: 'Intermédiaire introuvable — Arbitrage by VideoBourse',
       description: 'Fiche intermédiaire non trouvée.',
     };
   }
 
   const catLabel = CAT_LABELS[broker.category] || broker.category;
-  const title = `${broker.name} avis ${new Date().getFullYear()} — frais, commissions et comparatif | ArbitrAge`;
+  const title = `${broker.name} avis ${new Date().getFullYear()} — frais, commissions et comparatif | Arbitrage`;
   const description = `Avis complet sur ${broker.name} : frais de courtage, commissions, scores, régulation et comparatif avec les meilleurs ${catLabel}s. Fondé en ${broker.founded || 'N/A'} — ${broker.tagline}`;
-  const url = `https://arbitrage-videobourse.fr/dashboard/courtiers/${slug}`;
+  const url = `https://comparatif.videobourse.fr/dashboard/courtiers/${slug}`;
 
   return {
     title,
@@ -73,7 +73,7 @@ export async function generateMetadata({
           url: (broker as any).logo_url || 'https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png',
           width: 1200,
           height: 630,
-          alt: `${broker.name} — ArbitrAge`,
+          alt: `${broker.name} — Arbitrage by VideoBourse`,
         },
       ],
     },
@@ -117,9 +117,73 @@ export default async function BrokerDetailPage({
 
   if (!broker) notFound();
 
+  const catLabel = CAT_LABELS[broker.category] || broker.category;
+  const url = `https://comparatif.videobourse.fr/dashboard/courtiers/${broker.slug}`;
+
+  // ── JSON-LD Structured Data ─────────────────────────────────────────────
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      // BreadcrumbList
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://comparatif.videobourse.fr/dashboard/courtiers' },
+          { '@type': 'ListItem', position: 2, name: catLabel.charAt(0).toUpperCase() + catLabel.slice(1) + 's', item: `https://comparatif.videobourse.fr/dashboard/courtiers?category=${broker.category}` },
+          { '@type': 'ListItem', position: 3, name: broker.name, item: url },
+        ],
+      },
+      // FinancialProduct
+      {
+        '@type': 'FinancialProduct',
+        name: broker.name,
+        description: broker.tagline,
+        url: broker.website || url,
+        provider: {
+          '@type': 'Organization',
+          name: broker.name,
+          url: broker.website,
+        },
+        ...(broker.founded ? { foundingDate: String(broker.founded) } : {}),
+        ...(broker.regulation?.length ? {
+          regulatoryStatus: broker.regulation.join(', '),
+        } : {}),
+        aggregateRating: broker.trustpilot_score && broker.trustpilot_count ? {
+          '@type': 'AggregateRating',
+          ratingValue: broker.trustpilot_score,
+          bestRating: 5,
+          worstRating: 1,
+          ratingCount: broker.trustpilot_count,
+        } : undefined,
+      },
+      // FAQPage — pros/cons as FAQ
+      ...(broker.pros?.length || broker.cons?.length ? [{
+        '@type': 'FAQPage',
+        mainEntity: [
+          ...(broker.pros?.slice(0, 3).map((pro: string) => ({
+            '@type': 'Question',
+            name: `Quel est un avantage de ${broker.name} ?`,
+            acceptedAnswer: { '@type': 'Answer', text: pro },
+          })) || []),
+          ...(broker.cons?.slice(0, 2).map((con: string) => ({
+            '@type': 'Question',
+            name: `Quel est un inconvénient de ${broker.name} ?`,
+            acceptedAnswer: { '@type': 'Answer', text: con },
+          })) || []),
+        ],
+      }] : []),
+    ],
+  };
+
   return (
-    <PageContainer scrollable>
-      <BrokerDetailClient broker={broker} allBrokers={allBrokers} />
-    </PageContainer>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <PageContainer scrollable>
+        <BrokerDetailClient broker={broker} allBrokers={allBrokers} />
+      </PageContainer>
+    </>
   );
 }

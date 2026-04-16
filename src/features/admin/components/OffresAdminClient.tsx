@@ -196,7 +196,7 @@ export function OffresAdminClient() {
               </button>
             </div>
             <div className="p-5 space-y-4 max-h-[70vh] overflow-y-auto">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <Field label="Nom intermédiaire *">
                   <input className={ic} value={form.broker_name} onChange={e => set("broker_name", e.target.value)} placeholder="ex: XTB" />
                 </Field>
@@ -219,7 +219,7 @@ export function OffresAdminClient() {
                 <textarea className={ic} rows={3} value={form.description} onChange={e => set("description", e.target.value)}
                   placeholder="Décrivez l'offre en détail…" />
               </Field>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <Field label="Texte bouton">
                   <input className={ic} value={form.cta_label} onChange={e => set("cta_label", e.target.value)} placeholder="Voir l'offre" />
                 </Field>
@@ -230,7 +230,7 @@ export function OffresAdminClient() {
               <Field label="URL de l'offre *">
                 <input className={ic} value={form.cta_url} onChange={e => set("cta_url", e.target.value)} placeholder="https://..." />
               </Field>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <Field label="Expire le (optionnel)">
                   <input className={ic} type="date" value={form.expires_at || ""} onChange={e => set("expires_at", e.target.value)} />
                 </Field>

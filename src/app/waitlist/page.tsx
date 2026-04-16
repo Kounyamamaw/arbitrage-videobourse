@@ -3,8 +3,8 @@ import { WaitlistForm } from "./waitlist-form";
 import { WaitlistCount } from "./waitlist-count";
 
 export const metadata = {
-  title: "ArbitrAge — Combien vous coûte vraiment votre courtier ?",
-  description: "Calculez le coût réel total de votre courtier — frais cachés inclus — et découvrez combien vous économiseriez ailleurs. Par VideoBourse.",
+  title: "Combien vous coûte vraiment votre courtier ? Calculez vos frais cachés — Arbitrage by VideoBourse",
+  description: "Droits de garde, frais de change, commissions cachées... La plupart des investisseurs paient des centaines d'euros de trop chaque année. Calculez vos vrais frais en 2 minutes.",
 };
 
 export default function WaitlistPage() {

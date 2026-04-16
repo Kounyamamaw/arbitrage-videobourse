@@ -118,7 +118,7 @@ function MobileFilterDrawer() {
   const hasActiveAdvanced = assetClass !== "all" || level !== "all" || fiscality !== "all" || platform !== "all" || hasDCA || hasFractions;
 
   return (
-    <div className="lg:hidden">
+    <div className="lg:hidden sticky top-0 z-20 bg-background/95 backdrop-blur-sm pt-1 pb-2 -mx-1 px-1">
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
         <button
           onClick={() => setOpen(true)}
@@ -243,7 +243,7 @@ export function BrokerFilters() {
   return (
     <>
     <MobileFilterDrawer />
-    <aside className="hidden lg:flex w-60 shrink-0 flex-col gap-5">
+    <aside className="hidden lg:flex w-60 shrink-0 flex-col gap-5 sticky top-4 self-start max-h-[calc(100vh-6rem)] overflow-y-auto">
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <SlidersHorizontal size={13} color="var(--accent)" />

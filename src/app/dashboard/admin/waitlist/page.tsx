@@ -61,9 +61,9 @@ export default function AdminWaitlistPage() {
           <div className="rounded-xl border border-border bg-card">
             <div className="divide-y divide-border">
               {subs.map((sub) => (
-                <div key={sub.id} className="flex items-center gap-4 px-6 py-3">
+                <div key={sub.id} className="flex items-center gap-3 px-4 py-3 sm:px-6 sm:gap-4">
                   <IconMail className="size-4 text-muted-foreground" />
-                  <span className="flex-1 text-sm font-medium">{sub.email}</span>
+                  <span className="flex-1 min-w-0 truncate text-sm font-medium">{sub.email}</span>
                   <span className="text-xs text-muted-foreground">
                     {new Date(sub.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
                   </span>
