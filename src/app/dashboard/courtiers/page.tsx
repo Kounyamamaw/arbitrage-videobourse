@@ -9,9 +9,24 @@ export const metadata: Metadata = {
   keywords: [
     'comparateur courtier bourse france',
     'meilleur courtier bourse',
+    'meilleur broker',
+    'meilleur broker 2026',
+    'meilleur courtier 2026',
+    'meilleur compte-titres',
+    'meilleure neobanque',
+    'meilleure neobanque 2026',
+    'meilleure banque',
+    'meilleure banque 2026',
+    'meilleure assurance-vie',
+    'meilleure assurance-vie 2026',
+    'meilleur contrat assurance-vie',
+    'classement courtier bourse',
+    'classement broker france',
+    'comparateur courtier',
+    'comparateur broker',
+    'comparateur neobanque',
     'frais courtage comparatif',
     'comparateur broker cfd forex',
-    'meilleure neobanque france',
     'comparateur plateforme crypto france',
     'frais interactive brokers',
     'frais fortuneo',
@@ -19,6 +34,7 @@ export const metadata: Metadata = {
     'frais trade republic',
     'comparateur assurance vie',
     'arbitrage videobourse',
+    'videobourse comparateur',
   ],
   openGraph: {
     type: 'website',
@@ -43,7 +59,7 @@ export default function CourtiersPage() {
     <PageContainer scrollable>
       <div className="flex flex-1 flex-col space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight">Intermédiaires</h2>
+          <h1 className="text-2xl font-bold tracking-tight">Comparateur d'intermédiaires financiers</h1>
         </div>
         <div className="flex flex-col gap-6 lg:flex-row w-full overflow-hidden">
           <BrokerFilters />

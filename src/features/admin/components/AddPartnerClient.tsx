@@ -333,10 +333,10 @@ export function AddPartnerClient() {
   if (loading) return <div className="flex h-32 items-center justify-center text-muted-foreground">Chargement...</div>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-x-hidden">
       {/* List */}
-      <div className="rounded-xl border border-border bg-card">
-        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-6 sm:py-4 gap-2 flex-wrap">
           <div>
             <h3 className="font-semibold">Intermédiaires référencés</h3>
             <p className="text-sm text-muted-foreground">{partners.length} intermédiaires</p>
