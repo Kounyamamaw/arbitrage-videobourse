@@ -609,7 +609,7 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
 
         {/* Pros & Cons */}
         <div style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, padding: "20px" }}>
-          <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginBottom: 16, margin: 0, marginBottom: 16 }}>Points forts & faibles</h2>
+          <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginBottom: 16 }}>Points forts & faibles</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
             {broker.pros.map((pro, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
