@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useFilterStore } from "@/lib/store";
 import { Broker, computeOverallScore } from "@/lib/brokers";
 import { BrokerCard } from "./BrokerCard";
-import { Search, X, Share2, Check, LayoutGrid, LayoutList, ExternalLink } from "lucide-react";
+import { Search, X, Share2, Check, LayoutGrid, LayoutList } from "lucide-react";
 
 export function BrokerGrid() {
   const {
@@ -19,7 +19,7 @@ export function BrokerGrid() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
-  // Auto-reset to cards when "all" is selected
+  // Reset to cards when switching to "all"
   useEffect(() => {
     if (!category || category === "all") setViewMode("cards");
   }, [category]);
@@ -202,44 +202,44 @@ export function BrokerGrid() {
           {copied ? <Check size={14} /> : <Share2 size={14} />}
         </button>
       </div>
-      {/* Barre résultats + toggle vue — toggle visible seulement sur catégorie spécifique */}
+      {/* Barre résultats + toggle vue */}
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{filtered.length} résultat{filtered.length !== 1 ? "s" : ""}</p>
         <div style={{ display: "flex", gap: 3, padding: 3, borderRadius: 9, backgroundColor: "var(--surface)", border: "1px solid var(--border)" }}>
-            <button
-              onClick={() => setViewMode("cards")}
-              style={{
-                display: "flex", alignItems: "center", gap: 5,
-                padding: "5px 10px", borderRadius: 6, border: "none", cursor: "pointer",
-                backgroundColor: viewMode === "cards" ? "var(--card)" : "transparent",
-                color: viewMode === "cards" ? "var(--accent)" : "var(--text-faint)",
-                boxShadow: viewMode === "cards" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
-                fontSize: 12, fontWeight: viewMode === "cards" ? 600 : 400,
-                transition: "all 150ms",
-              }}
-            >
-              <LayoutGrid size={13} />
-              <span>Cartes</span>
-            </button>
-            <button
-              onClick={() => { if (!category || category === "all") return; setViewMode("table"); }}
-              style={{
-                display: "flex", alignItems: "center", gap: 5,
-                padding: "5px 10px", borderRadius: 6, border: "none",
-                cursor: (!category || category === "all") ? "not-allowed" : "pointer",
-                opacity: (!category || category === "all") ? 0.35 : 1,
-                backgroundColor: viewMode === "table" ? "var(--card)" : "transparent",
-                color: viewMode === "table" ? "var(--accent)" : "var(--text-faint)",
-                boxShadow: viewMode === "table" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
-                fontSize: 12, fontWeight: viewMode === "table" ? 600 : 400,
-                transition: "all 150ms",
-              }}
-              title={(!category || category === "all") ? "Sélectionnez une catégorie pour activer la vue tableau" : "Vue tableau"}
-            >
-              <LayoutList size={13} />
-              <span>Tableau</span>
-            </button>
-          </div>
+          <button
+            onClick={() => setViewMode("cards")}
+            style={{
+              display: "flex", alignItems: "center", gap: 5,
+              padding: "5px 10px", borderRadius: 6, border: "none", cursor: "pointer",
+              backgroundColor: viewMode === "cards" ? "var(--card)" : "transparent",
+              color: viewMode === "cards" ? "var(--accent)" : "var(--text-faint)",
+              boxShadow: viewMode === "cards" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+              fontSize: 12, fontWeight: viewMode === "cards" ? 600 : 400,
+              transition: "all 150ms",
+            }}
+          >
+            <LayoutGrid size={13} />
+            <span>Cartes</span>
+          </button>
+          <button
+            onClick={() => { if (!category || category === "all") return; setViewMode("table"); }}
+            title={(!category || category === "all") ? "Sélectionnez une catégorie pour activer la vue tableau" : "Vue tableau"}
+            style={{
+              display: "flex", alignItems: "center", gap: 5,
+              padding: "5px 10px", borderRadius: 6, border: "none",
+              cursor: (!category || category === "all") ? "not-allowed" : "pointer",
+              opacity: (!category || category === "all") ? 0.38 : 1,
+              backgroundColor: viewMode === "table" ? "var(--card)" : "transparent",
+              color: viewMode === "table" ? "var(--accent)" : "var(--text-faint)",
+              boxShadow: viewMode === "table" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+              fontSize: 12, fontWeight: viewMode === "table" ? 600 : 400,
+              transition: "all 150ms",
+            }}
+          >
+            <LayoutList size={13} />
+            <span>Tableau</span>
+          </button>
+        </div>
       </div>
 
       {filtered.length === 0 ? (
@@ -269,202 +269,88 @@ type TableCol = {
 
 const TABLE_COLS: Record<string, TableCol[]> = {
   broker: [
-    { key: "fr",      label: "Frais France",    getValue: (b) => {
-      const t = (b.fees as any)?.FR?.[0];
-      if (!t) return "—";
-      return t.amount === 0 ? "Gratuit" : t.type === "flat" ? `${t.amount}€` : `${t.amount}%`;
-    }},
-    { key: "us",      label: "Frais USA",       getValue: (b) => {
-      const t = (b.fees as any)?.US?.[0];
-      if (!t) return "—";
-      return t.amount === 0 ? "Gratuit" : t.type === "flat" ? `${t.amount}€` : `${t.amount}%`;
-    }},
-    { key: "eu",      label: "Frais Europe",    getValue: (b) => {
-      const t = (b.fees as any)?.EU?.[0];
-      if (!t) return "—";
-      return t.amount === 0 ? "Gratuit" : t.type === "flat" ? `${t.amount}€` : `${t.amount}%`;
-    }},
+    { key: "fr", label: "Frais France", getValue: (b) => { const t = (b.fees as any)?.FR?.[0]; if (!t) return "—"; return t.amount === 0 ? "Gratuit" : t.type === "flat" ? `${t.amount}€` : `${t.amount}%`; }},
+    { key: "us", label: "Frais USA", getValue: (b) => { const t = (b.fees as any)?.US?.[0]; if (!t) return "—"; return t.amount === 0 ? "Gratuit" : t.type === "flat" ? `${t.amount}€` : `${t.amount}%`; }},
+    { key: "eu", label: "Frais Europe", getValue: (b) => { const t = (b.fees as any)?.EU?.[0]; if (!t) return "—"; return t.amount === 0 ? "Gratuit" : t.type === "flat" ? `${t.amount}€` : `${t.amount}%`; }},
     { key: "custody", label: "Droits de garde", getValue: (b) => b.custody_fee === 0 ? "Gratuit" : `${b.custody_fee}€/an` },
-    { key: "fx",      label: "Frais de change", getValue: (b) => b.currency_fee ? `${b.currency_fee}%` : "—" },
+    { key: "fx", label: "Frais de change", getValue: (b) => b.currency_fee ? `${b.currency_fee}%` : "—" },
   ],
   neobanque: [
-    { key: "abo",      label: "Abonnement",          getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.standard?.montant === 0) return "Gratuit";
-      if (f?.standard?.montant != null) return `${f.standard.montant}€/mois`;
-      return "—";
-    }},
-    { key: "retrait",  label: "Frais de retrait",    getValue: (b) => b.withdrawal_fee === 0 ? "Gratuit" : b.withdrawal_fee ? `${b.withdrawal_fee}€` : "—" },
-    { key: "etranger", label: "Frais à l'étranger",  getValue: (b) => b.currency_fee ? `${b.currency_fee}%` : "Gratuit" },
-    { key: "plafond",  label: "Plafond retrait",     getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.retrait_especes_standard?.montant) return `${f.retrait_especes_standard.montant}€/mois`;
-      return "—";
-    }},
-    { key: "extra",    label: "Service additionnel", getValue: (b) => {
-      if ((b as any).has_dca) return "DCA auto";
-      if ((b as any).has_fractions) return "Fractions";
-      return "—";
-    }},
+    { key: "abo", label: "Abonnement", getValue: (b) => { const f = b.fees as any; if (f?.standard?.montant === 0) return "Gratuit"; if (f?.standard?.montant != null) return `${f.standard.montant}€/mois`; return "—"; }},
+    { key: "retrait", label: "Frais retrait", getValue: (b) => b.withdrawal_fee === 0 ? "Gratuit" : b.withdrawal_fee ? `${b.withdrawal_fee}€` : "—" },
+    { key: "etranger", label: "Frais étranger", getValue: (b) => b.currency_fee ? `${b.currency_fee}%` : "Gratuit" },
+    { key: "plafond", label: "Plafond retrait", getValue: (b) => { const f = b.fees as any; if (f?.retrait_especes_standard?.montant) return `${f.retrait_especes_standard.montant}€/mois`; return "—"; }},
+    { key: "extra", label: "Service add.", getValue: (b) => { if ((b as any).has_dca) return "DCA auto"; if ((b as any).has_fractions) return "Fractions"; return "—"; }},
   ],
   bank: [
-    { key: "annual",   label: "Frais annuel",        getValue: (b) => b.custody_fee === 0 ? "Gratuit" : `${b.custody_fee}€/an` },
-    { key: "cb",       label: "Coût des CB",          getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.carte?.montant != null) return `${f.carte.montant}€/an`;
-      return "—";
-    }},
-    { key: "decouvert",label: "Frais découverts",    getValue: (b) => b.inactivity_fee ? `${b.inactivity_fee}€` : "—" },
-    { key: "virement", label: "Frais de virement",   getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.FR?.[0]?.amount === 0) return "Gratuit";
-      return "—";
-    }},
-    { key: "cloture",  label: "Frais de clôture",    getValue: (b) => (b as any).account_closing_fee ? `${(b as any).account_closing_fee}€` : "Gratuit" },
+    { key: "annual", label: "Frais annuel", getValue: (b) => b.custody_fee === 0 ? "Gratuit" : `${b.custody_fee}€/an` },
+    { key: "cb", label: "Coût CB", getValue: (b) => { const f = b.fees as any; if (f?.carte?.montant != null) return `${f.carte.montant}€/an`; return "—"; }},
+    { key: "decouvert", label: "Découverts", getValue: (b) => b.inactivity_fee ? `${b.inactivity_fee}€` : "—" },
+    { key: "virement", label: "Virement", getValue: (b) => { const t = (b.fees as any)?.FR?.[0]; if (t?.amount === 0) return "Gratuit"; return "—"; }},
+    { key: "cloture", label: "Clôture", getValue: (b) => (b as any).account_closing_fee ? `${(b as any).account_closing_fee}€` : "Gratuit" },
   ],
   cfd: [
-    { key: "spread",   label: "Spread & Commission", getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.spread_forex?.montant != null) return `${f.spread_forex.montant} pip`;
-      if (f?.spread_indices?.montant != null) return `${f.spread_indices.montant} pt`;
-      return "—";
-    }},
-    { key: "overnight",label: "Swap overnight",      getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.overnight?.montant != null) return `${f.overnight.montant}%/nuit`;
-      return "—";
-    }},
-    { key: "fx",       label: "Frais de change",     getValue: (b) => b.currency_fee ? `${b.currency_fee}%` : "—" },
-    { key: "retrait",  label: "Frais de retrait",    getValue: (b) => b.withdrawal_fee === 0 ? "Gratuit" : b.withdrawal_fee ? `${b.withdrawal_fee}€` : "—" },
-    { key: "inact",    label: "Frais d'inactivité",  getValue: (b) => b.inactivity_fee === 0 ? "Aucun" : `${b.inactivity_fee}€/mois` },
+    { key: "spread", label: "Spread", getValue: (b) => { const f = b.fees as any; if (f?.spread_forex?.montant != null) return `${f.spread_forex.montant} pip`; if (f?.spread_indices?.montant != null) return `${f.spread_indices.montant} pt`; return "—"; }},
+    { key: "overnight", label: "Overnight", getValue: (b) => { const f = b.fees as any; if (f?.overnight?.montant != null) return `${f.overnight.montant}%/nuit`; return "—"; }},
+    { key: "fx", label: "Frais change", getValue: (b) => b.currency_fee ? `${b.currency_fee}%` : "—" },
+    { key: "retrait", label: "Retrait", getValue: (b) => b.withdrawal_fee === 0 ? "Gratuit" : b.withdrawal_fee ? `${b.withdrawal_fee}€` : "—" },
+    { key: "inact", label: "Inactivité", getValue: (b) => b.inactivity_fee === 0 ? "Aucun" : `${b.inactivity_fee}€/mois` },
   ],
   crypto: [
-    { key: "spread",   label: "Spread & Commission", getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.maker?.montant != null && f?.taker?.montant != null) return `${f.maker.montant}% / ${f.taker.montant}%`;
-      if (f?.trading_spot?.montant != null) return `${f.trading_spot.montant}%`;
-      if (f?.crypto_spread?.montant != null) return `~${f.crypto_spread.montant}%`;
-      return "—";
-    }},
-    { key: "retrait",  label: "Frais de retrait",    getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.retrait_fiat?.montant != null) return `${f.retrait_fiat.montant}€`;
-      return b.withdrawal_fee === 0 ? "Gratuit" : b.withdrawal_fee ? `${b.withdrawal_fee}€` : "—";
-    }},
-    { key: "fx",       label: "Frais de change",     getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.depot_carte?.montant != null) return `${f.depot_carte.montant}% carte`;
-      return b.currency_fee ? `${b.currency_fee}%` : "—";
-    }},
-    { key: "overnight",label: "Frais overnight",     getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.overnight?.montant != null) return `${f.overnight.montant}%`;
-      return "—";
-    }},
-    { key: "inact",    label: "Frais d'inactivité",  getValue: (b) => b.inactivity_fee === 0 ? "Aucun" : `${b.inactivity_fee}€/mois` },
+    { key: "spread", label: "Maker/Taker", getValue: (b) => { const f = b.fees as any; if (f?.maker?.montant != null && f?.taker?.montant != null) return `${f.maker.montant}%/${f.taker.montant}%`; if (f?.trading_spot?.montant != null) return `${f.trading_spot.montant}%`; if (f?.crypto_spread?.montant != null) return `~${f.crypto_spread.montant}%`; return "—"; }},
+    { key: "retrait", label: "Retrait", getValue: (b) => { const f = b.fees as any; if (f?.retrait_fiat?.montant != null) return `${f.retrait_fiat.montant}€`; return b.withdrawal_fee === 0 ? "Gratuit" : b.withdrawal_fee ? `${b.withdrawal_fee}€` : "—"; }},
+    { key: "fx", label: "Frais change", getValue: (b) => { const f = b.fees as any; if (f?.depot_carte?.montant != null) return `${f.depot_carte.montant}%`; return b.currency_fee ? `${b.currency_fee}%` : "—"; }},
+    { key: "overnight", label: "Overnight", getValue: (b) => { const f = b.fees as any; if (f?.overnight?.montant != null) return `${f.overnight.montant}%`; return "—"; }},
+    { key: "inact", label: "Inactivité", getValue: (b) => b.inactivity_fee === 0 ? "Aucun" : `${b.inactivity_fee}€/mois` },
   ],
   insurance: [
-    { key: "entree",   label: "Droit d'entrée",      getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.entree?.montant != null) return `${f.entree.montant}%`;
-      return "Gratuit";
-    }},
-    { key: "annual",   label: "Frais annuel",        getValue: (b) => b.custody_fee ? `${b.custody_fee}%/an` : "—" },
-    { key: "arb",      label: "Frais d'arbitrage",   getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.arbitrage?.montant != null) return `${f.arbitrage.montant}€`;
-      return "Gratuit";
-    }},
-    { key: "sortie",   label: "Sortie anticipée",    getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.sortie_anticipee?.montant != null) return `${f.sortie_anticipee.montant}%`;
-      return "—";
-    }},
-    { key: "uc",       label: "Frais gestion UC",    getValue: (b) => {
-      const f = b.fees as any;
-      if (f?.gestion_uc?.montant != null) return `${f.gestion_uc.montant}%/an`;
-      return "—";
-    }},
+    { key: "entree", label: "Droit entrée", getValue: (b) => { const f = b.fees as any; if (f?.entree?.montant != null) return `${f.entree.montant}%`; return "Gratuit"; }},
+    { key: "annual", label: "Frais annuel", getValue: (b) => b.custody_fee ? `${b.custody_fee}%/an` : "—" },
+    { key: "arb", label: "Arbitrage", getValue: (b) => { const f = b.fees as any; if (f?.arbitrage?.montant != null) return `${f.arbitrage.montant}€`; return "Gratuit"; }},
+    { key: "sortie", label: "Sortie antici.", getValue: (b) => { const f = b.fees as any; if (f?.sortie_anticipee?.montant != null) return `${f.sortie_anticipee.montant}%`; return "—"; }},
+    { key: "uc", label: "Gestion UC", getValue: (b) => { const f = b.fees as any; if (f?.gestion_uc?.montant != null) return `${f.gestion_uc.montant}%/an`; return "—"; }},
   ],
 };
 
-// ── Composant vue tableau ─────────────────────────────────────────────────
+// ── Vue tableau ───────────────────────────────────────────────────────────
 function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: string }) {
   const cols = TABLE_COLS[category] || TABLE_COLS.broker;
-
   return (
-    <div style={{
-      display: "block",
-      width: "100%",
-      maxWidth: "100%",
-      overflowX: "auto",
-      overflowY: "visible",
-      WebkitOverflowScrolling: "touch" as any,
-      borderRadius: 14,
-      border: "1px solid var(--border)",
-      backgroundColor: "var(--card)",
-    }}>
-      <table style={{ borderCollapse: "collapse", minWidth: "max-content", width: "100%" }}>
+    <div style={{ width: "100%", overflowX: "auto", WebkitOverflowScrolling: "touch" as any, borderRadius: 14, border: "1px solid var(--border)", backgroundColor: "var(--card)" }}>
+      <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 480 }}>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border)", backgroundColor: "var(--surface)" }}>
-            <th style={{ padding: "10px 14px", textAlign: "left", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
-              Intermédiaire
-            </th>
+            <th style={{ padding: "10px 14px", textAlign: "left", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>Intermédiaire</th>
             {cols.map(col => (
-              <th key={col.key} style={{ padding: "10px 12px", textAlign: "right", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
-                {col.label}
-              </th>
+              <th key={col.key} style={{ padding: "10px 10px", textAlign: "right", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>{col.label}</th>
             ))}
-            <th style={{ padding: "10px 12px", textAlign: "right", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              Score
-            </th>
+            <th style={{ padding: "10px 10px", textAlign: "right", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Score</th>
           </tr>
         </thead>
         <tbody>
           {brokers.map((broker, i) => (
-            <tr
-              key={broker.id}
-              style={{
-                borderBottom: i < brokers.length - 1 ? "1px solid var(--border-light, var(--border))" : "none",
-                transition: "background 120ms",
-              }}
+            <tr key={broker.id}
+              style={{ borderBottom: i < brokers.length - 1 ? "1px solid var(--border-light, var(--border))" : "none", transition: "background 120ms" }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--surface)")}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = "")}
             >
-              {/* Nom + logo */}
               <td style={{ padding: "10px 14px", whiteSpace: "nowrap" }}>
-                <a
-                  href={`/dashboard/courtiers/${broker.slug}`}
-                  style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none", color: "var(--text)" }}
-                >
-                  {(broker as any).logo_url ? (
-                    <img src={(broker as any).logo_url} alt={broker.name} style={{ width: 24, height: 24, borderRadius: 6, objectFit: "contain", border: "1px solid var(--border)", flexShrink: 0 }} />
-                  ) : (
-                    <div style={{ width: 24, height: 24, borderRadius: 6, backgroundColor: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <span style={{ fontSize: 10, fontWeight: 700, color: "#fff" }}>{broker.name[0]}</span>
-                    </div>
-                  )}
-                  <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{broker.name}</span>
-                  {(broker as any).is_partner && (
-                    <span style={{ fontSize: 9, fontWeight: 700, padding: "1px 5px", borderRadius: 4, backgroundColor: "#dbeafe", color: "#2563eb", border: "1px solid #93c5fd" }}>P</span>
-                  )}
+                <a href={`/dashboard/courtiers/${broker.slug}`} style={{ display: "flex", alignItems: "center", gap: 9, textDecoration: "none", color: "var(--text)" }}>
+                  {(broker as any).logo_url
+                    ? <img src={(broker as any).logo_url} alt={broker.name} style={{ width: 22, height: 22, borderRadius: 5, objectFit: "contain", border: "1px solid var(--border)", flexShrink: 0 }} />
+                    : <div style={{ width: 22, height: 22, borderRadius: 5, backgroundColor: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><span style={{ fontSize: 9, fontWeight: 700, color: "#fff" }}>{broker.name[0]}</span></div>
+                  }
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>{broker.name}</span>
+                  {(broker as any).is_partner && <span style={{ fontSize: 9, fontWeight: 700, padding: "1px 5px", borderRadius: 4, backgroundColor: "#dbeafe", color: "#2563eb", border: "1px solid #93c5fd" }}>P</span>}
                 </a>
               </td>
-              {/* Colonnes de frais */}
               {cols.map(col => {
                 const val = col.getValue(broker);
-                const isGratuit = val === "Gratuit" || val === "Aucun";
-                return (
-                  <td key={col.key} style={{ padding: "10px 12px", textAlign: "right", fontSize: 12, fontWeight: isGratuit ? 600 : 500, color: isGratuit ? "var(--positive, #22c55e)" : "var(--text-muted)", whiteSpace: "nowrap" }}>
-                    {val}
-                  </td>
-                );
+                const ok = val === "Gratuit" || val === "Aucun";
+                return <td key={col.key} style={{ padding: "10px 10px", textAlign: "right", fontSize: 12, fontWeight: ok ? 600 : 500, color: ok ? "var(--positive, #22c55e)" : val === "—" ? "var(--text-faint)" : "var(--text-muted)", whiteSpace: "nowrap" }}>{val}</td>;
               })}
-              {/* Score */}
-              <td style={{ padding: "10px 12px", textAlign: "right", whiteSpace: "nowrap" }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", fontFamily: "var(--font-sora)" }}>
-                  {broker.score_overall?.toFixed(1)}
-                </span>
+              <td style={{ padding: "10px 10px", textAlign: "right", whiteSpace: "nowrap" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)" }}>{broker.score_overall?.toFixed(1)}</span>
               </td>
             </tr>
           ))}
