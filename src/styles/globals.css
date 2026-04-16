@@ -362,13 +362,26 @@
 /* Force le conteneur tableau à ne jamais dépasser la largeur du viewport  */
 .broker-table-scroll {
   display: block;
+  /* Constraint to parent — never exceeds viewport */
   width: 100%;
   max-width: 100%;
+  /* Clamp to viewport width as ultimate fallback */
+  max-width: min(100%, 100vw);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  /* New block formatting context — prevents content from escaping */
+  isolation: isolate;
 }
 .broker-table-scroll table {
+  /* Table never forces parent wider */
   min-width: 480px;
-  width: 100%;
+  width: max-content;
   border-collapse: collapse;
+}
+@media (max-width: 768px) {
+  .broker-table-scroll {
+    /* On mobile: hard cap at viewport width */
+    max-width: calc(100vw - 32px);
+    width: calc(100vw - 32px);
+  }
 }

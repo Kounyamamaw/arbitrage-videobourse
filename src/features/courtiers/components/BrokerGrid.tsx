@@ -280,11 +280,14 @@ const TABLE_COLS: Record<string, TableCol[]> = {
 // ── BrokerTableView ────────────────────────────────────────────────────────
 function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: string }) {
   const cols = TABLE_COLS[category] || TABLE_COLS.broker;
+  // Le tableau trie TOUJOURS par score décroissant — indépendamment du filtre actif
+  const ranked = [...brokers].sort((a, z) => (z.score_overall ?? 0) - (a.score_overall ?? 0));
   return (
     <div className="broker-table-scroll" style={{ borderRadius: 14, border: "1px solid var(--border)", backgroundColor: "var(--card)" }}>
       <table>
         <thead>
           <tr style={{ borderBottom:"1px solid var(--border)", backgroundColor:"var(--surface)" }}>
+            <th style={{ padding:"10px 10px", textAlign:"center", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", width:32 }}>#</th>
             <th style={{ padding:"10px 14px", textAlign:"left", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap" }}>Intermédiaire</th>
             {cols.map(col => (
               <th key={col.key} style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap" }}>{col.label}</th>
@@ -293,12 +296,17 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
           </tr>
         </thead>
         <tbody>
-          {brokers.map((broker, i) => (
+          {ranked.map((broker, i) => (
             <tr key={broker.id}
               style={{ borderBottom: i < brokers.length-1 ? "1px solid var(--border-light,var(--border))" : "none", transition:"background 120ms" }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--surface)")}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = "")}
             >
+              <td style={{ padding:"10px 10px", textAlign:"center", whiteSpace:"nowrap", width:32 }}>
+                <span style={{ fontSize:12, fontWeight:700, color: i === 0 ? "#F59E0B" : i === 1 ? "#9CA3AF" : i === 2 ? "#CD7F32" : "var(--text-faint)" }}>
+                  {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`}
+                </span>
+              </td>
               <td style={{ padding:"10px 14px", whiteSpace:"nowrap" }}>
                 <a href={`/dashboard/courtiers/${broker.slug}`} style={{ display:"flex", alignItems:"center", gap:9, textDecoration:"none", color:"var(--text)" }}>
                   {(broker as any).logo_url

@@ -45,7 +45,7 @@ export default function CourtiersPage() {
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold tracking-tight">Intermédiaires</h2>
         </div>
-        <div className="flex flex-col gap-6 lg:flex-row">
+        <div className="flex flex-col gap-6 lg:flex-row w-full overflow-hidden">
           <BrokerFilters />
           <BrokerGrid />
         </div>
