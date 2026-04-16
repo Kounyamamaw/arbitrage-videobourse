@@ -1,13 +1,8 @@
 User-agent: *
 # Pages publiques — indexables
+Allow: /dashboard/courtiers
 Allow: /dashboard/courtiers/
-Allow: /dashboard/overview
-Allow: /dashboard/conseiller-ia
-Allow: /dashboard/par-actif
-Allow: /dashboard/comparer
 Allow: /waitlist
-
-
 
 # Pages privées / admin — non indexables
 Disallow: /auth
