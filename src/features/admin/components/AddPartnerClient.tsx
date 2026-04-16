@@ -30,6 +30,7 @@ const EMPTY_FORM = {
   custody_fee: "" as string, inactivity_fee: "" as string, currency_fee: "" as string,
   welcome_offer: "", pros: "", cons: "", best_for: "",
   accounts: "", regulation: "",
+  protection_solde_negatif: false,
 };
 type FormState = typeof EMPTY_FORM;
 
@@ -46,6 +47,7 @@ const ic = "w-full rounded-lg border border-border bg-background px-3 py-2 text-
 export function AddPartnerClient() {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentFees, setCurrentFees] = useState<Record<string, unknown>>({});
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
@@ -136,6 +138,8 @@ export function AddPartnerClient() {
       const targetSlug = editingSlug || form.slug;
 
       if (editingSlug) {
+        // Merge protection_solde_negatif into existing fees JSON
+        payload.fees = { ...currentFees, protection_solde_negatif: form.protection_solde_negatif };
         const res = await fetch(`/api/brokers/${editingSlug}`, {
           method: "PATCH", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -254,6 +258,7 @@ export function AddPartnerClient() {
       best_for:Array.isArray(full.best_for) ? full.best_for.join("\n") : (full.best_for || ""),
       accounts:   Array.isArray(full.accounts)   ? full.accounts.join(", ")   : (full.accounts   || ""),
       regulation: Array.isArray(full.regulation) ? full.regulation.join(", ") : (full.regulation || ""),
+      protection_solde_negatif: !!(full.fees as any)?.protection_solde_negatif,
     });
     setEditingSlug(full.slug); setLogoFile(null); setLogoPreview("");
     setPastedText(""); setEnrichResult(null); setShowDataFields(false); setShowModal(true);
@@ -467,6 +472,17 @@ export function AddPartnerClient() {
                         </Field>
                         <Field label="Frais change (%)">
                           <input type="number" step={0.01} value={form.currency_fee} onChange={e => set("currency_fee", e.target.value)} className={ic} placeholder="0" />
+                        </Field>
+                        <Field label="🛡 Protection solde négatif">
+                          <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, cursor: "pointer" }}>
+                            <input
+                              type="checkbox"
+                              checked={form.protection_solde_negatif}
+                              onChange={e => set("protection_solde_negatif", e.target.checked)}
+                              style={{ width: 16, height: 16, accentColor: "var(--primary)", cursor: "pointer" }}
+                            />
+                            <span className="text-sm text-muted-foreground">Oui — protection contre solde négatif activée</span>
+                          </label>
                         </Field>
                       </div>
                     </div>

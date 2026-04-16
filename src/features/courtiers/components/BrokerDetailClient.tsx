@@ -372,7 +372,11 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
     return { ...merged, score_overall: computeOverallScore(merged as Broker) };
   }, [rawBroker, autoScores]);
 
-  const markets = Object.keys(broker.fees || {}) as ("FR" | "EU" | "US")[];
+  // Uniquement les clés dont la valeur est un tableau de paliers (FR/EU/US)
+  // Les clés metadata (spread_forex, overnight…) sont des objets/booléens — on les exclut
+  const markets = (Object.entries(broker.fees || {}) as [string, unknown][])
+    .filter(([, v]) => Array.isArray(v))
+    .map(([k]) => k) as ("FR" | "EU" | "US")[];
 
   return (
     <div style={{ maxWidth: 1280, margin: "0 auto", padding: "16px 12px 48px", width: "100%", boxSizing: "border-box", overflowX: "hidden" }}>

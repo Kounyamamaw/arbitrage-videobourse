@@ -1,8 +1,42 @@
 import PageContainer from '@/components/layout/page-container';
 import { BrokerGrid } from '@/features/courtiers/components/BrokerGrid';
 import { BrokerFilters } from '@/features/courtiers/components/BrokerFilters';
+import type { Metadata } from 'next';
 
-export const metadata = { title: 'Intermédiaires — ArbitrAge' };
+export const metadata: Metadata = {
+  title: 'Comparateur courtiers, néobanques & brokers France 2025 | ArbitrAge',
+  description: 'Comparez les meilleurs courtiers bourse, néobanques, brokers CFD Forex et plateformes crypto en France. Frais, commissions, avis Trustpilot et scores sur plus de 40 intermédiaires financiers.',
+  keywords: [
+    'comparateur courtier bourse france',
+    'meilleur courtier bourse',
+    'frais courtage comparatif',
+    'comparateur broker cfd forex',
+    'meilleure neobanque france',
+    'comparateur plateforme crypto france',
+    'frais interactive brokers',
+    'frais fortuneo',
+    'frais degiro',
+    'frais trade republic',
+    'comparateur assurance vie',
+    'arbitrage videobourse',
+  ],
+  openGraph: {
+    type: 'website',
+    title: 'Comparateur courtiers & brokers France | ArbitrAge',
+    description: 'Comparez les meilleurs courtiers bourse, néobanques, brokers CFD et plateformes crypto en France. Frais, scores et avis sur 40+ intermédiaires.',
+    url: 'https://arbitrage-videobourse.fr/dashboard/courtiers',
+    images: [{ url: 'https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Comparateur courtiers & brokers France | ArbitrAge',
+    description: 'Comparez 40+ courtiers, néobanques et brokers CFD en France.',
+    images: ['https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png'],
+  },
+  alternates: {
+    canonical: 'https://arbitrage-videobourse.fr/dashboard/courtiers',
+  },
+};
 
 export default function CourtiersPage() {
   return (
