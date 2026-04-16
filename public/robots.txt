@@ -1,8 +1,60 @@
 User-agent: *
 # Pages publiques — indexables
-Allow: /dashboard/courtiers
 Allow: /dashboard/courtiers/
+Allow: /dashboard/overview
+Allow: /dashboard/conseiller-ia
+Allow: /dashboard/par-actif
+Allow: /dashboard/comparer
 Allow: /waitlist
+Allow: /dashboard/courtiers/interactive-brokers
+Allow: /dashboard/courtiers/ig
+Allow: /dashboard/courtiers/xtb
+Allow: /dashboard/courtiers/revolut
+Allow: /dashboard/courtiers/wise
+Allow: /dashboard/courtiers/linxea
+Allow: /dashboard/courtiers/saxo-banque
+Allow: /dashboard/courtiers/qonto
+Allow: /dashboard/courtiers/pepperstone
+Allow: /dashboard/courtiers/degiro
+Allow: /dashboard/courtiers/fortuneo
+Allow: /dashboard/courtiers/cmc-markets
+Allow: /dashboard/courtiers/boursobank
+Allow: /dashboard/courtiers/binance
+Allow: /dashboard/courtiers/etoro
+Allow: /dashboard/courtiers/yomoni
+Allow: /dashboard/courtiers/kraken
+Allow: /dashboard/courtiers/shine
+Allow: /dashboard/courtiers/swissquote
+Allow: /dashboard/courtiers/trade-republic
+Allow: /dashboard/courtiers/coinbase
+Allow: /dashboard/courtiers/capital-com
+Allow: /dashboard/courtiers/distingo-bank
+Allow: /dashboard/courtiers/n26
+Allow: /dashboard/courtiers/bourse-direct
+Allow: /dashboard/courtiers/deblock
+Allow: /dashboard/courtiers/bitvavo
+Allow: /dashboard/courtiers/bunq
+Allow: /dashboard/courtiers/hello-bank
+Allow: /dashboard/courtiers/wh-selfinvest
+Allow: /dashboard/courtiers/bitpanda
+Allow: /dashboard/courtiers/okx
+Allow: /dashboard/courtiers/coinhouse
+Allow: /dashboard/courtiers/swissborg
+Allow: /dashboard/courtiers/monabanq
+Allow: /dashboard/courtiers/bforbank
+Allow: /dashboard/courtiers/lydia
+Allow: /dashboard/courtiers/bnp-paribas
+Allow: /dashboard/courtiers/soci-t-g-n-rale
+Allow: /dashboard/courtiers/green-got
+Allow: /dashboard/courtiers/easybourse
+Allow: /dashboard/courtiers/cr-dit-mutuel
+Allow: /dashboard/courtiers/cr-dit-agricole
+Allow: /dashboard/courtiers/la-banque-postale
+Allow: /dashboard/courtiers/caisse-d-epargne
+Allow: /dashboard/courtiers/helios
+Allow: /dashboard/courtiers/skrill
+
+
 
 # Pages privées / admin — non indexables
 Disallow: /auth
