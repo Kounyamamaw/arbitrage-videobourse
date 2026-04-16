@@ -357,3 +357,18 @@
   --accent-foreground: oklch(0.2046 0 0) !important;
   --ring: oklch(0.52 0.12 250) !important;
 }
+
+/* ── Vue tableau — scroll horizontal sans débordement ─────────────────── */
+/* Force le conteneur tableau à ne jamais dépasser la largeur du viewport  */
+.broker-table-scroll {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.broker-table-scroll table {
+  min-width: 480px;
+  width: 100%;
+  border-collapse: collapse;
+}

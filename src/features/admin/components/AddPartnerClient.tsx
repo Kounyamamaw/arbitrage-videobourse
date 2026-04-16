@@ -30,6 +30,27 @@ const EMPTY_FORM = {
   custody_fee: "" as string, inactivity_fee: "" as string, currency_fee: "" as string,
   welcome_offer: "", pros: "", cons: "", best_for: "",
   accounts: "", regulation: "",
+  // Critères vue tableau (fees JSON)
+  fees_fr_amount: "" as string,
+  fees_us_amount: "" as string,
+  fees_eu_amount: "" as string,
+  fees_fr_type: "percent" as string,
+  fees_us_type: "flat" as string,
+  fees_eu_type: "percent" as string,
+  fees_spread_forex: "" as string,
+  fees_spread_indices: "" as string,
+  fees_overnight: "" as string,
+  fees_standard_abo: "" as string,
+  fees_retrait_especes: "" as string,
+  fees_maker: "" as string,
+  fees_taker: "" as string,
+  fees_retrait_fiat: "" as string,
+  fees_depot_carte: "" as string,
+  fees_carte_banque: "" as string,
+  fees_entree: "" as string,
+  fees_arbitrage: "" as string,
+  fees_sortie_anticipee: "" as string,
+  fees_gestion_uc: "" as string,
   protection_solde_negatif: false,
 };
 type FormState = typeof EMPTY_FORM;
@@ -134,12 +155,35 @@ export function AddPartnerClient() {
     if (form.accounts)   payload.accounts   = parseArr(form.accounts);
     if (form.regulation) payload.regulation = parseArr(form.regulation);
 
+    // ── Construire le fees JSON à partir des champs du formulaire ──
+    const pn = (v: string) => { const n = parseFloat(v); return isNaN(n) ? undefined : n; };
+    const feesUpdate: Record<string, unknown> = { ...currentFees };
+    // FR/US/EU paliers
+    if (pn(form.fees_fr_amount) !== undefined) feesUpdate.FR = [{ min: 0, max: null, type: form.fees_fr_type || "percent", amount: pn(form.fees_fr_amount), label: "" }];
+    if (pn(form.fees_us_amount) !== undefined) feesUpdate.US = [{ min: 0, max: null, type: form.fees_us_type || "flat",    amount: pn(form.fees_us_amount), label: "" }];
+    if (pn(form.fees_eu_amount) !== undefined) feesUpdate.EU = [{ min: 0, max: null, type: form.fees_eu_type || "percent", amount: pn(form.fees_eu_amount), label: "" }];
+    // Clés metadata
+    if (pn(form.fees_spread_forex)    !== undefined) feesUpdate.spread_forex    = { montant: pn(form.fees_spread_forex),    details: "EUR/USD" };
+    if (pn(form.fees_spread_indices)  !== undefined) feesUpdate.spread_indices  = { montant: pn(form.fees_spread_indices),  details: "CAC40/DAX" };
+    if (pn(form.fees_overnight)       !== undefined) feesUpdate.overnight       = { montant: pn(form.fees_overnight),       details: "%/nuit" };
+    if (pn(form.fees_standard_abo)    !== undefined) feesUpdate.standard        = { montant: pn(form.fees_standard_abo),    details: "€/mois" };
+    if (pn(form.fees_retrait_especes) !== undefined) feesUpdate.retrait_especes_standard = { montant: pn(form.fees_retrait_especes), details: "€/mois gratuit" };
+    if (pn(form.fees_maker)           !== undefined) feesUpdate.maker           = { montant: pn(form.fees_maker),           details: "%" };
+    if (pn(form.fees_taker)           !== undefined) feesUpdate.taker           = { montant: pn(form.fees_taker),           details: "%" };
+    if (pn(form.fees_retrait_fiat)    !== undefined) feesUpdate.retrait_fiat    = { montant: pn(form.fees_retrait_fiat),    details: "€" };
+    if (pn(form.fees_depot_carte)     !== undefined) feesUpdate.depot_carte     = { montant: pn(form.fees_depot_carte),     details: "%" };
+    if (pn(form.fees_carte_banque)    !== undefined) feesUpdate.carte           = { montant: pn(form.fees_carte_banque),    details: "€/an" };
+    if (pn(form.fees_entree)          !== undefined) feesUpdate.entree          = { montant: pn(form.fees_entree),          details: "%" };
+    if (pn(form.fees_arbitrage)       !== undefined) feesUpdate.arbitrage       = { montant: pn(form.fees_arbitrage),       details: "€" };
+    if (pn(form.fees_sortie_anticipee)!== undefined) feesUpdate.sortie_anticipee= { montant: pn(form.fees_sortie_anticipee),details: "%" };
+    if (pn(form.fees_gestion_uc)      !== undefined) feesUpdate.gestion_uc     = { montant: pn(form.fees_gestion_uc),      details: "%/an" };
+    feesUpdate.protection_solde_negatif = form.protection_solde_negatif;
+    payload.fees = feesUpdate;
+
     try {
       const targetSlug = editingSlug || form.slug;
 
       if (editingSlug) {
-        // Merge protection_solde_negatif into existing fees JSON
-        payload.fees = { ...currentFees, protection_solde_negatif: form.protection_solde_negatif };
         const res = await fetch(`/api/brokers/${editingSlug}`, {
           method: "PATCH", headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -258,8 +302,30 @@ export function AddPartnerClient() {
       best_for:Array.isArray(full.best_for) ? full.best_for.join("\n") : (full.best_for || ""),
       accounts:   Array.isArray(full.accounts)   ? full.accounts.join(", ")   : (full.accounts   || ""),
       regulation: Array.isArray(full.regulation) ? full.regulation.join(", ") : (full.regulation || ""),
-      protection_solde_negatif: !!(full.fees as any)?.protection_solde_negatif,
+      // Critères tableau — lire depuis fees JSON
+      fees_fr_amount:       full.fees?.FR?.[0]?.amount != null ? String(full.fees.FR[0].amount) : "",
+      fees_us_amount:       full.fees?.US?.[0]?.amount != null ? String(full.fees.US[0].amount) : "",
+      fees_eu_amount:       full.fees?.EU?.[0]?.amount != null ? String(full.fees.EU[0].amount) : "",
+      fees_fr_type:         full.fees?.FR?.[0]?.type   || "percent",
+      fees_us_type:         full.fees?.US?.[0]?.type   || "flat",
+      fees_eu_type:         full.fees?.EU?.[0]?.type   || "percent",
+      fees_spread_forex:    full.fees?.spread_forex?.montant     != null ? String(full.fees.spread_forex.montant)     : "",
+      fees_spread_indices:  full.fees?.spread_indices?.montant   != null ? String(full.fees.spread_indices.montant)   : "",
+      fees_overnight:       full.fees?.overnight?.montant        != null ? String(full.fees.overnight.montant)        : "",
+      fees_standard_abo:    full.fees?.standard?.montant         != null ? String(full.fees.standard.montant)         : "",
+      fees_retrait_especes: full.fees?.retrait_especes_standard?.montant != null ? String(full.fees.retrait_especes_standard.montant) : "",
+      fees_maker:           full.fees?.maker?.montant            != null ? String(full.fees.maker.montant)            : "",
+      fees_taker:           full.fees?.taker?.montant            != null ? String(full.fees.taker.montant)            : "",
+      fees_retrait_fiat:    full.fees?.retrait_fiat?.montant     != null ? String(full.fees.retrait_fiat.montant)     : "",
+      fees_depot_carte:     full.fees?.depot_carte?.montant      != null ? String(full.fees.depot_carte.montant)      : "",
+      fees_carte_banque:    full.fees?.carte?.montant            != null ? String(full.fees.carte.montant)            : "",
+      fees_entree:          full.fees?.entree?.montant           != null ? String(full.fees.entree.montant)           : "",
+      fees_arbitrage:       full.fees?.arbitrage?.montant        != null ? String(full.fees.arbitrage.montant)        : "",
+      fees_sortie_anticipee:full.fees?.sortie_anticipee?.montant != null ? String(full.fees.sortie_anticipee.montant) : "",
+      fees_gestion_uc:      full.fees?.gestion_uc?.montant       != null ? String(full.fees.gestion_uc.montant)       : "",
+      protection_solde_negatif: !!(full.fees?.protection_solde_negatif),
     });
+    setCurrentFees((full.fees as Record<string, unknown>) || {});
     setEditingSlug(full.slug); setLogoFile(null); setLogoPreview("");
     setPastedText(""); setEnrichResult(null); setShowDataFields(false); setShowModal(true);
   };
@@ -473,15 +539,83 @@ export function AddPartnerClient() {
                         <Field label="Frais change (%)">
                           <input type="number" step={0.01} value={form.currency_fee} onChange={e => set("currency_fee", e.target.value)} className={ic} placeholder="0" />
                         </Field>
+                      </div>
+                    </div>
+
+                    {/* Critères vue tableau (fees JSON) */}
+                    <div>
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">📊 Critères vue tableau</p>
+                      <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+                        <Field label="FR 1er palier">
+                          <div style={{ display:"flex", gap:4 }}>
+                            <input type="number" step={0.01} value={form.fees_fr_amount} onChange={e => set("fees_fr_amount", e.target.value)} className={ic} placeholder="ex: 1.99" style={{ flex:1 }} />
+                            <select value={form.fees_fr_type} onChange={e => set("fees_fr_type", e.target.value)} className={ic} style={{ width:80 }}>
+                              <option value="flat">€ fixe</option><option value="percent">%</option>
+                            </select>
+                          </div>
+                        </Field>
+                        <Field label="US 1er palier">
+                          <div style={{ display:"flex", gap:4 }}>
+                            <input type="number" step={0.01} value={form.fees_us_amount} onChange={e => set("fees_us_amount", e.target.value)} className={ic} placeholder="ex: 15" style={{ flex:1 }} />
+                            <select value={form.fees_us_type} onChange={e => set("fees_us_type", e.target.value)} className={ic} style={{ width:80 }}>
+                              <option value="flat">€ fixe</option><option value="percent">%</option>
+                            </select>
+                          </div>
+                        </Field>
+                        <Field label="EU 1er palier">
+                          <div style={{ display:"flex", gap:4 }}>
+                            <input type="number" step={0.01} value={form.fees_eu_amount} onChange={e => set("fees_eu_amount", e.target.value)} className={ic} placeholder="ex: 3.90" style={{ flex:1 }} />
+                            <select value={form.fees_eu_type} onChange={e => set("fees_eu_type", e.target.value)} className={ic} style={{ width:80 }}>
+                              <option value="flat">€ fixe</option><option value="percent">%</option>
+                            </select>
+                          </div>
+                        </Field>
+                        <Field label="Spread Forex (pip EUR/USD)">
+                          <input type="number" step={0.01} value={form.fees_spread_forex} onChange={e => set("fees_spread_forex", e.target.value)} className={ic} placeholder="ex: 0.6" />
+                        </Field>
+                        <Field label="Spread Indices (pts)">
+                          <input type="number" step={0.1} value={form.fees_spread_indices} onChange={e => set("fees_spread_indices", e.target.value)} className={ic} placeholder="ex: 1" />
+                        </Field>
+                        <Field label="Overnight (%/nuit)">
+                          <input type="number" step={0.001} value={form.fees_overnight} onChange={e => set("fees_overnight", e.target.value)} className={ic} placeholder="ex: 0.007" />
+                        </Field>
+                        <Field label="Abonnement Standard (€/mois)">
+                          <input type="number" step={0.01} value={form.fees_standard_abo} onChange={e => set("fees_standard_abo", e.target.value)} className={ic} placeholder="0 = gratuit" />
+                        </Field>
+                        <Field label="Plafond retrait gratuit (€/mois)">
+                          <input type="number" step={1} value={form.fees_retrait_especes} onChange={e => set("fees_retrait_especes", e.target.value)} className={ic} placeholder="ex: 200" />
+                        </Field>
+                        <Field label="Maker (%)">
+                          <input type="number" step={0.001} value={form.fees_maker} onChange={e => set("fees_maker", e.target.value)} className={ic} placeholder="ex: 0.1" />
+                        </Field>
+                        <Field label="Taker (%)">
+                          <input type="number" step={0.001} value={form.fees_taker} onChange={e => set("fees_taker", e.target.value)} className={ic} placeholder="ex: 0.1" />
+                        </Field>
+                        <Field label="Retrait fiat (€)">
+                          <input type="number" step={0.01} value={form.fees_retrait_fiat} onChange={e => set("fees_retrait_fiat", e.target.value)} className={ic} placeholder="ex: 5" />
+                        </Field>
+                        <Field label="Dépôt carte (%)">
+                          <input type="number" step={0.01} value={form.fees_depot_carte} onChange={e => set("fees_depot_carte", e.target.value)} className={ic} placeholder="ex: 1.5" />
+                        </Field>
+                        <Field label="Carte bancaire (€/an)">
+                          <input type="number" step={0.01} value={form.fees_carte_banque} onChange={e => set("fees_carte_banque", e.target.value)} className={ic} placeholder="ex: 39" />
+                        </Field>
+                        <Field label="Droit d'entrée AV (%)">
+                          <input type="number" step={0.01} value={form.fees_entree} onChange={e => set("fees_entree", e.target.value)} className={ic} placeholder="0 = gratuit" />
+                        </Field>
+                        <Field label="Arbitrage AV (€)">
+                          <input type="number" step={0.01} value={form.fees_arbitrage} onChange={e => set("fees_arbitrage", e.target.value)} className={ic} placeholder="0 = gratuit" />
+                        </Field>
+                        <Field label="Sortie anticipée AV (%)">
+                          <input type="number" step={0.01} value={form.fees_sortie_anticipee} onChange={e => set("fees_sortie_anticipee", e.target.value)} className={ic} placeholder="ex: 1" />
+                        </Field>
+                        <Field label="Gestion UC AV (%/an)">
+                          <input type="number" step={0.01} value={form.fees_gestion_uc} onChange={e => set("fees_gestion_uc", e.target.value)} className={ic} placeholder="ex: 0.5" />
+                        </Field>
                         <Field label="🛡 Protection solde négatif">
-                          <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, cursor: "pointer" }}>
-                            <input
-                              type="checkbox"
-                              checked={form.protection_solde_negatif}
-                              onChange={e => set("protection_solde_negatif", e.target.checked)}
-                              style={{ width: 16, height: 16, accentColor: "var(--primary)", cursor: "pointer" }}
-                            />
-                            <span className="text-sm text-muted-foreground">Oui — protection contre solde négatif activée</span>
+                          <label style={{ display:"flex", alignItems:"center", gap:8, marginTop:8, cursor:"pointer" }}>
+                            <input type="checkbox" checked={form.protection_solde_negatif} onChange={e => set("protection_solde_negatif", e.target.checked)} style={{ width:16, height:16, accentColor:"var(--primary)", cursor:"pointer" }} />
+                            <span className="text-sm text-muted-foreground">Activée</span>
                           </label>
                         </Field>
                       </div>
