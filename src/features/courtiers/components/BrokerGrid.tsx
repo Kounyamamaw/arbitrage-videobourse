@@ -202,34 +202,36 @@ export function BrokerGrid() {
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{filtered.length} résultat{filtered.length !== 1 ? "s" : ""}</p>
         {category && category !== "all" && (
-          <div style={{ display: "flex", gap: 2, padding: 3, borderRadius: 8, backgroundColor: "var(--surface)", border: "1px solid var(--border)" }}>
+          <div style={{ display: "flex", gap: 3, padding: 3, borderRadius: 9, backgroundColor: "var(--surface)", border: "1px solid var(--border)" }}>
             <button
               onClick={() => setViewMode("cards")}
-              title="Vue cartes"
               style={{
-                display: "flex", alignItems: "center", justifyContent: "center",
-                width: 28, height: 28, borderRadius: 6, border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 5,
+                padding: "5px 10px", borderRadius: 6, border: "none", cursor: "pointer",
                 backgroundColor: viewMode === "cards" ? "var(--card)" : "transparent",
                 color: viewMode === "cards" ? "var(--accent)" : "var(--text-faint)",
                 boxShadow: viewMode === "cards" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                fontSize: 12, fontWeight: viewMode === "cards" ? 600 : 400,
                 transition: "all 150ms",
               }}
             >
-              <LayoutGrid size={14} />
+              <LayoutGrid size={13} />
+              <span>Cartes</span>
             </button>
             <button
               onClick={() => setViewMode("table")}
-              title="Vue tableau"
               style={{
-                display: "flex", alignItems: "center", justifyContent: "center",
-                width: 28, height: 28, borderRadius: 6, border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 5,
+                padding: "5px 10px", borderRadius: 6, border: "none", cursor: "pointer",
                 backgroundColor: viewMode === "table" ? "var(--card)" : "transparent",
                 color: viewMode === "table" ? "var(--accent)" : "var(--text-faint)",
                 boxShadow: viewMode === "table" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                fontSize: 12, fontWeight: viewMode === "table" ? 600 : 400,
                 transition: "all 150ms",
               }}
             >
-              <LayoutList size={14} />
+              <LayoutList size={13} />
+              <span>Tableau</span>
             </button>
           </div>
         )}
@@ -386,8 +388,16 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
   const cols = TABLE_COLS[category] || TABLE_COLS.broker;
 
   return (
-    <div style={{ width: "100%", overflowX: "auto", borderRadius: 14, border: "1px solid var(--border)", backgroundColor: "var(--card)" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
+    <div style={{
+      width: "100%",
+      overflowX: "auto",
+      overflowY: "visible",
+      WebkitOverflowScrolling: "touch" as any,
+      borderRadius: 14,
+      border: "1px solid var(--border)",
+      backgroundColor: "var(--card)",
+    }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 520 }}>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border)", backgroundColor: "var(--surface)" }}>
             <th style={{ padding: "10px 14px", textAlign: "left", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
