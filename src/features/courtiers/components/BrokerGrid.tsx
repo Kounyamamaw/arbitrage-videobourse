@@ -19,6 +19,10 @@ export function BrokerGrid() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  // Auto-reset to cards when "all" is selected
+  useEffect(() => {
+    if (!category || category === "all") setViewMode("cards");
+  }, [category]);
   const searchParams = useSearchParams();
 
   const buildShareUrl = useCallback(() => {
@@ -201,8 +205,7 @@ export function BrokerGrid() {
       {/* Barre résultats + toggle vue — toggle visible seulement sur catégorie spécifique */}
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">{filtered.length} résultat{filtered.length !== 1 ? "s" : ""}</p>
-        {category && category !== "all" && (
-          <div style={{ display: "flex", gap: 3, padding: 3, borderRadius: 9, backgroundColor: "var(--surface)", border: "1px solid var(--border)" }}>
+        <div style={{ display: "flex", gap: 3, padding: 3, borderRadius: 9, backgroundColor: "var(--surface)", border: "1px solid var(--border)" }}>
             <button
               onClick={() => setViewMode("cards")}
               style={{
@@ -219,22 +222,24 @@ export function BrokerGrid() {
               <span>Cartes</span>
             </button>
             <button
-              onClick={() => setViewMode("table")}
+              onClick={() => { if (!category || category === "all") return; setViewMode("table"); }}
               style={{
                 display: "flex", alignItems: "center", gap: 5,
-                padding: "5px 10px", borderRadius: 6, border: "none", cursor: "pointer",
+                padding: "5px 10px", borderRadius: 6, border: "none",
+                cursor: (!category || category === "all") ? "not-allowed" : "pointer",
+                opacity: (!category || category === "all") ? 0.35 : 1,
                 backgroundColor: viewMode === "table" ? "var(--card)" : "transparent",
                 color: viewMode === "table" ? "var(--accent)" : "var(--text-faint)",
                 boxShadow: viewMode === "table" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
                 fontSize: 12, fontWeight: viewMode === "table" ? 600 : 400,
                 transition: "all 150ms",
               }}
+              title={(!category || category === "all") ? "Sélectionnez une catégorie pour activer la vue tableau" : "Vue tableau"}
             >
               <LayoutList size={13} />
               <span>Tableau</span>
             </button>
           </div>
-        )}
       </div>
 
       {filtered.length === 0 ? (
