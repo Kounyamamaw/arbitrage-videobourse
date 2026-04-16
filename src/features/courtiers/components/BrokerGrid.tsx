@@ -170,7 +170,7 @@ export function BrokerGrid() {
   }
 
   return (
-    <div className="flex-1 space-y-5">
+    <div className="flex-1 space-y-5 min-w-0 overflow-hidden">
       {/* Barre de recherche + bouton partage */}
       <div className="flex items-center gap-2">
         <div className="relative flex-1 min-w-0">
@@ -394,7 +394,9 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
 
   return (
     <div style={{
+      display: "block",
       width: "100%",
+      maxWidth: "100%",
       overflowX: "auto",
       overflowY: "visible",
       WebkitOverflowScrolling: "touch" as any,
@@ -402,7 +404,7 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
       border: "1px solid var(--border)",
       backgroundColor: "var(--card)",
     }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 520 }}>
+      <table style={{ borderCollapse: "collapse", minWidth: "max-content", width: "100%" }}>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border)", backgroundColor: "var(--surface)" }}>
             <th style={{ padding: "10px 14px", textAlign: "left", fontSize: 11, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
