@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import PageContainer from "@/components/layout/page-container";
-import { ArrowUpRight, Gift } from "lucide-react";
+import { ArrowUpRight, Gift, Bell, Check, Loader2 } from "lucide-react";
 
 type Offer = {
   id: string;
@@ -140,7 +140,9 @@ export default function OffresPage() {
   const [nlMsg, setNlMsg] = useState("");
 
   const handleNewsletter = async () => {
-    if (!nlEmail || !nlEmail.includes("@")) { setNlMsg("Entrez un email valide"); setNlStatus("error"); return; }
+    if (!nlEmail || !nlEmail.includes("@")) {
+      setNlMsg("Entrez un email valide"); setNlStatus("error"); return;
+    }
     setNlStatus("loading");
     try {
       const res = await fetch("/api/offers/newsletter", {
@@ -149,9 +151,18 @@ export default function OffresPage() {
         body: JSON.stringify({ email: nlEmail }),
       });
       const data = await res.json();
-      if (res.ok) { setNlStatus("success"); setNlMsg("Inscrit ! Vous recevrez les prochaines offres."); setNlEmail(""); }
-      else { setNlStatus("error"); setNlMsg(data.error || "Erreur lors de l'inscription"); }
-    } catch { setNlStatus("error"); setNlMsg("Erreur réseau, réessayez."); }
+      if (res.ok) {
+        setNlStatus("success");
+        setNlMsg("Inscrit ! Vous recevrez les prochaines offres.");
+        setNlEmail("");
+      } else {
+        setNlStatus("error");
+        setNlMsg(data.error || "Erreur lors de l'inscription");
+      }
+    } catch {
+      setNlStatus("error");
+      setNlMsg("Erreur réseau, réessayez.");
+    }
   };
 
   useEffect(() => {
@@ -177,7 +188,7 @@ export default function OffresPage() {
           </div>
         </div>
 
-        {/* ── Newsletter offres ────────────────────────────────── */}
+        {/* ── Newsletter — Ne rater aucune offre ── */}
         <div style={{
           borderRadius: 14, border: "1px solid var(--border)",
           backgroundColor: "var(--surface)", padding: "16px 20px",
@@ -190,7 +201,7 @@ export default function OffresPage() {
             </p>
           </div>
           <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0, lineHeight: 1.5 }}>
-            Recevez une notification dès qu&apos;une nouvelle offre est disponible.
+            Recevez une notification dès qu&apos;une nouvelle offre est disponible pour notre communauté.
           </p>
           {nlStatus === "success" ? (
             <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--positive, #22c55e)", fontSize: 13, fontWeight: 600 }}>
@@ -208,17 +219,17 @@ export default function OffresPage() {
                   onKeyDown={e => e.key === "Enter" && handleNewsletter()}
                   style={{
                     flex: 1, minWidth: 0, borderRadius: 8,
-                    border: nlStatus === "error" ? "1px solid var(--destructive, #ef4444)" : "1px solid var(--border)",
-                    backgroundColor: "var(--bg)", padding: "8px 12px", fontSize: 13, color: "var(--text)",
-                    outline: "none",
+                    border: nlStatus === "error" ? "1px solid #ef4444" : "1px solid var(--border)",
+                    backgroundColor: "var(--bg)", padding: "8px 12px",
+                    fontSize: 13, color: "var(--text)", outline: "none",
                   }}
                 />
                 <button
                   onClick={handleNewsletter}
                   disabled={nlStatus === "loading"}
                   style={{
-                    display: "flex", alignItems: "center", gap: 5, padding: "8px 14px",
-                    borderRadius: 8, border: "none",
+                    display: "flex", alignItems: "center", gap: 5,
+                    padding: "8px 14px", borderRadius: 8, border: "none",
                     cursor: nlStatus === "loading" ? "not-allowed" : "pointer",
                     backgroundColor: "var(--accent)", color: "#fff",
                     fontSize: 12, fontWeight: 600,
@@ -226,12 +237,14 @@ export default function OffresPage() {
                     transition: "opacity 150ms", whiteSpace: "nowrap",
                   }}
                 >
-                  {nlStatus === "loading" ? <Loader2 size={13} className="animate-spin" /> : <Bell size={13} />}
+                  {nlStatus === "loading"
+                    ? <Loader2 size={13} className="animate-spin" />
+                    : <Bell size={13} />}
                   <span>S&apos;inscrire</span>
                 </button>
               </div>
               {nlStatus === "error" && nlMsg && (
-                <p style={{ fontSize: 11, color: "var(--destructive, #ef4444)", margin: 0 }}>{nlMsg}</p>
+                <p style={{ fontSize: 11, color: "#ef4444", margin: 0 }}>{nlMsg}</p>
               )}
             </>
           )}

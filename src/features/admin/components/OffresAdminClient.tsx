@@ -55,15 +55,16 @@ export function OffresAdminClient() {
   const [nlLoading, setNlLoading] = useState(false);
 
   const loadNewsletter = async () => {
-    if (nlSubscribers.length > 0) { setShowNewsletter(v => !v); return; }
-    setNlLoading(true);
-    try {
-      const res = await fetch("/api/offers/newsletter");
-      const data = await res.json();
-      setNlSubscribers(Array.isArray(data) ? data : []);
-    } catch { setNlSubscribers([]); }
-    setNlLoading(false);
-    setShowNewsletter(true);
+    if (!showNewsletter && nlSubscribers.length === 0) {
+      setNlLoading(true);
+      try {
+        const res = await fetch("/api/offers/newsletter");
+        const data = await res.json();
+        setNlSubscribers(Array.isArray(data) ? data : []);
+      } catch { setNlSubscribers([]); }
+      setNlLoading(false);
+    }
+    setShowNewsletter(v => !v);
   };
 
   const deleteNlSubscriber = async (id: number) => {
@@ -165,11 +166,15 @@ export function OffresAdminClient() {
             <div className="text-left">
               <p className="font-semibold text-sm">Newsletter offres</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {nlSubscribers.length > 0 ? `${nlSubscribers.length} inscrit${nlSubscribers.length > 1 ? "s" : ""}` : "Voir les inscrits"}
+                {nlSubscribers.length > 0
+                  ? `${nlSubscribers.length} inscrit${nlSubscribers.length > 1 ? "s" : ""}`
+                  : "Voir les inscrits"}
               </p>
             </div>
           </div>
-          {showNewsletter ? <IconChevronUp className="size-4 text-muted-foreground" /> : <IconChevronDown className="size-4 text-muted-foreground" />}
+          {showNewsletter
+            ? <IconChevronUp className="size-4 text-muted-foreground" />
+            : <IconChevronDown className="size-4 text-muted-foreground" />}
         </button>
 
         {showNewsletter && (
@@ -188,9 +193,14 @@ export function OffresAdminClient() {
                     <IconMail className="size-3.5 text-muted-foreground shrink-0" />
                     <span className="flex-1 min-w-0 truncate text-sm">{sub.email}</span>
                     <span className="text-xs text-muted-foreground shrink-0 hidden sm:block">
-                      {new Date(sub.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
+                      {new Date(sub.created_at).toLocaleDateString("fr-FR", {
+                        day: "numeric", month: "short", year: "numeric",
+                      })}
                     </span>
-                    <button onClick={() => deleteNlSubscriber(sub.id)} className="shrink-0 text-muted-foreground hover:text-red-500">
+                    <button
+                      onClick={() => deleteNlSubscriber(sub.id)}
+                      className="shrink-0 text-muted-foreground hover:text-red-500"
+                    >
                       <IconTrash className="size-3.5" />
                     </button>
                   </div>
@@ -225,7 +235,7 @@ export function OffresAdminClient() {
                 )}
               </div>
               {/* Infos */}
-              <div className="flex-1 min-w-0 overflow-hidden">
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <p className="font-semibold text-sm">{o.broker_name}</p>
                   {o.badge && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">{o.badge}</span>}
