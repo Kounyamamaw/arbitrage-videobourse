@@ -243,7 +243,7 @@ export function BrokerFilters() {
   return (
     <>
     <MobileFilterDrawer />
-    <aside className="hidden lg:flex w-60 shrink-0 flex-col gap-5 sticky top-4 self-start">
+    <aside className="hidden lg:flex w-60 shrink-0 flex-col gap-5 sticky top-4 self-start max-h-[calc(100dvh-80px)] overflow-y-auto pr-1">
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <SlidersHorizontal size={13} color="var(--accent)" />
