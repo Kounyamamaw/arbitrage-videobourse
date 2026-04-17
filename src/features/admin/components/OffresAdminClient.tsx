@@ -145,41 +145,43 @@ export function OffresAdminClient() {
       ) : (
         <div className="space-y-3">
           {offers.map(o => (
-            <div key={o.id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 sm:gap-4 sm:p-4">
-              {/* Logo */}
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
-                {o.broker_logo && !o.broker_logo.startsWith("data:") ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={o.broker_logo} alt={o.broker_name} className="size-7 object-contain"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-                ) : (
-                  <span className="text-xs font-bold text-primary">{o.broker_name.slice(0, 2).toUpperCase()}</span>
-                )}
-              </div>
-              {/* Infos */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-semibold text-sm">{o.broker_name}</p>
-                  {o.badge && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">{o.badge}</span>}
-                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${o.is_active ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
-                    {o.is_active ? "Active" : "Inactive"}
-                  </span>
+            <div key={o.id} className="flex flex-col gap-2 rounded-xl border border-border bg-card p-3 sm:flex-row sm:items-center sm:gap-3 sm:p-4">
+              {/* Ligne 1 mobile: logo + infos */}
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
+                  {o.broker_logo && !o.broker_logo.startsWith("data:") ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={o.broker_logo} alt={o.broker_name} className="size-7 object-contain"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                  ) : (
+                    <span className="text-xs font-bold text-primary">{o.broker_name.slice(0, 2).toUpperCase()}</span>
+                  )}
                 </div>
-                <p className="text-xs text-muted-foreground truncate mt-0.5">{o.title}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="font-semibold text-sm truncate">{o.broker_name}</p>
+                    {o.badge && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary shrink-0">{o.badge}</span>}
+                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold shrink-0 ${o.is_active ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
+                      {o.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate mt-0.5">{o.title}</p>
+                </div>
               </div>
-              {/* Ordre */}
-              <span className="text-xs text-muted-foreground shrink-0 hidden sm:block">#{o.sort_order}</span>
-              {/* Actions */}
-              <button onClick={() => toggleActive(o)} title={o.is_active ? "Désactiver" : "Activer"}
-                className="text-muted-foreground hover:text-primary shrink-0">
-                {o.is_active ? <IconCheck className="size-4 text-green-500" /> : <IconX className="size-4" />}
-              </button>
-              <button onClick={() => openEdit(o)} className="text-muted-foreground hover:text-primary shrink-0">
-                <IconPencil className="size-4" />
-              </button>
-              <button onClick={() => handleDelete(o.id)} className="text-muted-foreground hover:text-red-500 shrink-0">
-                <IconTrash className="size-4" />
-              </button>
+              {/* Ligne 2 mobile: ordre + actions (sm: aligne à droite) */}
+              <div className="flex items-center gap-2 sm:ml-auto">
+                <span className="text-xs text-muted-foreground">#{o.sort_order}</span>
+                <button onClick={() => toggleActive(o)} title={o.is_active ? "Désactiver" : "Activer"}
+                  className="text-muted-foreground hover:text-primary">
+                  {o.is_active ? <IconCheck className="size-4 text-green-500" /> : <IconX className="size-4" />}
+                </button>
+                <button onClick={() => openEdit(o)} className="text-muted-foreground hover:text-primary">
+                  <IconPencil className="size-4" />
+                </button>
+                <button onClick={() => handleDelete(o.id)} className="text-muted-foreground hover:text-red-500">
+                  <IconTrash className="size-4" />
+                </button>
+              </div>
             </div>
           ))}
         </div>

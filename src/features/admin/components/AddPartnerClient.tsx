@@ -348,29 +348,29 @@ export function AddPartnerClient() {
         </div>
         <div className="divide-y divide-border">
           {partners.map((p) => (
-            <div key={p.id} className="flex items-center gap-3 px-4 py-3 sm:px-6">
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
-                {p.logo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.logo_url} alt={p.name} className="size-6 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display="none"; }} />
-                ) : (
-                  <span className="text-[10px] font-bold text-muted-foreground">{p.name.slice(0,2).toUpperCase()}</span>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <p className="font-medium text-sm">{p.name}</p>
-                  <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">{p.category}</span>
-                  {((p as any).categories || []).filter((cat: string) => cat !== p.category).map((cat: string) => (
-                    <span key={cat} className="rounded-md bg-muted/70 border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">{cat}</span>
-                  ))}
-                  {p.is_partner && <span className="rounded-md bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">Partenaire</span>}
+            <div key={p.id} className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-3 sm:px-6">
+              {/* Ligne 1 mobile: logo + nom + badges */}
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
+                  {p.logo_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.logo_url} alt={p.name} className="size-6 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display="none"; }} />
+                  ) : (
+                    <span className="text-[10px] font-bold text-muted-foreground">{p.name.slice(0,2).toUpperCase()}</span>
+                  )}
                 </div>
-                <p className="text-[11px] text-muted-foreground truncate">{p.tagline || p.website || "—"}</p>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="font-medium text-sm truncate">{p.name}</p>
+                    <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground shrink-0">{p.category}</span>
+                    {p.is_partner && <span className="rounded-md bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 shrink-0">Partenaire</span>}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground truncate">{p.tagline || p.website || "—"}</p>
+                </div>
               </div>
-              {/* Actions — toujours visibles, compactes */}
-              <div className="flex items-center gap-1 shrink-0">
-                <a href={`/dashboard/courtiers/${p.slug}`} className="hidden sm:block text-xs text-primary hover:underline px-1">Fiche</a>
+              {/* Ligne 2 mobile: actions (sm: aligne à droite dans la même ligne) */}
+              <div className="flex items-center gap-1 sm:ml-auto">
+                <a href={`/dashboard/courtiers/${p.slug}`} className="text-xs text-primary hover:underline px-1">Fiche</a>
                 <button onClick={() => openEdit(p)} className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-primary"><IconPencil className="size-3.5" /></button>
                 <a href={p.affiliate_url || p.website} target="_blank" rel="noopener noreferrer" className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground"><IconExternalLink className="size-3.5" /></a>
                 <button onClick={() => handleDelete(p.id)} className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-red-500"><IconTrash className="size-3.5" /></button>
