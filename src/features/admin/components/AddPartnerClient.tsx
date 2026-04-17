@@ -335,7 +335,7 @@ export function AddPartnerClient() {
   return (
     <div className="space-y-6">
       {/* List */}
-      <div className="rounded-xl border border-border bg-card">
+      <div className="rounded-xl border border-border bg-card overflow-x-hidden">
         <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-6 sm:py-4 gap-2 flex-wrap">
           <div>
             <h3 className="font-semibold">Intermédiaires référencés</h3>
@@ -348,7 +348,7 @@ export function AddPartnerClient() {
         </div>
         <div className="divide-y divide-border">
           {partners.map((p) => (
-            <div key={p.id} className="flex items-center gap-3 px-4 py-3 sm:px-6">
+            <div key={p.id} className="flex min-w-0 items-center gap-2 px-3 py-3 sm:gap-3 sm:px-4">
               <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
                 {p.logo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -359,7 +359,7 @@ export function AddPartnerClient() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <p className="font-medium text-sm">{p.name}</p>
+                  <p className="font-medium text-sm truncate max-w-[120px] sm:max-w-none">{p.name}</p>
                   <span className="rounded-md bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">{p.category}</span>
                   {((p as any).categories || []).filter((cat: string) => cat !== p.category).map((cat: string) => (
                     <span key={cat} className="rounded-md bg-muted/70 border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">{cat}</span>

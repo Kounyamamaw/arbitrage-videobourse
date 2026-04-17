@@ -122,7 +122,7 @@ export function OffresAdminClient() {
   };
 
   return (
-    <div className="flex flex-1 flex-col space-y-6">
+    <div className="flex flex-1 flex-col space-y-6 overflow-x-hidden">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Offres Exclusives</h2>
@@ -145,7 +145,7 @@ export function OffresAdminClient() {
       ) : (
         <div className="space-y-3">
           {offers.map(o => (
-            <div key={o.id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 sm:gap-4 sm:p-4">
+            <div key={o.id} className="flex min-w-0 items-center gap-2 rounded-xl border border-border bg-card p-3 sm:gap-3 sm:p-4">
               {/* Logo */}
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
                 {o.broker_logo && !o.broker_logo.startsWith("data:") ? (
@@ -159,7 +159,7 @@ export function OffresAdminClient() {
               {/* Infos */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-semibold text-sm">{o.broker_name}</p>
+                  <p className="font-semibold text-sm truncate max-w-[100px] sm:max-w-none">{o.broker_name}</p>
                   {o.badge && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">{o.badge}</span>}
                   <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${o.is_active ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
                     {o.is_active ? "Active" : "Inactive"}
