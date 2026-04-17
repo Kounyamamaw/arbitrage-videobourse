@@ -118,7 +118,7 @@ function MobileFilterDrawer() {
   const hasActiveAdvanced = assetClass !== "all" || level !== "all" || fiscality !== "all" || platform !== "all" || hasDCA || hasFractions;
 
   return (
-    <div className="lg:hidden sticky top-0 z-20 bg-background/95 backdrop-blur-sm pt-1 pb-2 -mx-1 px-1">
+    <div className="lg:hidden sticky top-0 z-20 bg-background/95 pt-1 pb-2 -mx-1 px-1">
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
         <button
           onClick={() => setOpen(true)}
