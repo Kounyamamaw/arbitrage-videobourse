@@ -122,7 +122,7 @@ export function OffresAdminClient() {
   };
 
   return (
-    <div className="flex flex-1 flex-col space-y-6 w-full min-w-0">
+    <div className="flex flex-1 flex-col space-y-6">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Offres Exclusives</h2>
@@ -145,7 +145,7 @@ export function OffresAdminClient() {
       ) : (
         <div className="space-y-3">
           {offers.map(o => (
-            <div key={o.id} className="flex items-center gap-2 rounded-xl border border-border bg-card p-3 sm:gap-3 sm:p-4 min-w-0">
+            <div key={o.id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 sm:gap-4 sm:p-4">
               {/* Logo */}
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
                 {o.broker_logo && !o.broker_logo.startsWith("data:") ? (
@@ -187,7 +187,7 @@ export function OffresAdminClient() {
 
       {/* MODAL */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
           <div className="w-full max-w-lg rounded-2xl border border-border bg-card shadow-2xl">
             <div className="flex items-center justify-between p-5 border-b border-border">
               <p className="font-semibold">{editingId ? "Modifier l'offre" : "Nouvelle offre"}</p>
