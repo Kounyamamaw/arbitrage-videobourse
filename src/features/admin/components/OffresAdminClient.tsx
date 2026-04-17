@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { IconPlus, IconPencil, IconTrash, IconGift, IconCheck, IconX } from "@tabler/icons-react";
+import { IconPlus, IconPencil, IconTrash, IconGift, IconCheck, IconX, IconMail, IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 
 type Offer = {
   id: string;
@@ -50,6 +50,27 @@ export function OffresAdminClient() {
   const [offers, setOffers]     = useState<Offer[]>([]);
   const [loading, setLoading]   = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showNewsletter, setShowNewsletter] = useState(false);
+  const [nlSubscribers, setNlSubscribers] = useState<{ id: number; email: string; created_at: string }[]>([]);
+  const [nlLoading, setNlLoading] = useState(false);
+
+  const loadNewsletter = async () => {
+    if (nlSubscribers.length > 0) { setShowNewsletter(v => !v); return; }
+    setNlLoading(true);
+    try {
+      const res = await fetch("/api/offers/newsletter");
+      const data = await res.json();
+      setNlSubscribers(Array.isArray(data) ? data : []);
+    } catch { setNlSubscribers([]); }
+    setNlLoading(false);
+    setShowNewsletter(true);
+  };
+
+  const deleteNlSubscriber = async (id: number) => {
+    if (!confirm("Supprimer cet inscrit ?")) return;
+    await fetch(`/api/offers/newsletter?id=${id}`, { method: "DELETE" });
+    setNlSubscribers(prev => prev.filter(s => s.id !== id));
+  };
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm]         = useState<Omit<Offer, "id">>(EMPTY);
   const [saving, setSaving]     = useState(false);
@@ -122,7 +143,7 @@ export function OffresAdminClient() {
   };
 
   return (
-    <div className="flex flex-1 flex-col space-y-6 overflow-x-hidden">
+    <div className="flex flex-1 flex-col space-y-6 w-full min-w-0 overflow-x-hidden">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Offres Exclusives</h2>
@@ -131,6 +152,53 @@ export function OffresAdminClient() {
         <button onClick={openNew} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors">
           <IconPlus className="size-4" /> Nouvelle offre
         </button>
+      </div>
+
+      {/* ── Newsletter inscrits ── */}
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <button
+          onClick={loadNewsletter}
+          className="w-full flex items-center justify-between px-5 py-4 hover:bg-muted/50 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <IconMail className="size-4 text-primary" />
+            <div className="text-left">
+              <p className="font-semibold text-sm">Newsletter offres</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {nlSubscribers.length > 0 ? `${nlSubscribers.length} inscrit${nlSubscribers.length > 1 ? "s" : ""}` : "Voir les inscrits"}
+              </p>
+            </div>
+          </div>
+          {showNewsletter ? <IconChevronUp className="size-4 text-muted-foreground" /> : <IconChevronDown className="size-4 text-muted-foreground" />}
+        </button>
+
+        {showNewsletter && (
+          <div className="border-t border-border">
+            {nlLoading ? (
+              <p className="text-sm text-muted-foreground px-5 py-4">Chargement…</p>
+            ) : nlSubscribers.length === 0 ? (
+              <div className="px-5 py-6 text-center">
+                <IconMail className="size-8 text-muted-foreground/30 mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground">Aucun inscrit pour le moment</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-border">
+                {nlSubscribers.map(sub => (
+                  <div key={sub.id} className="flex items-center gap-3 px-5 py-3">
+                    <IconMail className="size-3.5 text-muted-foreground shrink-0" />
+                    <span className="flex-1 min-w-0 truncate text-sm">{sub.email}</span>
+                    <span className="text-xs text-muted-foreground shrink-0 hidden sm:block">
+                      {new Date(sub.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
+                    </span>
+                    <button onClick={() => deleteNlSubscriber(sub.id)} className="shrink-0 text-muted-foreground hover:text-red-500">
+                      <IconTrash className="size-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Liste des offres */}
@@ -157,7 +225,7 @@ export function OffresAdminClient() {
                 )}
               </div>
               {/* Infos */}
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 overflow-hidden">
                 <div className="flex items-center gap-2 flex-wrap">
                   <p className="font-semibold text-sm">{o.broker_name}</p>
                   {o.badge && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">{o.badge}</span>}

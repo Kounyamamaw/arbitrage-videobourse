@@ -333,9 +333,9 @@ export function AddPartnerClient() {
   if (loading) return <div className="flex h-32 items-center justify-center text-muted-foreground">Chargement...</div>;
 
   return (
-    <div className="space-y-6 overflow-x-hidden">
+    <div className="space-y-6 w-full min-w-0">
       {/* List */}
-      <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="rounded-xl border border-border bg-card w-full min-w-0">
         <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-6 sm:py-4 gap-2 flex-wrap">
           <div>
             <h3 className="font-semibold">Intermédiaires référencés</h3>
@@ -348,7 +348,7 @@ export function AddPartnerClient() {
         </div>
         <div className="divide-y divide-border">
           {partners.map((p) => (
-            <div key={p.id} className="flex items-center gap-3 px-4 py-3 sm:px-6">
+            <div key={p.id} className="flex items-center gap-2 px-3 py-3 sm:gap-3 sm:px-4 min-w-0 overflow-hidden">
               <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
                 {p.logo_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
