@@ -122,7 +122,7 @@ export function OffresAdminClient() {
   };
 
   return (
-    <div className="flex flex-1 flex-col space-y-6">
+    <div className="flex flex-1 flex-col space-y-6 max-w-full overflow-x-hidden">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Offres Exclusives</h2>
@@ -143,7 +143,7 @@ export function OffresAdminClient() {
           <p className="text-xs text-muted-foreground mt-1">Cliquez sur &quot;Nouvelle offre&quot; pour commencer</p>
         </div>
       ) : (
-        <div className="space-y-3 overflow-x-hidden">
+        <div className="space-y-3">
           {offers.map(o => (
             <div key={o.id} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 sm:gap-4 sm:p-4">
               {/* Logo */}

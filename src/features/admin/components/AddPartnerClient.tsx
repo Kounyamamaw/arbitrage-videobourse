@@ -333,9 +333,9 @@ export function AddPartnerClient() {
   if (loading) return <div className="flex h-32 items-center justify-center text-muted-foreground">Chargement...</div>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-full overflow-x-hidden">
       {/* List */}
-      <div className="rounded-xl border border-border bg-card overflow-x-hidden">
+      <div className="rounded-xl border border-border bg-card max-w-full overflow-x-hidden">
         <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-6 sm:py-4 gap-2 flex-wrap">
           <div>
             <h3 className="font-semibold">Intermédiaires référencés</h3>
@@ -346,7 +346,7 @@ export function AddPartnerClient() {
             <IconPlus className="size-4" /> Ajouter
           </button>
         </div>
-        <div className="divide-y divide-border overflow-x-hidden">
+        <div className="divide-y divide-border">
           {partners.map((p) => (
             <div key={p.id} className="flex items-center gap-3 px-4 py-3 sm:px-6">
               <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
