@@ -149,7 +149,6 @@ export function AddPartnerClient() {
       const n = parseNum(form[fk]);
       if (n !== undefined) payload[pk] = n;
     }
-    // Save custody fee unit in custody_fee_details
     payload.custody_fee_details = form.custody_fee_unit || "€";
     if (form.welcome_offer) payload.welcome_offer = form.welcome_offer;
     if (form.pros)     payload.pros     = parseArr(form.pros);

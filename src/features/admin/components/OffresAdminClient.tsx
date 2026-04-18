@@ -145,7 +145,7 @@ export function OffresAdminClient() {
       ) : (
         <div className="space-y-3">
           {offers.map(o => (
-            <div key={o.id} className="flex flex-col gap-2 rounded-xl border border-border bg-card p-3 sm:flex-row sm:items-center sm:gap-3 sm:p-4">
+            <div key={o.id} className="flex flex-col gap-2 rounded-xl border border-border bg-card p-3 sm:flex-row sm:items-center sm:gap-3 sm:p-4 min-w-0 w-full overflow-hidden">
               {/* Ligne 1 mobile: logo + infos */}
               <div className="flex items-center gap-3 min-w-0">
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
