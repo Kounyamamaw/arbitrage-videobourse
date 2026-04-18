@@ -27,7 +27,7 @@ const EMPTY_FORM = {
   score_envergure: "" as string, score_support: "" as string,
   founded: "" as string, deposit_minimum: "" as string,
   trustpilot_score: "" as string, trustpilot_count: "" as string,
-  custody_fee: "" as string, inactivity_fee: "" as string, currency_fee: "" as string,
+  custody_fee: "" as string, custody_fee_unit: "€" as string, inactivity_fee: "" as string, currency_fee: "" as string,
   welcome_offer: "", pros: "", cons: "", best_for: "",
   accounts: "", regulation: "",
   // Critères vue tableau (fees JSON)
@@ -51,6 +51,7 @@ const EMPTY_FORM = {
   fees_arbitrage: "" as string,
   fees_sortie_anticipee: "" as string,
   fees_gestion_uc: "" as string,
+  fees_virement: "" as string,
   protection_solde_negatif: false,
 };
 type FormState = typeof EMPTY_FORM;
@@ -148,6 +149,8 @@ export function AddPartnerClient() {
       const n = parseNum(form[fk]);
       if (n !== undefined) payload[pk] = n;
     }
+    // Save custody fee unit in custody_fee_details
+    payload.custody_fee_details = form.custody_fee_unit || "€";
     if (form.welcome_offer) payload.welcome_offer = form.welcome_offer;
     if (form.pros)     payload.pros     = parseArr(form.pros);
     if (form.cons)     payload.cons     = parseArr(form.cons);
@@ -177,6 +180,7 @@ export function AddPartnerClient() {
     if (pn(form.fees_arbitrage)       !== undefined) feesUpdate.arbitrage       = { montant: pn(form.fees_arbitrage),       details: "€" };
     if (pn(form.fees_sortie_anticipee)!== undefined) feesUpdate.sortie_anticipee= { montant: pn(form.fees_sortie_anticipee),details: "%" };
     if (pn(form.fees_gestion_uc)      !== undefined) feesUpdate.gestion_uc     = { montant: pn(form.fees_gestion_uc),      details: "%/an" };
+    if (pn(form.fees_virement)         !== undefined) feesUpdate.virement       = { montant: pn(form.fees_virement),        details: "€/virement" };
     feesUpdate.protection_solde_negatif = form.protection_solde_negatif;
     payload.fees = feesUpdate;
 
@@ -294,6 +298,7 @@ export function AddPartnerClient() {
       trustpilot_score:  full.trustpilot_score  != null ? String(full.trustpilot_score)  : "",
       trustpilot_count:  full.trustpilot_count  != null ? String(full.trustpilot_count)  : "",
       custody_fee:       full.custody_fee       != null ? String(full.custody_fee)       : "",
+      custody_fee_unit:  full.custody_fee_details === "%" ? "%" : "€",
       inactivity_fee:    full.inactivity_fee    != null ? String(full.inactivity_fee)    : "",
       currency_fee:      full.currency_fee      != null ? String(full.currency_fee)      : "",
       welcome_offer:     full.welcome_offer     || "",
@@ -323,6 +328,7 @@ export function AddPartnerClient() {
       fees_arbitrage:       full.fees?.arbitrage?.montant        != null ? String(full.fees.arbitrage.montant)        : "",
       fees_sortie_anticipee:full.fees?.sortie_anticipee?.montant != null ? String(full.fees.sortie_anticipee.montant) : "",
       fees_gestion_uc:      full.fees?.gestion_uc?.montant       != null ? String(full.fees.gestion_uc.montant)       : "",
+      fees_virement:        full.fees?.virement?.montant         != null ? String(full.fees.virement.montant)         : "",
       protection_solde_negatif: !!(full.fees?.protection_solde_negatif),
     });
     setCurrentFees((full.fees as Record<string, unknown>) || {});
@@ -348,7 +354,7 @@ export function AddPartnerClient() {
         </div>
         <div className="divide-y divide-border">
           {partners.map((p) => (
-            <div key={p.id} className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-3 sm:px-6">
+            <div key={p.id} className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-3 sm:px-6 min-w-0 w-full overflow-hidden">
               {/* Ligne 1 mobile: logo + nom + badges */}
               <div className="flex items-center gap-2 min-w-0">
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted overflow-hidden">
@@ -531,8 +537,14 @@ export function AddPartnerClient() {
                         <Field label="Trustpilot avis">
                           <input type="number" value={form.trustpilot_count} onChange={e => set("trustpilot_count", e.target.value)} className={ic} placeholder="12000" />
                         </Field>
-                        <Field label="Frais garde (€/an)">
-                          <input type="number" step={0.01} value={form.custody_fee} onChange={e => set("custody_fee", e.target.value)} className={ic} placeholder="0" />
+                        <Field label="Frais de garde">
+                          <div style={{ display:"flex", gap:4 }}>
+                            <input type="number" step={0.01} value={form.custody_fee} onChange={e => set("custody_fee", e.target.value)} className={ic} placeholder="0" style={{ flex:1 }} />
+                            <select value={form.custody_fee_unit} onChange={e => set("custody_fee_unit", e.target.value)} className={ic} style={{ width:72 }}>
+                              <option value="€">€/an</option>
+                              <option value="%">%/an</option>
+                            </select>
+                          </div>
                         </Field>
                         <Field label="Frais inactivité (€)">
                           <input type="number" step={0.01} value={form.inactivity_fee} onChange={e => set("inactivity_fee", e.target.value)} className={ic} placeholder="0" />
@@ -600,6 +612,9 @@ export function AddPartnerClient() {
                         </Field>
                         <Field label="Carte bancaire (€/an)">
                           <input type="number" step={0.01} value={form.fees_carte_banque} onChange={e => set("fees_carte_banque", e.target.value)} className={ic} placeholder="ex: 39" />
+                        </Field>
+                        <Field label="Virement (€/virement)">
+                          <input type="number" step={0.01} value={form.fees_virement} onChange={e => set("fees_virement", e.target.value)} className={ic} placeholder="0 = gratuit" />
                         </Field>
                         <Field label="Droit d'entrée AV (%)">
                           <input type="number" step={0.01} value={form.fees_entree} onChange={e => set("fees_entree", e.target.value)} className={ic} placeholder="0 = gratuit" />

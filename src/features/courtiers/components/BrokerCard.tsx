@@ -20,7 +20,7 @@ const CAT_LABELS: Record<string, string> = {
   neobanque: "Néobanque",
   insurance: "Assurance-vie",
   crypto:    "Crypto",
-  cfd:       "CFD",
+  cfd:       "CFD FX",
   scpi:      "SCPI",
 };
 

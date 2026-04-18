@@ -277,7 +277,7 @@ const TABLE_COLS: Record<string, TableCol[]> = {
     { key:"annual",   label:"Frais annuel",  getValue:(b) => b.custody_fee===0?"Gratuit":`${b.custody_fee}€/an` },
     { key:"cb",       label:"Coût CB",       getValue:(b) => { const f=b.fees as any; if(f?.carte?.montant!=null) return`${f.carte.montant}€/an`; return"—"; }},
     { key:"decouvert",label:"Découverts",    getValue:(b) => b.inactivity_fee?`${b.inactivity_fee}€`:"—" },
-    { key:"virement", label:"Virement",      getValue:(b) => { const t=(b.fees as any)?.FR?.[0]; if(t?.amount===0) return"Gratuit"; return"—"; }},
+    { key:"virement", label:"Virement",      getValue:(b) => { const f=(b.fees as any); if(f?.virement?.montant===0) return"Gratuit"; if(f?.virement?.montant!=null) return`${f.virement.montant}€`; const t=f?.FR?.[0]; if(t?.amount===0) return"Gratuit"; return"—"; }},
     { key:"cloture",  label:"Clôture",       getValue:(b) => (b as any).account_closing_fee?`${(b as any).account_closing_fee}€`:"Gratuit" },
   ],
   cfd: [
@@ -296,7 +296,7 @@ const TABLE_COLS: Record<string, TableCol[]> = {
   ],
   insurance: [
     { key:"entree",   label:"Droit entrée",  getValue:(b) => { const f=b.fees as any; if(f?.entree?.montant!=null) return`${f.entree.montant}%`; return"Gratuit"; }},
-    { key:"annual",   label:"Frais annuel",  getValue:(b) => b.custody_fee?`${b.custody_fee}%/an`:"—" },
+    { key:"annual",   label:"Frais annuel",  getValue:(b) => { if(!b.custody_fee) return"—"; const unit=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${unit}`; } },
     { key:"arb",      label:"Arbitrage",     getValue:(b) => { const f=b.fees as any; if(f?.arbitrage?.montant!=null) return`${f.arbitrage.montant}€`; return"Gratuit"; }},
     { key:"sortie",   label:"Sortie antic.", getValue:(b) => { const f=b.fees as any; if(f?.sortie_anticipee?.montant!=null) return`${f.sortie_anticipee.montant}%`; return"—"; }},
     { key:"uc",       label:"Gestion UC",    getValue:(b) => { const f=b.fees as any; if(f?.gestion_uc?.montant!=null) return`${f.gestion_uc.montant}%/an`; return"—"; }},
@@ -362,9 +362,10 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
         <tbody>
           {sorted.map((broker, i) => (
             <tr key={broker.id}
-              style={{ borderBottom: i < brokers.length-1 ? "1px solid var(--border-light,var(--border))" : "none", transition:"background 120ms" }}
+              style={{ borderBottom: i < sorted.length-1 ? "1px solid var(--border-light,var(--border))" : "none", transition:"background 120ms",
+                backgroundColor: i % 2 === 1 ? "rgba(99,102,241,0.04)" : "transparent" }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--surface)")}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "")}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = i % 2 === 1 ? "rgba(99,102,241,0.04)" : "transparent")}
             >
               <td style={{ padding:"10px 10px", textAlign:"center", whiteSpace:"nowrap", width:32 }}>
                 <span style={{ fontSize:12, fontWeight:700, color: i === 0 ? "#F59E0B" : i === 1 ? "#9CA3AF" : i === 2 ? "#CD7F32" : "var(--text-faint)" }}>
