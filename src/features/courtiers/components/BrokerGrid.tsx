@@ -263,7 +263,7 @@ const TABLE_COLS: Record<string, TableCol[]> = {
     { key:"fr",      label:"Frais France",    getValue:(b) => { const t=(b.fees as any)?.FR?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
     { key:"us",      label:"Frais USA",       getValue:(b) => { const t=(b.fees as any)?.US?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
     { key:"eu",      label:"Frais Europe",    getValue:(b) => { const t=(b.fees as any)?.EU?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
-    { key:"custody", label:"Droits garde",    getValue:(b) => b.custody_fee===0?"Gratuit":`${b.custody_fee}€/an` },
+    { key:"custody", label:"Droits garde",    getValue:(b) => { if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
     { key:"fx",      label:"Frais change",    getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
   ],
   neobanque: [
@@ -271,13 +271,13 @@ const TABLE_COLS: Record<string, TableCol[]> = {
     { key:"retrait", label:"Retrait",         getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
     { key:"etranger",label:"Étranger",        getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"Gratuit" },
     { key:"plafond", label:"Plafond retrait", getValue:(b) => { const f=b.fees as any; if(f?.retrait_especes_standard?.montant) return`${f.retrait_especes_standard.montant}€/mois`; return"—"; }},
-    { key:"extra",   label:"Service add.",    getValue:(b) => { if((b as any).has_dca) return"DCA auto"; if((b as any).has_fractions) return"Fractions"; return"—"; }},
+    { key:"extra",   label:"Service add.",    getValue:(b) => { const extras=[]; if((b as any).has_dca) extras.push("DCA"); if((b as any).has_fractions) extras.push("Fractions"); return extras.length?extras.join(", "):"—"; } },
   ],
   bank: [
-    { key:"annual",   label:"Frais annuel",  getValue:(b) => b.custody_fee===0?"Gratuit":`${b.custody_fee}€/an` },
+    { key:"annual",   label:"Frais annuel",  getValue:(b) => { if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
     { key:"cb",       label:"Coût CB",       getValue:(b) => { const f=b.fees as any; if(f?.carte?.montant!=null) return`${f.carte.montant}€/an`; return"—"; }},
-    { key:"decouvert",label:"Découverts",    getValue:(b) => b.inactivity_fee?`${b.inactivity_fee}€`:"—" },
-    { key:"virement", label:"Virement",      getValue:(b) => { const f=(b.fees as any); if(f?.virement?.montant===0) return"Gratuit"; if(f?.virement?.montant!=null) return`${f.virement.montant}€`; const t=f?.FR?.[0]; if(t?.amount===0) return"Gratuit"; return"—"; }},
+    { key:"decouvert",label:"Découverts",    getValue:(b) => { const f=b.fees as any; if(f?.decouvert_taux?.montant!=null) return`${f.decouvert_taux.montant}% TEG`; return"—"; } },
+    { key:"virement", label:"Virement",      getValue:(b) => { const f=b.fees as any; if(f?.virement?.montant===0) return"Gratuit"; if(f?.virement?.montant!=null) return`${f.virement.montant}€`; return"Gratuit"; } },
     { key:"cloture",  label:"Clôture",       getValue:(b) => (b as any).account_closing_fee?`${(b as any).account_closing_fee}€`:"Gratuit" },
   ],
   cfd: [
@@ -296,7 +296,7 @@ const TABLE_COLS: Record<string, TableCol[]> = {
   ],
   insurance: [
     { key:"entree",   label:"Droit entrée",  getValue:(b) => { const f=b.fees as any; if(f?.entree?.montant!=null) return`${f.entree.montant}%`; return"Gratuit"; }},
-    { key:"annual",   label:"Frais annuel",  getValue:(b) => { if(!b.custody_fee) return"—"; const unit=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${unit}`; } },
+    { key:"annual",   label:"Frais annuel",  getValue:(b) => { if(!b.custody_fee) return"—"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
     { key:"arb",      label:"Arbitrage",     getValue:(b) => { const f=b.fees as any; if(f?.arbitrage?.montant!=null) return`${f.arbitrage.montant}€`; return"Gratuit"; }},
     { key:"sortie",   label:"Sortie antic.", getValue:(b) => { const f=b.fees as any; if(f?.sortie_anticipee?.montant!=null) return`${f.sortie_anticipee.montant}%`; return"—"; }},
     { key:"uc",       label:"Gestion UC",    getValue:(b) => { const f=b.fees as any; if(f?.gestion_uc?.montant!=null) return`${f.gestion_uc.montant}%/an`; return"—"; }},
@@ -362,10 +362,9 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
         <tbody>
           {sorted.map((broker, i) => (
             <tr key={broker.id}
-              style={{ borderBottom: i < sorted.length-1 ? "1px solid var(--border-light,var(--border))" : "none", transition:"background 120ms",
-                backgroundColor: i % 2 === 1 ? "rgba(99,102,241,0.04)" : "transparent" }}
+              style={{ borderBottom: i < brokers.length-1 ? "1px solid var(--border-light,var(--border))" : "none", transition:"background 120ms" }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--surface)")}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = i % 2 === 1 ? "rgba(99,102,241,0.04)" : "transparent")}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "")}
             >
               <td style={{ padding:"10px 10px", textAlign:"center", whiteSpace:"nowrap", width:32 }}>
                 <span style={{ fontSize:12, fontWeight:700, color: i === 0 ? "#F59E0B" : i === 1 ? "#9CA3AF" : i === 2 ? "#CD7F32" : "var(--text-faint)" }}>
