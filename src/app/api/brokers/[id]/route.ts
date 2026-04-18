@@ -8,7 +8,7 @@ const SCALAR_COLS = new Set([
   'score_overall','score_fees','score_reliability','score_ux',
   'score_envergure','score_support',
   'founded','deposit_minimum','trustpilot_score','trustpilot_count',
-  'custody_fee','inactivity_fee','currency_fee',
+  'custody_fee','custody_fee_details','inactivity_fee','inactivity_fee_details','currency_fee','currency_fee_details',
   'welcome_offer','level','is_foreign','provides_ifu','has_dca','has_fractions',
   'withdrawal_fee','deposit_fee','dividend_fee','ost_fee',
   'account_opening_fee','account_closing_fee','transfer_out_fee','etf_count','pea_max_deposit',
