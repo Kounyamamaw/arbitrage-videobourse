@@ -3,19 +3,11 @@ import { supabaseAdmin as supabase } from "@/lib/supabase";
 
 const GROQ_API = "https://api.groq.com/openai/v1/chat/completions";
 
-// Construit l'index d'affiliation — format propre pour le LLM
-// Chaque courtier sur une ligne : "- Nom : [Nom](/go/slug)"
-function buildAffiliateIndex(allBrokers: { name: string; slug: string; affiliate_url?: string | null }[]): string {
-  return allBrokers
-    .filter((b) => b.affiliate_url && b.affiliate_url.trim() !== "")
-    .map((b) => `- ${b.name} : [${b.name}](/go/${b.slug})`)
-    .join("\n");
-}
+// Plus besoin de buildAffiliateIndex — makeBrokersClickable côté client gère tous les liens
 
 function buildSystemPrompt(
   brokers: unknown[],
-  etfs: unknown[],
-  affiliateIndex: string
+  etfs: unknown[]
 ) {
   const etfData =
     etfs.length > 0
@@ -43,20 +35,17 @@ ${etfData}
    - Si la question porte sur un ETF, une enveloppe fiscale, une stratégie : NE MENTIONNE PAS de courtier, ou une brève mention en fin de réponse ("disponible sur la plupart des courtiers comme XTB ou Trade Republic")
    - N'impose JAMAIS un lien cliquable si ce n'est pas pertinent
 
-3. LIENS — RÈGLES ABSOLUES
-   INTERDIT : reproduire des URLs brutes dans ta réponse. Ne jamais écrire une URL commençant par "https://"
-   INTERDIT : écrire le nom d'un courtier deux fois de suite (pas de "XTB XTB" ou "Interactive BrokersInteractive Brokers")
+3. NOMS DE COURTIERS — RÈGLES ABSOLUES
+   INTERDIT absolu : écrire quoi que ce soit entre crochets et parenthèses comme [texte](url)
+   INTERDIT absolu : écrire toute URL, chemin ou slug (/go/..., /dashboard/..., https://...)
+   INTERDIT absolu : mentionner le même courtier deux fois dans la même réponse
    
-   Pour mentionner un courtier cliquable, utilise UNIQUEMENT ce format : [Nom du courtier](/go/slug)
-   Le slug = nom en minuscules avec tirets. Exemples :
-   - Interactive Brokers → [Interactive Brokers](/go/interactive-brokers)
-   - Trade Republic → [Trade Republic](/go/trade-republic)
-   - XTB → [XTB](/go/xtb)
+   Pour citer un courtier : écris UNIQUEMENT son nom en texte simple, sans aucun formatage lien.
+   Exemple correct : "Interactive Brokers est une bonne option pour les investisseurs expérimentés."
+   Exemple INTERDIT : "[Interactive Brokers](/go/interactive-brokers)" ou "Interactive Brokers/go/..."
    
-   Maximum 1 lien cliquable par réponse. Si tu ne mentionnes pas de courtier comme recommandation principale, n'écris aucun lien.
-   
-   LISTE DES COURTIERS AVEC LIENS D'AFFILIATION DISPONIBLES :
-${affiliateIndex}
+   La plateforme gère automatiquement les liens — tu n'as rien à faire côté liens.
+   Maximum 2 courtiers différents mentionnés par réponse, chacun cité UNE SEULE FOIS.
 
 4. FORMAT
    - Français naturel, max 220 mots
@@ -234,18 +223,11 @@ export async function POST(req: NextRequest) {
       etfs = mod.default as unknown as Record<string, unknown>[];
     }
 
-    // Construction de l'index d'affiliation complet AVANT tout filtrage
-    // Garantit que le LLM a toujours les vrais liens d'affiliation de TOUS les courtiers
-    const affiliateIndex = buildAffiliateIndex(
-      brokers as { name: string; slug: string; affiliate_url?: string | null }[]
-    );
-
     const lastQuestion = messages[messages.length - 1]?.content || "";
     const context = filterContext(lastQuestion, brokers, etfs);
     const systemPrompt = buildSystemPrompt(
       context.brokers,
-      context.etfs,
-      affiliateIndex
+      context.etfs
     );
 
     const response = await fetch(GROQ_API, {
