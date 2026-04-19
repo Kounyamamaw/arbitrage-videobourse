@@ -202,7 +202,7 @@ export function BrokerGrid() {
       {/* Compteur résultats + toggle vue pleine largeur */}
       <div className="flex flex-col gap-2">
         <p className="text-xs text-muted-foreground">{filtered.length} résultat{filtered.length !== 1 ? "s" : ""}</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+        {(!category || category === "all") ? null : <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
           <button
             onClick={() => setViewMode("cards")}
             style={{
@@ -234,7 +234,7 @@ export function BrokerGrid() {
             <LayoutList size={15} />
             <span>Tableau comparatif</span>
           </button>
-        </div>
+        </div>}
       </div>
 
       {filtered.length === 0 ? (

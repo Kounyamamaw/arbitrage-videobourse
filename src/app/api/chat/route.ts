@@ -3,13 +3,13 @@ import { supabaseAdmin as supabase } from "@/lib/supabase";
 
 const GROQ_API = "https://api.groq.com/openai/v1/chat/completions";
 
-// Liste COMPLÈTE des liens affiliés — indépendante du filtrage contextuel
-// Le LLM doit TOUJOURS avoir accès aux vrais liens d'affiliation de tous les courtiers
+// Construit l'index d'affiliation — format propre pour le LLM
+// Chaque courtier sur une ligne : "- Nom : [Nom](/go/slug)"
 function buildAffiliateIndex(allBrokers: { name: string; slug: string; affiliate_url?: string | null }[]): string {
   return allBrokers
     .filter((b) => b.affiliate_url && b.affiliate_url.trim() !== "")
-    .map((b) => `${b.name}→${b.affiliate_url}`)
-    .join("|");
+    .map((b) => `- ${b.name} : [${b.name}](/go/${b.slug})`)
+    .join("\n");
 }
 
 function buildSystemPrompt(
@@ -43,16 +43,20 @@ ${etfData}
    - Si la question porte sur un ETF, une enveloppe fiscale, une stratégie : NE MENTIONNE PAS de courtier, ou une brève mention en fin de réponse ("disponible sur la plupart des courtiers comme XTB ou Trade Republic")
    - N'impose JAMAIS un lien cliquable si ce n'est pas pertinent
 
-3. LIENS AFFILIÉS — RÈGLE ABSOLUE
-   LISTE COMPLÈTE DES LIENS AFFILIÉS (utilise UNIQUEMENT ces URLs — jamais d'autre URL) :
-   ${affiliateIndex}
-
-   Format : [Nom](url) — mais SEULEMENT si :
-   - La question demande EXPLICITEMENT vers quel courtier aller ouvrir un compte
-   - ET tu cites ce courtier comme recommandation principale
-   - Maximum 1 lien par réponse
-   - JAMAIS deux fois le même nom (pas de "XTB [XTB](url)")
-   - Si un courtier n'est PAS dans la liste ci-dessus, utilise le format : [Nom](/dashboard/courtiers/slug) — JAMAIS son site officiel
+3. LIENS — RÈGLES ABSOLUES
+   INTERDIT : reproduire des URLs brutes dans ta réponse. Ne jamais écrire une URL commençant par "https://"
+   INTERDIT : écrire le nom d'un courtier deux fois de suite (pas de "XTB XTB" ou "Interactive BrokersInteractive Brokers")
+   
+   Pour mentionner un courtier cliquable, utilise UNIQUEMENT ce format : [Nom du courtier](/go/slug)
+   Le slug = nom en minuscules avec tirets. Exemples :
+   - Interactive Brokers → [Interactive Brokers](/go/interactive-brokers)
+   - Trade Republic → [Trade Republic](/go/trade-republic)
+   - XTB → [XTB](/go/xtb)
+   
+   Maximum 1 lien cliquable par réponse. Si tu ne mentionnes pas de courtier comme recommandation principale, n'écris aucun lien.
+   
+   LISTE DES COURTIERS AVEC LIENS D'AFFILIATION DISPONIBLES :
+${affiliateIndex}
 
 4. FORMAT
    - Français naturel, max 220 mots
@@ -151,7 +155,6 @@ function filterContext(
   const relevantBrokers = filtered.slice(0, 5).map((b) => ({
     name: b.name,
     slug: b.slug,
-    affiliate_url: (b as any).affiliate_url || null,
     score: b.score_overall,
     score_fees: b.score_fees,
     score_envergure: (b as any).score_envergure ?? 0,
