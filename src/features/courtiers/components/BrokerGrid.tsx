@@ -274,7 +274,7 @@ const TABLE_COLS: Record<string, TableCol[]> = {
     { key:"extra",   label:"Service add.",    getValue:(b) => { const extras=[]; if((b as any).has_dca) extras.push("DCA"); if((b as any).has_fractions) extras.push("Fractions"); return extras.length?extras.join(", "):"—"; } },
   ],
   bank: [
-    { key:"annual",   label:"Frais annuel",  getValue:(b) => { if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
+    { key:"annual",   label:"Frais annuel",  getValue:(b) => { const fees=(b.fees||{}) as any; const tc=fees.tenue_compte; if(tc?.montant!=null) return tc.montant===0?"Gratuit":`${tc.montant}€/an`; if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
     { key:"cb",       label:"Coût CB",       getValue:(b) => { const f=b.fees as any; if(f?.carte?.montant!=null) return`${f.carte.montant}€/an`; return"—"; }},
     { key:"decouvert",label:"Découverts",    getValue:(b) => { const f=b.fees as any; if(f?.decouvert_taux?.montant!=null) return`${f.decouvert_taux.montant}% TEG`; return"—"; } },
     { key:"virement", label:"Virement",      getValue:(b) => { const f=b.fees as any; if(f?.virement?.montant===0) return"Gratuit"; if(f?.virement?.montant!=null) return`${f.virement.montant}€`; return"Gratuit"; } },
