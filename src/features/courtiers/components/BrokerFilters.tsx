@@ -15,11 +15,12 @@ const CATEGORIES = [
 ];
 
 const ACCOUNTS = [
-  { value: "all", label: "Toutes" },
-  { value: "PEA", label: "PEA"   },
-  { value: "CTO", label: "CTO"   },
-  { value: "AV",  label: "AV"    },
-  { value: "PER", label: "PER"   },
+  { value: "all", label: "Toutes"    },
+  { value: "PEA", label: "PEA"       },
+  { value: "CTO", label: "CTO"       },
+  { value: "AV",  label: "AV"        },
+  { value: "PER", label: "PER"       },
+  { value: "cfd", label: "CFD FOREX" },
 ];
 
 const SORTS = [

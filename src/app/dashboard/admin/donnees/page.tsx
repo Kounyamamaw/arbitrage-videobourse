@@ -27,6 +27,7 @@ const FIELDS = [
   { key: 'logo_url',          label: 'URL du logo',          type: 'text'    },
   { key: 'affiliate_url',     label: 'Lien affilié',         type: 'text'    },
   { key: 'demo_url',          label: 'Lien démo',            type: 'text'    },
+  { key: 'fees.virement_int', label: 'Virement Int. (€)',    type: 'fees_montant' },
 ] as const;
 
 export default function DonneesPage() {
@@ -44,8 +45,16 @@ export default function DonneesPage() {
   const openEdit = (b: Broker) => {
     const form: Record<string, string> = {};
     FIELDS.forEach(f => {
-      const v = b[f.key];
-      form[f.key] = Array.isArray(v) ? (v as string[]).join(', ') : v !== null && v !== undefined ? String(v) : '';
+      if (f.type === 'fees_montant') {
+        // Lire depuis broker.fees le sous-champ correspondant
+        const subKey = f.key.replace(/^fees\./, '');
+        const feesObj = (b.fees as Record<string, any>) ?? {};
+        const montant = feesObj[subKey]?.montant;
+        form[f.key] = montant != null ? String(montant) : '';
+      } else {
+        const v = b[f.key];
+        form[f.key] = Array.isArray(v) ? (v as string[]).join(', ') : v !== null && v !== undefined ? String(v) : '';
+      }
     });
     setEditForm(form);
     setEditingSlug(b.slug);
@@ -55,17 +64,45 @@ export default function DonneesPage() {
     if (!editingSlug) return;
     setSaving(true);
     const payload: Record<string, unknown> = {};
+
+    // Séparer les champs scalaires/array des sous-champs fees.*
+    const feesSubfields: Record<string, { montant: number; details: string }> = {};
+
     FIELDS.forEach(f => {
       const v = editForm[f.key];
       if (v === '' || v === undefined) return;
-      if (f.type === 'number') payload[f.key] = parseFloat(v);
-      else if (f.type === 'bool') payload[f.key] = v === 'true';
-      else if (f.key === 'accounts' || f.key === 'pros' || f.key === 'cons')
+
+      if (f.type === 'fees_montant') {
+        // Clé de la forme "fees.xxx" → merge dans fees
+        const subKey = f.key.replace(/^fees\./, '');
+        const montant = parseFloat(v);
+        if (!isNaN(montant)) {
+          feesSubfields[subKey] = { montant, details: '' };
+        }
+      } else if (f.type === 'number') {
+        payload[f.key] = parseFloat(v);
+      } else if (f.type === 'bool') {
+        payload[f.key] = v === 'true';
+      } else if (f.key === 'accounts' || f.key === 'pros' || f.key === 'cons') {
         payload[f.key] = v.split(',').map((s: string) => s.trim()).filter(Boolean);
-      else payload[f.key] = v;
+      } else {
+        payload[f.key] = v;
+      }
     });
+
+    // Si des sous-champs fees sont modifiés, fetch les fees actuels et merger
+    if (Object.keys(feesSubfields).length > 0) {
+      const broker = brokers.find(b => b.slug === editingSlug);
+      const currentFees: Record<string, unknown> = (broker?.fees as Record<string, unknown>) ?? {};
+      payload['fees'] = { ...currentFees, ...feesSubfields };
+    }
+
     try {
-      const res = await fetch(`/api/brokers/${editingSlug}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const res = await fetch(`/api/brokers/${editingSlug}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
       if (res.ok) {
         const updated = await res.json();
         setBrokers(prev => prev.map(b => b.slug === editingSlug ? { ...b, ...updated } : b));
@@ -148,6 +185,15 @@ export default function DonneesPage() {
                                 <option value="true">Oui</option>
                                 <option value="false">Non</option>
                               </select>
+                            ) : f.type === 'fees_montant' ? (
+                              <input
+                                type="number"
+                                step="0.01"
+                                placeholder="0"
+                                value={editForm[f.key] || ''}
+                                onChange={e => setEditForm(fm => ({ ...fm, [f.key]: e.target.value }))}
+                                className="w-full rounded-lg border border-border bg-background px-3 py-1.5 text-sm focus:border-primary focus:outline-none"
+                              />
                             ) : (
                               <input value={editForm[f.key] || ''} onChange={e => setEditForm(fm => ({ ...fm, [f.key]: e.target.value }))}
                                 className="w-full rounded-lg border border-border bg-background px-3 py-1.5 text-sm focus:border-primary focus:outline-none" />

@@ -38,9 +38,11 @@ export function BrokerGrid() {
     if (hasDCA)                  params.set("hasDCA",       "1");
     if (hasFractions)            params.set("hasFractions", "1");
     if (hasDemo)                 params.set("hasDemo",      "1");
+    // Inclure la vue tableau dans l'URL partagée (seulement si activée)
+    if (viewMode === "table")    params.set("view",         "table");
     const qs = params.toString();
     return `${window.location.origin}/dashboard/courtiers${qs ? `?${qs}` : ""}`;
-  }, []);
+  }, [viewMode]);
 
   const handleShare = () => {
     const url = buildShareUrl();
@@ -62,6 +64,7 @@ export function BrokerGrid() {
     const dca = searchParams.get("hasDCA");
     const frx = searchParams.get("hasFractions");
     const dem = searchParams.get("hasDemo");
+    const viw = searchParams.get("view");
     if (cat) setCategory(cat);
     if (acc) setAccountType(acc);
     if (srt) setSortBy(srt);
@@ -72,6 +75,7 @@ export function BrokerGrid() {
     if (dca === "1") setHasDCA(true);
     if (frx === "1") setHasFractions(true);
     if (dem === "1") setHasDemo(true);
+    if (viw === "table" && cat && cat !== "all") setViewMode("table");
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -119,7 +123,17 @@ export function BrokerGrid() {
       const cats: string[] = (b as any).categories || [];
       return b.category === category || cats.includes(category);
     });
-    if (accountType && accountType !== "all") list = list.filter((b) => b.accounts?.includes(accountType));
+    if (accountType && accountType !== "all") {
+      if (accountType === "cfd") {
+        // CFD FOREX = filtre par catégorie, pas par enveloppe comptable
+        list = list.filter((b) => {
+          const cats: string[] = (b as any).categories || [];
+          return b.category === "cfd" || cats.includes("cfd");
+        });
+      } else {
+        list = list.filter((b) => b.accounts?.includes(accountType));
+      }
+    }
     if (maxDeposit < 10000) list = list.filter((b) => b.deposit_minimum <= maxDeposit);
 
     // Filtres avancés — basés sur les champs du broker (on filtre souplement si le champ n'existe pas)
@@ -281,7 +295,7 @@ const TABLE_COLS: Record<string, TableCol[]> = {
     { key:"annual",   label:"Frais annuel",  getValue:(b) => { const fees=(b.fees||{}) as any; const tc=fees.tenue_compte; if(tc?.montant!=null) return tc.montant===0?"Gratuit":`${tc.montant}€/an`; if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
     { key:"cb",       label:"Coût CB",       getValue:(b) => { const f=b.fees as any; if(f?.carte?.montant!=null) return`${f.carte.montant}€/an`; return"—"; }},
     { key:"decouvert",label:"Découverts",    getValue:(b) => { const f=b.fees as any; if(f?.decouvert_taux?.montant!=null) return`${f.decouvert_taux.montant}% TEG`; return"—"; } },
-    { key:"virement", label:"Virement",      getValue:(b) => { const f=b.fees as any; if(f?.virement?.montant===0) return"Gratuit"; if(f?.virement?.montant!=null) return`${f.virement.montant}€`; return"Gratuit"; } },
+    { key:"virement_int", label:"Virement Int.", getValue:(b) => { const f=b.fees as any; const vi=f?.virement_int; if(vi?.montant!=null) return vi.montant===0?"Gratuit":`${vi.montant}€`; if(f?.virement?.montant===0) return"Gratuit"; if(f?.virement?.montant!=null) return`${f.virement.montant}€`; return"Gratuit"; } },
     { key:"cloture",  label:"Clôture",       getValue:(b) => (b as any).account_closing_fee?`${(b as any).account_closing_fee}€`:"Gratuit" },
   ],
   cfd: [
