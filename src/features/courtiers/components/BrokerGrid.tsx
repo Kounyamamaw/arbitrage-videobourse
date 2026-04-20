@@ -364,6 +364,11 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
         <thead>
           <tr style={{ borderBottom:"1px solid var(--border)", backgroundColor:"var(--surface)" }}>
             <th style={{ padding:"10px 10px", textAlign:"center", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", width:32 }}>#</th>
+            {/* Score en 1ère position */}
+            <th onClick={() => handleSort("score")}
+              style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === "score" ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", cursor:"pointer", userSelect:"none", whiteSpace:"nowrap" }}>
+              Score<SortIcon key="score" />
+            </th>
             <th style={{ padding:"10px 14px", textAlign:"left", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap" }}>Intermédiaire</th>
             {cols.map(col => (
               <th key={col.key} onClick={() => handleSort(col.key)}
@@ -371,23 +376,27 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
                 {col.label}<SortIcon key={col.key} />
               </th>
             ))}
-            <th onClick={() => handleSort("score")}
-              style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === "score" ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", cursor:"pointer", userSelect:"none", whiteSpace:"nowrap" }}>
-              Score<SortIcon key="score" />
-            </th>
           </tr>
         </thead>
         <tbody>
           {sorted.map((broker, i) => (
             <tr key={broker.id}
-              style={{ borderBottom: i < brokers.length-1 ? "1px solid var(--border-light,var(--border))" : "none", transition:"background 120ms" }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--surface)")}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "")}
+              style={{
+                borderBottom: i < brokers.length-1 ? "1px solid var(--border-light,var(--border))" : "none",
+                transition:"background 120ms",
+                backgroundColor: i % 2 === 1 ? "var(--surface)" : undefined,
+              }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--accent-light, rgba(59,130,246,0.06))")}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = i % 2 === 1 ? "var(--surface)" : "")}
             >
               <td style={{ padding:"10px 10px", textAlign:"center", whiteSpace:"nowrap", width:32 }}>
                 <span style={{ fontSize:12, fontWeight:700, color: i === 0 ? "#F59E0B" : i === 1 ? "#9CA3AF" : i === 2 ? "#CD7F32" : "var(--text-faint)" }}>
                   {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`}
                 </span>
+              </td>
+              {/* Score en 1ère position */}
+              <td style={{ padding:"10px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
+                <span style={{ fontSize:12, fontWeight:700, color:"var(--accent)" }}>{broker.score_overall?.toFixed(1)}</span>
               </td>
               <td style={{ padding:"10px 14px", whiteSpace:"nowrap" }}>
                 <a href={`/dashboard/courtiers/${broker.slug}`} style={{ display:"flex", alignItems:"center", gap:9, textDecoration:"none", color:"var(--text)" }}>
@@ -404,9 +413,6 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
                 const ok = val==="Gratuit"||val==="Aucun";
                 return <td key={col.key} style={{ padding:"10px 10px", textAlign:"right", fontSize:12, fontWeight: ok?600:500, color: ok?"var(--positive,#22c55e)":val==="—"?"var(--text-faint)":"var(--text-muted)", whiteSpace:"nowrap" }}>{val}</td>;
               })}
-              <td style={{ padding:"10px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
-                <span style={{ fontSize:12, fontWeight:700, color:"var(--accent)" }}>{broker.score_overall?.toFixed(1)}</span>
-              </td>
             </tr>
           ))}
         </tbody>

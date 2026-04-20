@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { IconPlus, IconPencil, IconTrash, IconGift, IconCheck, IconX } from "@tabler/icons-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 
 type Offer = {
   id: string;
@@ -121,6 +122,37 @@ export function OffresAdminClient() {
     setOffers(prev => prev.map(x => x.id === o.id ? { ...x, is_active: !x.is_active } : x));
   };
 
+  // Déplacer une offre vers le haut ou le bas en échangeant les sort_order
+  const moveOffer = async (index: number, direction: "up" | "down") => {
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= offers.length) return;
+
+    const current = offers[index];
+    const target  = offers[targetIndex];
+    const newCurrentOrder = target.sort_order;
+    const newTargetOrder  = current.sort_order;
+
+    // Optimistic update
+    setOffers(prev => {
+      const next = [...prev];
+      next[index]       = { ...current, sort_order: newCurrentOrder };
+      next[targetIndex] = { ...target,  sort_order: newTargetOrder  };
+      return next.slice().sort((a, b) => a.sort_order - b.sort_order);
+    });
+
+    // Persist both changes in parallel
+    await Promise.all([
+      fetch(`/api/offers/${current.id}`, {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sort_order: newCurrentOrder }),
+      }),
+      fetch(`/api/offers/${target.id}`, {
+        method: "PATCH", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sort_order: newTargetOrder }),
+      }),
+    ]);
+  };
+
   return (
     <div className="flex flex-1 flex-col space-y-6 max-w-full overflow-x-hidden">
       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -144,7 +176,7 @@ export function OffresAdminClient() {
         </div>
       ) : (
         <div className="space-y-3">
-          {offers.map(o => (
+          {offers.map((o, index) => (
             <div key={o.id} className="flex flex-col gap-2 rounded-xl border border-border bg-card p-3 sm:flex-row sm:items-center sm:gap-3 sm:p-4 min-w-0 w-full overflow-hidden">
               {/* Ligne 1 mobile: logo + infos */}
               <div className="flex items-center gap-3 min-w-0">
@@ -168,11 +200,32 @@ export function OffresAdminClient() {
                   <p className="text-xs text-muted-foreground truncate mt-0.5">{o.title}</p>
                 </div>
               </div>
-              {/* Ligne 2 mobile: ordre + actions (sm: aligne à droite) */}
-              <div className="flex items-center gap-2 sm:ml-auto">
-                <span className="text-xs text-muted-foreground">#{o.sort_order}</span>
+              {/* Actions : ordre + active + edit + delete */}
+              <div className="flex items-center gap-1 sm:ml-auto">
+                {/* Boutons monter / descendre */}
+                <div className="flex flex-col" style={{ gap: 1 }}>
+                  <button
+                    onClick={() => moveOffer(index, "up")}
+                    disabled={index === 0}
+                    title="Monter"
+                    className="flex items-center justify-center rounded p-0.5 text-muted-foreground hover:text-primary disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+                    style={{ width: 20, height: 18 }}
+                  >
+                    <ChevronUp size={13} />
+                  </button>
+                  <button
+                    onClick={() => moveOffer(index, "down")}
+                    disabled={index === offers.length - 1}
+                    title="Descendre"
+                    className="flex items-center justify-center rounded p-0.5 text-muted-foreground hover:text-primary disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+                    style={{ width: 20, height: 18 }}
+                  >
+                    <ChevronDown size={13} />
+                  </button>
+                </div>
+                <span className="text-xs text-muted-foreground w-6 text-center">#{o.sort_order}</span>
                 <button onClick={() => toggleActive(o)} title={o.is_active ? "Désactiver" : "Activer"}
-                  className="text-muted-foreground hover:text-primary">
+                  className="text-muted-foreground hover:text-primary ml-1">
                   {o.is_active ? <IconCheck className="size-4 text-green-500" /> : <IconX className="size-4" />}
                 </button>
                 <button onClick={() => openEdit(o)} className="text-muted-foreground hover:text-primary">
