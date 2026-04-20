@@ -11,8 +11,9 @@ type FilterStore = {
   level:       string;   // all | debutant | intermediaire | expert
   fiscality:   string;   // all | france | etranger | ifu
   platform:    string;   // all | tradingview | metatrader | prt | ninjatrader | atas
-  hasDCA:      boolean;
+  hasDCA:       boolean;
   hasFractions: boolean;
+  hasDemo:      boolean;
   // Actions
   setCategory:    (v: string) => void;
   setAccountType: (v: string) => void;
@@ -24,13 +25,14 @@ type FilterStore = {
   setPlatform:    (v: string) => void;
   setHasDCA:      (v: boolean) => void;
   setHasFractions:(v: boolean) => void;
+  setHasDemo:     (v: boolean) => void;
   reset:          () => void;
 };
 
 const DEFAULTS = {
   category: "all", accountType: "all", sortBy: "score", maxDeposit: 10000,
   assetClass: "all", level: "all", fiscality: "all", platform: "all",
-  hasDCA: false, hasFractions: false,
+  hasDCA: false, hasFractions: false, hasDemo: false,
 };
 
 export const useFilterStore = create<FilterStore>((set) => ({
@@ -45,5 +47,6 @@ export const useFilterStore = create<FilterStore>((set) => ({
   setPlatform:    (v) => set({ platform: v }),
   setHasDCA:      (v) => set({ hasDCA: v }),
   setHasFractions:(v) => set({ hasFractions: v }),
+  setHasDemo:     (v) => set({ hasDemo: v }),
   reset: () => set(DEFAULTS),
 }));

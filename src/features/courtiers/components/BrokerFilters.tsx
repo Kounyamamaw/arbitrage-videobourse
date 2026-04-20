@@ -106,13 +106,13 @@ function MobileFilterDrawer() {
     category, setCategory, accountType, setAccountType, sortBy, setSortBy,
     maxDeposit, setMaxDeposit, assetClass, setAssetClass, level, setLevel,
     fiscality, setFiscality, platform, setPlatform, hasDCA, setHasDCA,
-    hasFractions, setHasFractions, reset,
+    hasFractions, setHasFractions, hasDemo, setHasDemo, reset,
   } = useFilterStore();
 
   const activeCount = [
     category !== "all", accountType !== "all", sortBy !== "score", maxDeposit < 10000,
     assetClass !== "all", level !== "all", fiscality !== "all", platform !== "all",
-    hasDCA, hasFractions,
+    hasDCA, hasFractions, hasDemo,
   ].filter(Boolean).length;
 
   const hasActiveAdvanced = assetClass !== "all" || level !== "all" || fiscality !== "all" || platform !== "all" || hasDCA || hasFractions;
@@ -183,6 +183,9 @@ function MobileFilterDrawer() {
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               {ACCOUNTS.map((a) => <FilterBtn key={a.value} active={accountType === a.value} label={a.label} onClick={() => setAccountType(a.value)} />)}
             </div>
+            <div style={{ marginTop: 8 }}>
+              <Toggle checked={hasDemo} label="Compte démo disponible" onChange={setHasDemo} />
+            </div>
           </div>
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
@@ -234,7 +237,7 @@ export function BrokerFilters() {
     category, setCategory, accountType, setAccountType, sortBy, setSortBy,
     maxDeposit, setMaxDeposit, assetClass, setAssetClass, level, setLevel,
     fiscality, setFiscality, platform, setPlatform, hasDCA, setHasDCA,
-    hasFractions, setHasFractions, reset,
+    hasFractions, setHasFractions, hasDemo, setHasDemo, reset,
   } = useFilterStore();
 
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -261,6 +264,9 @@ export function BrokerFilters() {
         <SectionTitle label="Enveloppe" />
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {ACCOUNTS.map((a) => <FilterBtn key={a.value} active={accountType === a.value} label={a.label} onClick={() => setAccountType(a.value)} />)}
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <Toggle checked={hasDemo} label="Compte démo disponible" onChange={setHasDemo} />
         </div>
       </div>
       <div>

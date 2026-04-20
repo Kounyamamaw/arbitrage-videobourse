@@ -10,9 +10,9 @@ import { Search, X, Share2, Check, LayoutGrid, LayoutList } from "lucide-react";
 export function BrokerGrid() {
   const {
     category, accountType, sortBy, maxDeposit,
-    assetClass, level, fiscality, platform, hasDCA, hasFractions,
+    assetClass, level, fiscality, platform, hasDCA, hasFractions, hasDemo,
     setCategory, setAccountType, setSortBy, setAssetClass,
-    setLevel, setFiscality, setPlatform, setHasDCA, setHasFractions,
+    setLevel, setFiscality, setPlatform, setHasDCA, setHasFractions, setHasDemo,
   } = useFilterStore();
   const [search, setSearch] = useState("");
   const [allBrokers, setAllBrokers] = useState<Broker[]>([]);
@@ -25,7 +25,7 @@ export function BrokerGrid() {
   const buildShareUrl = useCallback(() => {
     if (typeof window === "undefined") return "";
     const {
-      category, accountType, sortBy, assetClass, level, fiscality, platform, hasDCA, hasFractions,
+      category, accountType, sortBy, assetClass, level, fiscality, platform, hasDCA, hasFractions, hasDemo,
     } = useFilterStore.getState();
     const params = new URLSearchParams();
     if (category    !== "all")   params.set("category",     category);
@@ -37,6 +37,7 @@ export function BrokerGrid() {
     if (platform    !== "all")   params.set("platform",     platform);
     if (hasDCA)                  params.set("hasDCA",       "1");
     if (hasFractions)            params.set("hasFractions", "1");
+    if (hasDemo)                 params.set("hasDemo",      "1");
     const qs = params.toString();
     return `${window.location.origin}/dashboard/courtiers${qs ? `?${qs}` : ""}`;
   }, []);
@@ -60,6 +61,7 @@ export function BrokerGrid() {
     const plt = searchParams.get("platform");
     const dca = searchParams.get("hasDCA");
     const frx = searchParams.get("hasFractions");
+    const dem = searchParams.get("hasDemo");
     if (cat) setCategory(cat);
     if (acc) setAccountType(acc);
     if (srt) setSortBy(srt);
@@ -69,6 +71,7 @@ export function BrokerGrid() {
     if (plt) setPlatform(plt);
     if (dca === "1") setHasDCA(true);
     if (frx === "1") setHasFractions(true);
+    if (dem === "1") setHasDemo(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -138,6 +141,7 @@ export function BrokerGrid() {
     });
     if (hasDCA)       list = list.filter((b) => !!(b as any).has_dca);
     if (hasFractions) list = list.filter((b) => !!(b as any).has_fractions);
+    if (hasDemo)      list = list.filter((b) => !!(b as any).demo_url);
     if (search.trim()) {
       const q = search.toLowerCase().trim();
       list = list.filter((b) => b.name.toLowerCase().includes(q) || b.tagline?.toLowerCase().includes(q) || b.category?.toLowerCase().includes(q));
@@ -160,7 +164,7 @@ export function BrokerGrid() {
       });
     }
     return list;
-  }, [category, accountType, sortBy, maxDeposit, search, allBrokers, assetClass, level, fiscality, platform, hasDCA, hasFractions]);
+  }, [category, accountType, sortBy, maxDeposit, search, allBrokers, assetClass, level, fiscality, platform, hasDCA, hasFractions, hasDemo]);
 
   if (loading) {
     return <div className="flex-1 flex items-center justify-center h-32 text-muted-foreground text-sm">Chargement des courtiers...</div>;
