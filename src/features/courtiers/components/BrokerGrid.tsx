@@ -384,10 +384,10 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
               style={{
                 borderBottom: i < brokers.length-1 ? "1px solid var(--border-light,var(--border))" : "none",
                 transition:"background 120ms",
-                backgroundColor: i % 2 === 1 ? "var(--surface)" : undefined,
+                backgroundColor: i % 2 === 1 ? "rgba(59,130,246,0.06)" : "transparent",
               }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--accent-light, rgba(59,130,246,0.06))")}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = i % 2 === 1 ? "var(--surface)" : "")}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(59,130,246,0.13)")}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = i % 2 === 1 ? "rgba(59,130,246,0.06)" : "transparent")}
             >
               <td style={{ padding:"10px 10px", textAlign:"center", whiteSpace:"nowrap", width:32 }}>
                 <span style={{ fontSize:12, fontWeight:700, color: i === 0 ? "#F59E0B" : i === 1 ? "#9CA3AF" : i === 2 ? "#CD7F32" : "var(--text-faint)" }}>
