@@ -1,28 +1,15 @@
-# Arbitrage by VideoBourse — llms.txt
-# https://comparatif.videobourse.fr
+# https://videobourse.fr/comparatif
 
-## Présentation
-Arbitrage by VideoBourse est un comparateur indépendant de courtiers, néobanques, brokers CFD Forex et plateformes crypto en France. Toutes les données sont vérifiées manuellement depuis les grilles tarifaires officielles des intermédiaires.
+# ArbitrAge — Comparatif indépendant d'intermédiaires financiers
+# Par VideoBourse — https://videobourse.fr/comparatif
 
-## Ce que fait ce site
-- Compare les frais de courtage, droits de garde, frais de change et commissions de 40+ intermédiaires financiers français et européens
-- Calcule un score global sur 10 pour chaque intermédiaire (frais, fiabilité, interface, envergure, support)
-- Propose un simulateur FIRE/DCA pour visualiser l'impact des frais sur 10, 20, 30 ans
-- Intègre un conseiller IA pour répondre aux questions financières
-- Compare les ETF : TER, tracking différence, éligibilité PEA, courtier optimal
+ArbitrAge est un comparateur indépendant de courtiers, banques, néobanques, exchanges crypto, CFD et assurances-vie pour investisseurs français. Il calcule le coût total réel de chaque intermédiaire (courtage, change, garde, inactivité) selon l'usage réel de l'utilisateur.
 
-## Intermédiaires couverts
-Courtiers bourse : Interactive Brokers, Fortuneo, Bourse Direct, Degiro, XTB, Trade Republic, Saxo Banque, eToro, EasyBourse, Swissquote, WH SelfInvest
-CFD Forex : IG, CMC Markets, Capital.com, Pepperstone, Darwinex
-Néobanques : Revolut, BoursoBank, Wise, N26, Bunq, Lydia, Green-Got, Helios, Monabanq, Qonto, Shine, Hello bank!, BforBank, Skrill, Distingo Bank, Deblock
-Crypto : Binance, Coinbase, Kraken, Bitstamp, Bitpanda, Bitvavo, Coinhouse
-Banques : BNP Paribas, Crédit Agricole, Caisse d'Épargne
-Assurances-vie : Linxea, Yomoni
+## Pages principales
+- Comparatif tous acteurs : https://videobourse.fr/comparatif/dashboard/courtiers
+- Comparateur avancé : https://videobourse.fr/comparatif/dashboard/comparer
+- Conseiller IA : https://videobourse.fr/comparatif/dashboard/conseiller-ia
+- ETF : https://videobourse.fr/comparatif/dashboard/etf
 
-## Données
-- Source : grilles tarifaires officielles + scraping web
-- Mise à jour : manuelle + assistée IA
-- Non affilié aux intermédiaires présentés (liens d'affiliation signalés)
-
-## Contact
-VideoBourse — https://comparatif.videobourse.fr
+## À propos
+VideoBourse — https://videobourse.fr

@@ -1,15 +1,15 @@
 User-agent: *
 # Pages publiques — indexables
-Allow: /dashboard/courtiers
-Allow: /dashboard/courtiers/
-Allow: /waitlist
+Allow: /comparatif/dashboard/courtiers
+Allow: /comparatif/dashboard/courtiers/
+Allow: /comparatif/waitlist
 
 # Pages privées / admin — non indexables
-Disallow: /auth
-Disallow: /dashboard/admin
-Disallow: /sign-in
-Disallow: /sign-up
-Disallow: /v1/
+Disallow: /comparatif/auth
+Disallow: /comparatif/dashboard/admin
+Disallow: /comparatif/sign-in
+Disallow: /comparatif/sign-up
+Disallow: /comparatif/v1/
 
 # Sitemap
-Sitemap: https://comparatif.videobourse.fr/sitemap.xml
+Sitemap: https://videobourse.fr/comparatif/sitemap.xml

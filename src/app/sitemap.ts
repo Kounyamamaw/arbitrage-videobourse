@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { supabaseAdmin as supabase } from '@/lib/supabase';
 
-const BASE = 'https://comparatif.videobourse.fr';
+const BASE = 'https://videobourse.fr/comparatif';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();

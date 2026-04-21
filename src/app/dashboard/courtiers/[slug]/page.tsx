@@ -46,7 +46,7 @@ export async function generateMetadata({
   const catLabel = CAT_LABELS[broker.category] || broker.category;
   const title = `${broker.name} avis ${new Date().getFullYear()} — frais, commissions et comparatif | Arbitrage`;
   const description = `Avis complet sur ${broker.name} : frais de courtage, commissions, scores, régulation et comparatif avec les meilleurs ${catLabel}s. Fondé en ${broker.founded || 'N/A'} — ${broker.tagline}`;
-  const url = `https://comparatif.videobourse.fr/dashboard/courtiers/${slug}`;
+  const url = `https://videobourse.fr/comparatif/dashboard/courtiers/${slug}`;
 
   return {
     title,
@@ -118,7 +118,7 @@ export default async function BrokerDetailPage({
   if (!broker) notFound();
 
   const catLabel = CAT_LABELS[broker.category] || broker.category;
-  const url = `https://comparatif.videobourse.fr/dashboard/courtiers/${broker.slug}`;
+  const url = `https://videobourse.fr/comparatif/dashboard/courtiers/${broker.slug}`;
 
   // ── JSON-LD Structured Data ─────────────────────────────────────────────
   const jsonLd = {
@@ -128,8 +128,8 @@ export default async function BrokerDetailPage({
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://comparatif.videobourse.fr/dashboard/courtiers' },
-          { '@type': 'ListItem', position: 2, name: catLabel.charAt(0).toUpperCase() + catLabel.slice(1) + 's', item: `https://comparatif.videobourse.fr/dashboard/courtiers?category=${broker.category}` },
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://videobourse.fr/comparatif/dashboard/courtiers' },
+          { '@type': 'ListItem', position: 2, name: catLabel.charAt(0).toUpperCase() + catLabel.slice(1) + 's', item: `https://videobourse.fr/comparatif/dashboard/courtiers?category=${broker.category}` },
           { '@type': 'ListItem', position: 3, name: broker.name, item: url },
         ],
       },

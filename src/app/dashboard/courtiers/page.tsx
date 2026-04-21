@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: 'website',
     title: 'Comparateur courtiers bourse, néobanques & brokers France | Arbitrage by VideoBourse',
     description: 'Comparez les meilleurs courtiers bourse, néobanques, brokers CFD et plateformes crypto en France. Frais, scores et avis sur 40+ intermédiaires.',
-    url: 'https://comparatif.videobourse.fr/dashboard/courtiers',
+    url: 'https://videobourse.fr/comparatif/dashboard/courtiers',
     images: [{ url: 'https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png', width: 1200, height: 630 }],
   },
   twitter: {
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     images: ['https://framerusercontent.com/images/cB9wgyzc0EYXTdSFxeCpMyXx7zg.png'],
   },
   alternates: {
-    canonical: 'https://comparatif.videobourse.fr/dashboard/courtiers',
+    canonical: 'https://videobourse.fr/comparatif/dashboard/courtiers',
   },
 };
 

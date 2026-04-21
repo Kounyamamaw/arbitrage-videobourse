@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://comparatif.videobourse.fr</loc></url>
-<url><loc>https://comparatif.videobourse.fr/dashboard/courtiers</loc></url>
-<url><loc>https://comparatif.videobourse.fr/dashboard/comparer</loc></url>
-<url><loc>https://comparatif.videobourse.fr/dashboard/etf</loc></url>
-<url><loc>https://comparatif.videobourse.fr/dashboard/conseiller-ia</loc></url>
-<url><loc>https://comparatif.videobourse.fr/waitlist</loc></url>
+  <url><loc>https://videobourse.fr/comparatif</loc></url>
+  <url><loc>https://videobourse.fr/comparatif/dashboard/courtiers</loc></url>
+  <url><loc>https://videobourse.fr/comparatif/dashboard/comparer</loc></url>
+  <url><loc>https://videobourse.fr/comparatif/dashboard/etf</loc></url>
+  <url><loc>https://videobourse.fr/comparatif/dashboard/conseiller-ia</loc></url>
+  <url><loc>https://videobourse.fr/comparatif/waitlist</loc></url>
 </urlset>

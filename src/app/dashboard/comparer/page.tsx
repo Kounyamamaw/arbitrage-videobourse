@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Simulateur frais courtier & calcul FIRE/DCA — Arbitrage by VideoBourse',
   description: 'Calculez le coût réel de votre courtier sur 10, 20 ou 30 ans. Comparez l\'impact des frais sur votre capital FIRE et optimisez votre stratégie DCA.',
   robots: { index: true, follow: true },
-  alternates: { canonical: 'https://comparatif.videobourse.fr/dashboard/comparer' },
+  alternates: { canonical: 'https://videobourse.fr/comparatif/dashboard/comparer' },
 };
 
 export default function ComparerPage() {

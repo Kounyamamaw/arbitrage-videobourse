@@ -41,7 +41,7 @@ export function BrokerGrid() {
     // Inclure la vue tableau dans l'URL partagée (seulement si activée)
     if (viewMode === "table")    params.set("view",         "table");
     const qs = params.toString();
-    return `${window.location.origin}/dashboard/courtiers${qs ? `?${qs}` : ""}`;
+    return `${window.location.origin}/comparatif/dashboard/courtiers${qs ? `?${qs}` : ""}`;
   }, [viewMode]);
 
   const handleShare = () => {
