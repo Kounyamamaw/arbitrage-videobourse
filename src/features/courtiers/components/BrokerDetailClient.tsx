@@ -219,19 +219,87 @@ function BrokerRadarChart({ broker }: { broker: Broker }) {
 
 // ── Fee comparison bar chart ──────────────────────────────────────────────
 function FeeComparisonChart({ broker, allBrokers }: { broker: Broker; allBrokers: Broker[] }) {
-  // Compute estimated annual fee for 300€ × 4 orders/month
-  const estimate = (b: Broker) => {
-    const fees = b.fees?.FR;
-    if (!fees) return 0;
-    const tier = fees.find((f) => f.min <= 300 && (f.max === null || f.max >= 300));
-    if (!tier) return 0;
-    const perOrder = tier.type === "flat" ? tier.amount : (300 * tier.amount) / 100;
-    return Math.round(perOrder * 4 * 12);
+  const cat = broker.category;
+
+  // Estimation adaptée par catégorie — retourne null si pas de donnée
+  const estimate = (b: Broker): number | null => {
+    const fees = (b.fees || {}) as any;
+    switch (b.category) {
+      case "broker": {
+        // Frais courtage annuels : 300€ × 4 ordres/mois × 12 sur marché FR
+        const tiers = b.fees?.FR;
+        if (!tiers?.length) return null;
+        const tier = tiers.find((f) => f.min <= 300 && (f.max === null || f.max >= 300));
+        if (!tier) return null;
+        const perOrder = tier.type === "flat" ? tier.amount : (300 * tier.amount) / 100;
+        return Math.round(perOrder * 4 * 12);
+      }
+      case "neobanque": {
+        // Abonnement annuel (plan standard)
+        const montant = fees.standard?.montant;
+        if (montant == null) return null;
+        return Math.round(montant * 12);
+      }
+      case "bank": {
+        // Frais de tenue de compte annuels
+        const tc = fees.tenue_compte?.montant;
+        if (tc != null) return Math.round(tc);
+        if (b.custody_fee != null && b.custody_fee >= 0) return Math.round(b.custody_fee);
+        return null;
+      }
+      case "insurance": {
+        // Frais gestion UC annuels sur 10 000€ (simulation)
+        const uc = fees.gestion_uc?.montant;
+        if (uc != null) return Math.round(10000 * uc / 100);
+        if (b.custody_fee > 0) return Math.round(b.custody_fee);
+        return null;
+      }
+      case "crypto": {
+        // Frais maker annuels sur 1 000€/mois
+        const maker = fees.maker?.montant ?? fees.trading_spot?.montant;
+        if (maker != null) return Math.round(1000 * maker / 100 * 12);
+        return null;
+      }
+      case "cfd": {
+        // Spread forex annualisé indicatif (en pips × 10 000 positions/an)
+        const spread = fees.spread_forex?.montant ?? fees.spread_indices?.montant;
+        if (spread != null) return Math.round(spread * 10);
+        return null;
+      }
+      default:
+        return null;
+    }
   };
 
+  // Libellé de l'axe X selon catégorie
+  const xLabel: Record<string, string> = {
+    broker:    "Frais courtage/an · 300€ × 4 ordres/mois",
+    neobanque: "Abonnement annuel",
+    bank:      "Frais tenue de compte/an",
+    insurance: "Frais gestion UC/an · base 10 000€",
+    crypto:    "Frais trading/an · 1 000€/mois",
+    cfd:       "Spread indicatif annualisé",
+  };
+
+  // Filtrer la même catégorie uniquement, exclure les valeurs nulles
   const data = allBrokers
-    .map((b) => ({ name: b.name.replace("Interactive Brokers", "IBKR"), value: estimate(b), isCurrent: b.slug === broker.slug }))
-    .sort((a, z) => a.value - z.value);
+    .filter((b) => b.category === cat)
+    .map((b) => ({
+      name: b.name.replace("Interactive Brokers", "IBKR").replace("Bourse Direct", "B. Direct"),
+      value: estimate(b),
+      isCurrent: b.slug === broker.slug,
+    }))
+    .filter((d) => d.value !== null && d.value !== undefined)
+    .sort((a, z) => (a.value ?? 0) - (z.value ?? 0)) as { name: string; value: number; isCurrent: boolean }[];
+
+  // Hauteur dynamique : min 160px, 32px par barre
+  const chartHeight = Math.max(160, data.length * 32);
+
+  // Largeur YAxis dynamique : basée sur la longueur max des noms
+  const maxNameLen = Math.max(...data.map((d) => d.name.length), 8);
+  const yWidth = Math.min(Math.max(maxNameLen * 6.5, 64), 140);
+
+  if (data.length === 0) return null;
 
   return (
     <div style={{
@@ -246,12 +314,14 @@ function FeeComparisonChart({ broker, allBrokers }: { broker: Broker; allBrokers
         <FeaturedIcon icon={CreditCard} color="brand" size="sm" />
         <div>
           <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", margin: 0 }}>Comparaison des frais</h2>
-          <p style={{ fontSize: 12, color: "var(--text-faint)" }}>Coût annuel estimé — 300€ × 4 ordres/mois · France</p>
+          <p style={{ fontSize: 12, color: "var(--text-faint)" }}>
+            {xLabel[cat] ?? "Estimation annuelle"} — {CAT_LABELS[cat] ?? cat}
+          </p>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height={240}>
-        <BarChart data={data} layout="vertical" margin={{ left: 8, right: 24, top: 8, bottom: 0 }}>
-          <CartesianGrid horizontal={false} stroke="var(--border-light)" />
+      <ResponsiveContainer width="100%" height={chartHeight}>
+        <BarChart data={data} layout="vertical" margin={{ left: 4, right: 32, top: 8, bottom: 0 }}>
+          <CartesianGrid horizontal={false} strokeDasharray="3 3" stroke="var(--border)" strokeOpacity={0.5} />
           <XAxis
             type="number"
             tick={{ fontSize: 10, fill: "var(--text-faint)" }}
@@ -265,10 +335,10 @@ function FeeComparisonChart({ broker, allBrokers }: { broker: Broker; allBrokers
             tick={{ fontSize: 11, fill: "var(--text-muted)" }}
             axisLine={false}
             tickLine={false}
-            width={64}
+            width={yWidth}
           />
           <Tooltip
-            formatter={(v: number) => [`${v}€/an`, "Frais estimés"]}
+            formatter={(v: number) => [`${v}€`, "Estimation annuelle"]}
             contentStyle={{
               backgroundColor: "var(--card)",
               border: "1px solid var(--border)",
@@ -281,16 +351,20 @@ function FeeComparisonChart({ broker, allBrokers }: { broker: Broker; allBrokers
             {data.map((entry, i) => (
               <Cell
                 key={i}
-                fill={entry.isCurrent ? "#4F7BE8" : "var(--border)"}
-                fillOpacity={entry.isCurrent ? 1 : 0.7}
+                fill={entry.isCurrent ? "#4F7BE8" : "rgba(59,130,246,0.18)"}
+                fillOpacity={1}
               />
             ))}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <p style={{ fontSize: 11, color: "var(--text-faint)", marginTop: 8, textAlign: "center" }}>
-        La barre teal = {broker.name}
-      </p>
+      {/* Légende inline — nom de l'intermédiaire courant en bleu */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 10 }}>
+        <div style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: "#4F7BE8", flexShrink: 0 }} />
+        <span style={{ fontSize: 11, color: "var(--text-faint)" }}>
+          {broker.name} — intermédiaire consulté
+        </span>
+      </div>
     </div>
   );
 }
