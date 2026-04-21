@@ -184,7 +184,7 @@ function ETFCard({
           <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
             <Star size={12} fill="var(--accent)" color="var(--accent)" />
             <span style={{ fontSize: 11, color: "var(--accent-text)", fontWeight: 600 }}>Combo optimal</span>
-            <a href={`/go/${bestCombo.slug}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: "var(--accent-text)", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "2px" }}>{bestCombo.name}</a>
+            <a href={`/comparatif/go/${bestCombo.slug}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: "var(--accent-text)", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "2px" }}>{bestCombo.name}</a>
           </div>
           <span style={{ fontSize: 13, fontWeight: 800, color: "var(--accent)", fontFamily: "var(--font-sora)" }}>
             {bestCombo.total?.toFixed(0)}€/an

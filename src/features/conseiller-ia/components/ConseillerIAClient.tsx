@@ -195,7 +195,7 @@ export function ConseillerIAClient() {
           if (!b.name) continue;
           const url = b.affiliate_url?.trim()
             ? b.affiliate_url
-            : `/dashboard/courtiers/${b.slug}`;
+            : `/comparatif/dashboard/courtiers/${b.slug}`;
           map[b.name] = url;
           // Common alternate spellings / abbreviations
           if (b.name === "Interactive Brokers") map["IBKR"] = url;

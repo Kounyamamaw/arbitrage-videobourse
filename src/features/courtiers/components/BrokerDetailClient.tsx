@@ -559,14 +559,14 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
 
         {/* Row 5: CTA buttons — flex row, each takes equal space, stacks naturally */}
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <a href={`/go/${broker.slug}`} target="_blank" rel="noopener noreferrer"
+          <a href={`/comparatif/go/${broker.slug}`} target="_blank" rel="noopener noreferrer"
             className="btn-primary"
             style={{ flex: "1 1 140px", padding: "11px 16px", fontSize: 13, gap: 6, justifyContent: "center", textAlign: "center" }}>
             Ouvrir un compte
             <ArrowUpRight size={13} />
           </a>
           {(broker as any).demo_url && (
-            <a href={`/go/${broker.slug}/demo?src=demo-detail`} target="_blank" rel="noopener noreferrer"
+            <a href={`/comparatif/go/${broker.slug}/demo?src=demo-detail`} target="_blank" rel="noopener noreferrer"
               style={{ flex: "1 1 120px", padding: "11px 16px", fontSize: 13, gap: 6, borderRadius: 10, border: "1px solid var(--border)", color: "var(--text-muted)", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", fontWeight: 600 }}>
               Compte démo
               <ArrowUpRight size={13} />
