@@ -224,7 +224,7 @@ function FeeComparisonChart({ broker, allBrokers }: { broker: Broker; allBrokers
   // Estimation adaptée par catégorie — retourne null si pas de donnée
   const estimate = (b: Broker): number | null => {
     const fees = (b.fees || {}) as any;
-    switch (b.category) {
+    switch (b.category as string) {
       case "broker": {
         // Frais courtage annuels : 300€ × 4 ordres/mois × 12 sur marché FR
         const tiers = b.fees?.FR;
