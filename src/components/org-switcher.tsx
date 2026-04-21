@@ -7,7 +7,7 @@ export function OrgSwitcher() {
   const { state, isMobile } = useSidebar();
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
-  const logoSrc = isDark ? '/logos/logo-dark.svg' : '/logos/logo-light.svg';
+  const logoSrc = isDark ? '/comparatif/logos/logo-dark.svg' : '/comparatif/logos/logo-light.svg';
   const isExpanded = state === 'expanded' || isMobile;
 
   return (
@@ -25,7 +25,7 @@ export function OrgSwitcher() {
               </SidebarMenuButton>
               <a href='https://videobourse.fr' rel='noopener noreferrer'
                 className='flex shrink-0 items-center rounded-md p-1.5 opacity-70 transition-opacity hover:opacity-100' title='VideoBourse.fr'>
-                <img src='/logos/videobourse.svg' alt='VideoBourse' className='h-7 w-7 object-contain' />
+                <img src='/comparatif/logos/videobourse.svg' alt='VideoBourse' className='h-7 w-7 object-contain' />
               </a>
             </div>
             <div className='px-2'>
@@ -37,7 +37,7 @@ export function OrgSwitcher() {
         ) : (
           <SidebarMenuButton size='lg' asChild className='h-auto py-2 flex items-center justify-center'>
             <Link href='/dashboard/overview'>
-              <img src='/favicon.svg' alt='ArbitrAge'
+              <img src='/comparatif/favicon.svg' alt='ArbitrAge'
                 className='h-7 w-7 object-contain'
               />
             </Link>

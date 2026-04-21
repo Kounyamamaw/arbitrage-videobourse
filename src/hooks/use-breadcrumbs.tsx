@@ -9,120 +9,120 @@ type BreadcrumbItem = {
 };
 
 const routeMapping: Record<string, BreadcrumbItem[]> = {
-  '/dashboard': [{ title: 'Accueil', link: '/' }, { title: 'Tableau de bord', link: '/dashboard' }],
+  '/dashboard': [{ title: 'Accueil', link: '/comparatif' }, { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' }],
   '/dashboard/overview': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Tableau de bord', link: '/dashboard/overview' },
-    { title: 'Vue d\'ensemble', link: '/dashboard/overview' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' },
+    { title: 'Vue d\'ensemble', link: '/comparatif/dashboard/overview' }
   ],
   '/dashboard/courtiers': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Tableau de bord', link: '/dashboard/overview' },
-    { title: 'Intermédiaires', link: '/dashboard/courtiers' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' },
+    { title: 'Intermédiaires', link: '/comparatif/dashboard/courtiers' }
   ],
   '/dashboard/comparer': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Tableau de bord', link: '/dashboard/overview' },
-    { title: 'Comparer', link: '/dashboard/comparer' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' },
+    { title: 'Comparer', link: '/comparatif/dashboard/comparer' }
   ],
   '/dashboard/comparer/resultats': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Comparer', link: '/dashboard/comparer' },
-    { title: 'Résultats', link: '/dashboard/comparer/resultats' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Comparer', link: '/comparatif/dashboard/comparer' },
+    { title: 'Résultats', link: '/comparatif/dashboard/comparer/resultats' }
   ],
   '/dashboard/etf': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Tableau de bord', link: '/dashboard/overview' },
-    { title: 'ETF', link: '/dashboard/etf' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' },
+    { title: 'ETF', link: '/comparatif/dashboard/etf' }
   ],
   '/dashboard/par-actif': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Tableau de bord', link: '/dashboard/overview' },
-    { title: 'Par Actif', link: '/dashboard/par-actif' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' },
+    { title: 'Par Actif', link: '/comparatif/dashboard/par-actif' }
   ],
   '/dashboard/conseiller-ia': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Tableau de bord', link: '/dashboard/overview' },
-    { title: 'Conseiller IA', link: '/dashboard/conseiller-ia' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' },
+    { title: 'Conseiller IA', link: '/comparatif/dashboard/conseiller-ia' }
   ],
   '/dashboard/admin': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' }
   ],
   '/dashboard/admin/scraping': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Données', link: '/dashboard/admin/scraping' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Données', link: '/comparatif/dashboard/admin/scraping' }
   ],
   '/dashboard/admin/affiliations': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Affiliations', link: '/dashboard/admin/affiliations' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Affiliations', link: '/comparatif/dashboard/admin/affiliations' }
   ],
   '/dashboard/admin/partenaires': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Intermédiaires', link: '/dashboard/admin/partenaires' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Intermédiaires', link: '/comparatif/dashboard/admin/partenaires' }
   ],
   '/dashboard/admin/contenu': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Contenu', link: '/dashboard/admin/contenu' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Contenu', link: '/comparatif/dashboard/admin/contenu' }
   ],
   '/dashboard/admin/etfs': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'ETF', link: '/dashboard/admin/etfs' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'ETF', link: '/comparatif/dashboard/admin/etfs' }
   ],
   '/dashboard/admin/actions': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Actions', link: '/dashboard/admin/actions' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Actions', link: '/comparatif/dashboard/admin/actions' }
   ],
   '/dashboard/admin/options': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Options', link: '/dashboard/admin/options' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Options', link: '/comparatif/dashboard/admin/options' }
   ],
   '/dashboard/admin/futures': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Futures', link: '/dashboard/admin/futures' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Futures', link: '/comparatif/dashboard/admin/futures' }
   ],
   '/dashboard/admin/cfds': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'CFD', link: '/dashboard/admin/cfds' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'CFD', link: '/comparatif/dashboard/admin/cfds' }
   ],
   '/dashboard/admin/forex': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Forex', link: '/dashboard/admin/forex' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Forex', link: '/comparatif/dashboard/admin/forex' }
   ],
   '/dashboard/admin/waitlist': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Waitlist', link: '/dashboard/admin/waitlist' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Waitlist', link: '/comparatif/dashboard/admin/waitlist' }
   ],
   '/dashboard/admin/traffic': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Trafic', link: '/dashboard/admin/traffic' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Trafic', link: '/comparatif/dashboard/admin/traffic' }
   ],
   '/dashboard/admin/donnees': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'État des données', link: '/dashboard/admin/donnees' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'État des données', link: '/comparatif/dashboard/admin/donnees' }
   ],
   '/dashboard/offres': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Tableau de bord', link: '/dashboard/overview' },
-    { title: 'Offres Exclusives', link: '/dashboard/offres' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' },
+    { title: 'Offres Exclusives', link: '/comparatif/dashboard/offres' }
   ],
   '/dashboard/admin/offres': [
-    { title: 'Accueil', link: '/' },
-    { title: 'Admin', link: '/dashboard/admin' },
-    { title: 'Offres', link: '/dashboard/admin/offres' }
+    { title: 'Accueil', link: '/comparatif' },
+    { title: 'Admin', link: '/comparatif/dashboard/admin' },
+    { title: 'Offres', link: '/comparatif/dashboard/admin/offres' }
   ],
 };
 
@@ -165,13 +165,13 @@ export function useBreadcrumbs() {
       const key = label.toLowerCase();
       if (knownNames[key]) label = knownNames[key];
       return [
-        { title: 'Accueil', link: '/' },
-        { title: 'Intermédiaires', link: '/dashboard/courtiers' },
+        { title: 'Accueil', link: '/comparatif' },
+        { title: 'Intermédiaires', link: '/comparatif/dashboard/courtiers' },
         { title: label, link: pathname }
       ];
     }
 
     // Fallback
-    return [{ title: 'Accueil', link: '/' }, { title: 'Tableau de bord', link: '/dashboard/overview' }];
+    return [{ title: 'Accueil', link: '/comparatif' }, { title: 'Tableau de bord', link: '/comparatif/dashboard/overview' }];
   }, [pathname]);
 }
