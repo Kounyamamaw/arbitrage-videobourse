@@ -15,7 +15,7 @@ export async function GET(
     .single();
 
   if (!data?.affiliate_url) {
-    return NextResponse.redirect(new URL('/dashboard/courtiers', request.url));
+    return NextResponse.redirect(new URL('/comparatif/dashboard/courtiers', request.url));
   }
 
   // 2. Lire la source depuis le query param

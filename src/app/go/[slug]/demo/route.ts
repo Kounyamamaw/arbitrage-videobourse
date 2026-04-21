@@ -14,7 +14,7 @@ export async function GET(
     .single();
 
   if (!data?.demo_url) {
-    return NextResponse.redirect(new URL('/dashboard/courtiers', request.url));
+    return NextResponse.redirect(new URL('/comparatif/dashboard/courtiers', request.url));
   }
 
   // Source préfixée 'demo-' pour distinguer des clics affiliés dans le tracking
