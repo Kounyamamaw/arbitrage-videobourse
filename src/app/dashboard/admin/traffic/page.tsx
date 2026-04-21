@@ -146,7 +146,7 @@ export default function TrafficPage() {
 
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Trafic</h2>
-          <p className="text-muted-foreground mt-1">comparatif.videobourse.fr — Umami Analytics</p>
+          <p className="text-muted-foreground mt-1">videobourse.fr/comparatif* — Umami Analytics</p>
         </div>
 
         {notReady && (
