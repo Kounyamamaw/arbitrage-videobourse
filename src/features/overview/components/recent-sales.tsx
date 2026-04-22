@@ -96,7 +96,7 @@ export function RecentSales() {
             filtered.map((broker) => (
               <a
                 key={broker.slug}
-                href={`/dashboard/courtiers/${broker.slug}`}
+                href={`/comparatif/dashboard/courtiers/${broker.slug}`}
 
                 className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-muted/60 group"
               >

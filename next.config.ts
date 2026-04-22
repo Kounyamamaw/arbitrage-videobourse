@@ -33,7 +33,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        // La landing page de l'app = page tous les acteurs
+        // LP = page tous les acteurs (plus de landing Framer)
         source: '/',
         destination: '/dashboard/courtiers',
       },

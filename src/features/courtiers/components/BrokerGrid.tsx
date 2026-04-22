@@ -361,49 +361,28 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
     </span>
   );
 
-  // Tooltip desktop (hover) + mobile (bouton ? cliquable)
+  // Tooltip : un seul ?, bulle en dessous, desktop hover CSS + mobile clic React
   const [openTooltip, setOpenTooltip] = useState<string | null>(null);
   function ColHeader({ col }: { col: TableCol }) {
+    const isOpen = openTooltip === col.key;
     return (
       <th key={col.key} onClick={() => handleSort(col.key)}
-        style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === col.key ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", cursor:"pointer", userSelect:"none", position:"relative" }}>
+        style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === col.key ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", cursor:"pointer", userSelect:"none", position:"relative", overflow:"visible" }}>
         <span style={{ display:"inline-flex", alignItems:"center", gap:4 }}>
           {col.label}<SortIcon key={col.key} />
-          {/* Bouton ? mobile — visible uniquement sur écrans étroits */}
-          <span
-            className="md:hidden"
-            onClick={(e) => { e.stopPropagation(); setOpenTooltip(openTooltip === col.key ? null : col.key); }}
-            style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", width:14, height:14, borderRadius:"50%", backgroundColor:"var(--border)", fontSize:9, fontWeight:700, color:"var(--text-faint)", cursor:"pointer", flexShrink:0 }}
-          >?</span>
-          {/* Tooltip desktop — visible au hover sur md+ */}
-          <span className="hidden md:inline-flex" style={{ position:"relative" }}>
-            <span style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", width:13, height:13, borderRadius:"50%", backgroundColor:"var(--border)", fontSize:9, fontWeight:700, color:"var(--text-faint)", cursor:"default" }}>?</span>
-            <span style={{
-              position:"absolute", bottom:"calc(100% + 6px)", right:0, zIndex:50,
-              backgroundColor:"var(--card)", border:"1px solid var(--border)",
-              borderRadius:8, padding:"6px 10px", fontSize:11, color:"var(--text-muted)",
-              fontWeight:400, textTransform:"none", letterSpacing:0, whiteSpace:"normal",
-              width:220, boxShadow:"0 4px 12px rgba(0,0,0,0.12)",
-              pointerEvents:"none", opacity:0, transition:"opacity 150ms",
-            }}
-              className="col-tooltip"
-            >{col.tooltip}</span>
+          {/* Bouton ? unique — hover CSS desktop, clic React mobile */}
+          <span className="th-tip-wrap"
+            onClick={(e) => { e.stopPropagation(); setOpenTooltip(isOpen ? null : col.key); }}>
+            ?
+            {/* Bulle desktop — CSS pure via .th-tip-wrap:hover .th-tip */}
+            <span className="th-tip">{col.tooltip}</span>
           </span>
         </span>
-        {/* Tooltip mobile ouvert au clic */}
-        {openTooltip === col.key && (
-          <div className="md:hidden" style={{
-            position:"absolute", top:"calc(100% + 4px)", right:0, zIndex:50,
-            backgroundColor:"var(--card)", border:"1px solid var(--border)",
-            borderRadius:8, padding:"8px 10px 6px", fontSize:11, color:"var(--text-muted)",
-            fontWeight:400, textTransform:"none", letterSpacing:0, whiteSpace:"normal",
-            width:200, boxShadow:"0 4px 12px rgba(0,0,0,0.15)",
-          }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", gap:6 }}>
-              <span>{col.tooltip}</span>
-              <button onClick={(e) => { e.stopPropagation(); setOpenTooltip(null); }}
-                style={{ flexShrink:0, background:"none", border:"none", cursor:"pointer", color:"var(--text-faint)", fontSize:14, lineHeight:1, padding:0 }}>×</button>
-            </div>
+        {/* Bulle mobile — rendue par React sous le th */}
+        {isOpen && (
+          <div className="th-tip-mobile" onClick={(e) => e.stopPropagation()}>
+            <span>{col.tooltip}</span>
+            <button onClick={(e) => { e.stopPropagation(); setOpenTooltip(null); }}>×</button>
           </div>
         )}
       </th>
@@ -412,7 +391,6 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
 
   return (
     <div className="broker-table-scroll" style={{ borderRadius: 14, border: "1px solid var(--border)", backgroundColor: "var(--card)" }}>
-      <style>{`.col-tooltip { opacity: 0; } th:hover .col-tooltip { opacity: 1 !important; }`}</style>
       <table>
         <thead>
           <tr style={{ borderBottom:"1px solid var(--border)", backgroundColor:"var(--surface)" }}>

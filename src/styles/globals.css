@@ -359,29 +359,103 @@
 }
 
 /* ── Vue tableau — scroll horizontal sans débordement ─────────────────── */
-/* Force le conteneur tableau à ne jamais dépasser la largeur du viewport  */
 .broker-table-scroll {
   display: block;
-  /* Constraint to parent — never exceeds viewport */
   width: 100%;
   max-width: 100%;
-  /* Clamp to viewport width as ultimate fallback */
-  max-width: min(100%, 100vw);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  /* New block formatting context — prevents content from escaping */
-  isolation: isolate;
+  /* Nouveau contexte de formatage — empêche le débordement des enfants */
+  contain: inline-size;
 }
 .broker-table-scroll table {
-  /* Table never forces parent wider */
   min-width: 480px;
   width: max-content;
   border-collapse: collapse;
 }
 @media (max-width: 768px) {
   .broker-table-scroll {
-    /* On mobile: hard cap at viewport width */
     max-width: calc(100vw - 32px);
     width: calc(100vw - 32px);
   }
+}
+
+/* ── Tooltip critères tableau ──────────────────────────────────────────── */
+/* Bouton ? */
+.th-tip-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--border);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-faint);
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  /* Permet à la bulle de sortir du overflow:hidden du tableau */
+  z-index: 1;
+}
+/* Bulle desktop — apparaît EN DESSOUS au hover, via CSS pure */
+.th-tip {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);   /* ← EN DESSOUS du ? */
+  right: 0;
+  z-index: 9999;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: normal;
+  width: 210px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.13);
+  pointer-events: none;
+}
+/* Desktop (≥768px) : afficher la bulle au hover */
+@media (min-width: 768px) {
+  .th-tip-wrap:hover .th-tip {
+    display: block;
+  }
+}
+/* Bulle mobile — rendue par React, styles CSS */
+.th-tip-mobile {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 9999;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px 6px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: normal;
+  width: 210px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6px;
+}
+.th-tip-mobile button {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-faint);
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
 }
