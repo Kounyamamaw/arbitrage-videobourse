@@ -130,9 +130,6 @@ export function BrokerGrid() {
           const cats: string[] = (b as any).categories || [];
           return b.category === "cfd" || cats.includes("cfd");
         });
-      } else if (accountType === "FUTURES OPTIONS") {
-        // Futures Options = filtre par badge dans accounts[]
-        list = list.filter((b) => b.accounts?.includes("FUTURES OPTIONS"));
       } else {
         list = list.filter((b) => b.accounts?.includes(accountType));
       }
@@ -277,50 +274,50 @@ export function BrokerGrid() {
 }
 
 // ── TABLE_COLS ─────────────────────────────────────────────────────────────
-type TableCol = { key: string; label: string; tooltip: string; getValue: (b: Broker) => string; };
+type TableCol = { key: string; label: string; getValue: (b: Broker) => string; };
 
 const TABLE_COLS: Record<string, TableCol[]> = {
   broker: [
-    { key:"fr",      label:"Frais France",    tooltip:"Frais de courtage sur le marché français (Euronext Paris) pour un ordre standard",          getValue:(b) => { const t=(b.fees as any)?.FR?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
-    { key:"us",      label:"Frais USA",       tooltip:"Frais de courtage sur les marchés américains (NYSE, NASDAQ) pour un ordre standard",         getValue:(b) => { const t=(b.fees as any)?.US?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
-    { key:"eu",      label:"Frais Europe",    tooltip:"Frais de courtage sur les marchés européens hors France pour un ordre standard",              getValue:(b) => { const t=(b.fees as any)?.EU?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
-    { key:"custody", label:"Droits garde",    tooltip:"Frais de conservation des titres facturés annuellement, indépendamment des transactions",      getValue:(b) => { if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
-    { key:"fx",      label:"Frais change",    tooltip:"Commission prélevée lors d'une conversion de devises (ex: EUR→USD) exprimée en % du montant", getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
+    { key:"fr",      label:"Frais France",    getValue:(b) => { const t=(b.fees as any)?.FR?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
+    { key:"us",      label:"Frais USA",       getValue:(b) => { const t=(b.fees as any)?.US?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
+    { key:"eu",      label:"Frais Europe",    getValue:(b) => { const t=(b.fees as any)?.EU?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
+    { key:"custody", label:"Droits garde",    getValue:(b) => { if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
+    { key:"fx",      label:"Frais change",    getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
   ],
   neobanque: [
-    { key:"abo",     label:"Abonnement",      tooltip:"Coût mensuel de l'abonnement de base (plan Standard ou équivalent)",                                                                     getValue:(b) => { const f=b.fees as any; if(f?.standard?.montant===0) return"Gratuit"; if(f?.standard?.montant!=null) return`${f.standard.montant}€/mois`; return"—"; }},
-    { key:"retrait", label:"Retrait",         tooltip:"Frais par retrait d'espèces en dehors du quota mensuel gratuit",                                                                         getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
-    { key:"etranger",label:"Étranger",        tooltip:"Frais de change ou commission appliquée lors de paiements en devise étrangère (% du montant)", getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"Gratuit" },
-    { key:"plafond", label:"Plafond retrait", tooltip:"Montant mensuel maximum de retraits gratuits inclus dans l'abonnement standard",                getValue:(b) => { const f=b.fees as any; if(f?.retrait_especes_standard?.montant) return`${f.retrait_especes_standard.montant}€/mois`; return"—"; }},
-    { key:"extra",   label:"Service add.",    tooltip:"Fonctionnalités supplémentaires disponibles : investissement automatique (DCA) ou achat de fractions d'actions", getValue:(b) => { const extras=[]; if((b as any).has_dca) extras.push("DCA"); if((b as any).has_fractions) extras.push("Fractions"); return extras.length?extras.join(", "):"—"; } },
+    { key:"abo",     label:"Abonnement",      getValue:(b) => { const f=b.fees as any; if(f?.standard?.montant===0) return"Gratuit"; if(f?.standard?.montant!=null) return`${f.standard.montant}€/mois`; return"—"; }},
+    { key:"retrait", label:"Retrait",         getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
+    { key:"etranger",label:"Étranger",        getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"Gratuit" },
+    { key:"plafond", label:"Plafond retrait", getValue:(b) => { const f=b.fees as any; if(f?.retrait_especes_standard?.montant) return`${f.retrait_especes_standard.montant}€/mois`; return"—"; }},
+    { key:"extra",   label:"Service add.",    getValue:(b) => { const extras=[]; if((b as any).has_dca) extras.push("DCA"); if((b as any).has_fractions) extras.push("Fractions"); return extras.length?extras.join(", "):"—"; } },
   ],
   bank: [
-    { key:"annual",      label:"Frais annuel",  tooltip:"Frais de tenue de compte annuels (cotisation ou forfait bancaire standard)",                                                              getValue:(b) => { const fees=(b.fees||{}) as any; const tc=fees.tenue_compte; if(tc?.montant!=null) return tc.montant===0?"Gratuit":`${tc.montant}€/an`; if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
-    { key:"cb",          label:"Coût CB",       tooltip:"Cotisation annuelle de la carte bancaire Visa Classic (entrée de gamme) hors offres groupées", getValue:(b) => { const f=b.fees as any; if(f?.carte?.montant!=null&&f.carte.montant>0) return`${f.carte.montant}€/an`; if(f?.carte?.montant===0) return"Incluse"; return"—"; }},
-    { key:"decouvert",   label:"Découverts",    tooltip:"Taux effectif global (TEG) appliqué sur les découverts autorisés, exprimé en pourcentage annuel",                                        getValue:(b) => { const f=b.fees as any; if(f?.decouvert_taux?.montant!=null) return`${f.decouvert_taux.montant}% TEG`; return"—"; } },
-    { key:"virement_int",label:"Virement Int.", tooltip:"Frais minimum d'émission d'un virement international hors zone SEPA (hors commission de change)", getValue:(b) => { const f=b.fees as any; const vi=f?.virement_int; if(vi?.montant!=null) return vi.montant===0?"Gratuit":`${vi.montant}€`; if(f?.virement?.montant===0) return"Gratuit"; if(f?.virement?.montant!=null) return`${f.virement.montant}€`; return"Gratuit"; } },
-    { key:"cloture",     label:"Clôture",       tooltip:"Frais de clôture du compte bancaire",                                                                                                    getValue:(b) => (b as any).account_closing_fee?`${(b as any).account_closing_fee}€`:"Gratuit" },
+    { key:"annual",   label:"Frais annuel",  getValue:(b) => { const fees=(b.fees||{}) as any; const tc=fees.tenue_compte; if(tc?.montant!=null) return tc.montant===0?"Gratuit":`${tc.montant}€/an`; if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
+    { key:"cb",       label:"Coût CB",       getValue:(b) => { const f=b.fees as any; if(f?.carte?.montant!=null) return`${f.carte.montant}€/an`; return"—"; }},
+    { key:"decouvert",label:"Découverts",    getValue:(b) => { const f=b.fees as any; if(f?.decouvert_taux?.montant!=null) return`${f.decouvert_taux.montant}% TEG`; return"—"; } },
+    { key:"virement_int", label:"Virement Int.", getValue:(b) => { const f=b.fees as any; const vi=f?.virement_int; if(vi?.montant!=null) return vi.montant===0?"Gratuit":`${vi.montant}€`; if(f?.virement?.montant===0) return"Gratuit"; if(f?.virement?.montant!=null) return`${f.virement.montant}€`; return"Gratuit"; } },
+    { key:"cloture",  label:"Clôture",       getValue:(b) => (b as any).account_closing_fee?`${(b as any).account_closing_fee}€`:"Gratuit" },
   ],
   cfd: [
-    { key:"spread",   label:"Spread",        tooltip:"Écart entre le prix d'achat et de vente (en pips pour le Forex, en points pour les indices) — coût implicite de chaque transaction", getValue:(b) => { const f=b.fees as any; if(f?.spread_forex?.montant!=null) return`${f.spread_forex.montant} pip`; if(f?.spread_indices?.montant!=null) return`${f.spread_indices.montant} pt`; return"—"; }},
-    { key:"overnight",label:"Overnight",     tooltip:"Frais de financement prélevés chaque nuit pour maintenir une position CFD ouverte (exprimé en % du montant)", getValue:(b) => { const f=b.fees as any; if(f?.overnight?.montant!=null) return`${f.overnight.montant}%`; return"—"; }},
-    { key:"fx",       label:"Frais change",  tooltip:"Commission prélevée lors d'une conversion de devises sur les positions CFD libellées en devise étrangère", getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
-    { key:"retrait",  label:"Retrait",       tooltip:"Frais prélevés lors d'un retrait de fonds vers votre compte bancaire",                                      getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
-    { key:"inact",    label:"Inactivité",    tooltip:"Frais mensuels facturés si aucune transaction n'est effectuée pendant une période prolongée (généralement 12 mois)", getValue:(b) => b.inactivity_fee===0?"Aucun":`${b.inactivity_fee}€/mois` },
+    { key:"spread",   label:"Spread",        getValue:(b) => { const f=b.fees as any; if(f?.spread_forex?.montant!=null) return`${f.spread_forex.montant} pip`; if(f?.spread_indices?.montant!=null) return`${f.spread_indices.montant} pt`; return"—"; }},
+    { key:"overnight",label:"Overnight",     getValue:(b) => { const f=b.fees as any; if(f?.overnight?.montant!=null) return`${f.overnight.montant}%`; return"—"; }},
+    { key:"fx",       label:"Frais change",  getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
+    { key:"retrait",  label:"Retrait",       getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
+    { key:"inact",    label:"Inactivité",    getValue:(b) => b.inactivity_fee===0?"Aucun":`${b.inactivity_fee}€/mois` },
   ],
   crypto: [
-    { key:"spread",   label:"Maker/Taker",   tooltip:"Frais de trading : Maker (ordres à cours limité) / Taker (ordres au marché) exprimés en % du montant de l'ordre", getValue:(b) => { const f=b.fees as any; if(f?.maker?.montant!=null&&f?.taker?.montant!=null) return`${f.maker.montant}%/${f.taker.montant}%`; if(f?.trading_spot?.montant!=null) return`${f.trading_spot.montant}%`; if(f?.crypto_spread?.montant!=null) return`~${f.crypto_spread.montant}%`; return"—"; }},
-    { key:"retrait",  label:"Retrait",       tooltip:"Frais de retrait de fonds en euros (fiat) vers votre compte bancaire",                                             getValue:(b) => { const f=b.fees as any; if(f?.retrait_fiat?.montant!=null) return`${f.retrait_fiat.montant}€`; return b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—"; }},
-    { key:"fx",       label:"Frais change",  tooltip:"Commission sur les dépôts par carte bancaire ou conversion de devises (% du montant)",                             getValue:(b) => { const f=b.fees as any; if(f?.depot_carte?.montant!=null) return`${f.depot_carte.montant}%`; return b.currency_fee?`${b.currency_fee}%`:"—"; }},
-    { key:"overnight",label:"Overnight",     tooltip:"Frais de financement quotidien sur les positions à effet de levier (futures, produits dérivés)",                   getValue:(b) => { const f=b.fees as any; if(f?.overnight?.montant!=null) return`${f.overnight.montant}%`; return"—"; }},
-    { key:"inact",    label:"Inactivité",    tooltip:"Frais mensuels facturés en cas d'absence de transaction pendant une période prolongée",                            getValue:(b) => b.inactivity_fee===0?"Aucun":`${b.inactivity_fee}€/mois` },
+    { key:"spread",   label:"Maker/Taker",   getValue:(b) => { const f=b.fees as any; if(f?.maker?.montant!=null&&f?.taker?.montant!=null) return`${f.maker.montant}%/${f.taker.montant}%`; if(f?.trading_spot?.montant!=null) return`${f.trading_spot.montant}%`; if(f?.crypto_spread?.montant!=null) return`~${f.crypto_spread.montant}%`; return"—"; }},
+    { key:"retrait",  label:"Retrait",       getValue:(b) => { const f=b.fees as any; if(f?.retrait_fiat?.montant!=null) return`${f.retrait_fiat.montant}€`; return b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—"; }},
+    { key:"fx",       label:"Frais change",  getValue:(b) => { const f=b.fees as any; if(f?.depot_carte?.montant!=null) return`${f.depot_carte.montant}%`; return b.currency_fee?`${b.currency_fee}%`:"—"; }},
+    { key:"overnight",label:"Overnight",     getValue:(b) => { const f=b.fees as any; if(f?.overnight?.montant!=null) return`${f.overnight.montant}%`; return"—"; }},
+    { key:"inact",    label:"Inactivité",    getValue:(b) => b.inactivity_fee===0?"Aucun":`${b.inactivity_fee}€/mois` },
   ],
   insurance: [
-    { key:"entree",   label:"Droit entrée",  tooltip:"Commission prélevée sur chaque versement lors de la souscription ou des versements complémentaires (% du montant versé)", getValue:(b) => { const f=b.fees as any; if(f?.entree?.montant!=null) return`${f.entree.montant}%`; return"Gratuit"; }},
-    { key:"annual",   label:"Frais annuel",  tooltip:"Frais de gestion annuels prélevés sur l'encours du contrat (% de l'encours)",                                              getValue:(b) => { if(!b.custody_fee) return"—"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
-    { key:"arb",      label:"Arbitrage",     tooltip:"Frais prélevés lors d'un arbitrage (transfert) entre supports d'investissement au sein du contrat",                        getValue:(b) => { const f=b.fees as any; if(f?.arbitrage?.montant!=null) return`${f.arbitrage.montant}€`; return"Gratuit"; }},
-    { key:"sortie",   label:"Sortie antic.", tooltip:"Pénalités appliquées en cas de rachat total ou partiel avant la durée recommandée du contrat",                             getValue:(b) => { const f=b.fees as any; if(f?.sortie_anticipee?.montant!=null) return`${f.sortie_anticipee.montant}%`; return"—"; }},
-    { key:"uc",       label:"Gestion UC",    tooltip:"Frais annuels de gestion sur les unités de compte (actions, ETF, SCPI…) en plus des frais du fonds",                      getValue:(b) => { const f=b.fees as any; if(f?.gestion_uc?.montant!=null) return`${f.gestion_uc.montant}%/an`; return"—"; }},
+    { key:"entree",   label:"Droit entrée",  getValue:(b) => { const f=b.fees as any; if(f?.entree?.montant!=null) return`${f.entree.montant}%`; return"Gratuit"; }},
+    { key:"annual",   label:"Frais annuel",  getValue:(b) => { if(!b.custody_fee) return"—"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
+    { key:"arb",      label:"Arbitrage",     getValue:(b) => { const f=b.fees as any; if(f?.arbitrage?.montant!=null) return`${f.arbitrage.montant}€`; return"Gratuit"; }},
+    { key:"sortie",   label:"Sortie antic.", getValue:(b) => { const f=b.fees as any; if(f?.sortie_anticipee?.montant!=null) return`${f.sortie_anticipee.montant}%`; return"—"; }},
+    { key:"uc",       label:"Gestion UC",    getValue:(b) => { const f=b.fees as any; if(f?.gestion_uc?.montant!=null) return`${f.gestion_uc.montant}%/an`; return"—"; }},
   ],
 };
 
@@ -361,34 +358,6 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
     </span>
   );
 
-  // Tooltip : un seul ?, bulle en dessous, desktop hover CSS + mobile clic React
-  const [openTooltip, setOpenTooltip] = useState<string | null>(null);
-  function ColHeader({ col }: { col: TableCol }) {
-    const isOpen = openTooltip === col.key;
-    return (
-      <th key={col.key} onClick={() => handleSort(col.key)}
-        style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === col.key ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", cursor:"pointer", userSelect:"none", position:"relative", overflow:"visible" }}>
-        <span style={{ display:"inline-flex", alignItems:"center", gap:4 }}>
-          {col.label}<SortIcon key={col.key} />
-          {/* Bouton ? unique — hover CSS desktop, clic React mobile */}
-          <span className="th-tip-wrap"
-            onClick={(e) => { e.stopPropagation(); setOpenTooltip(isOpen ? null : col.key); }}>
-            ?
-            {/* Bulle desktop — CSS pure via .th-tip-wrap:hover .th-tip */}
-            <span className="th-tip">{col.tooltip}</span>
-          </span>
-        </span>
-        {/* Bulle mobile — rendue par React sous le th */}
-        {isOpen && (
-          <div className="th-tip-mobile" onClick={(e) => e.stopPropagation()}>
-            <span>{col.tooltip}</span>
-            <button onClick={(e) => { e.stopPropagation(); setOpenTooltip(null); }}>×</button>
-          </div>
-        )}
-      </th>
-    );
-  }
-
   return (
     <div className="broker-table-scroll" style={{ borderRadius: 14, border: "1px solid var(--border)", backgroundColor: "var(--card)" }}>
       <table>
@@ -401,7 +370,12 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
               Score<SortIcon key="score" />
             </th>
             <th style={{ padding:"10px 14px", textAlign:"left", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap" }}>Intermédiaire</th>
-            {cols.map(col => <ColHeader key={col.key} col={col} />)}
+            {cols.map(col => (
+              <th key={col.key} onClick={() => handleSort(col.key)}
+                style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === col.key ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", cursor:"pointer", userSelect:"none" }}>
+                {col.label}<SortIcon key={col.key} />
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -425,7 +399,7 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
                 <span style={{ fontSize:12, fontWeight:700, color:"var(--accent)" }}>{broker.score_overall?.toFixed(1)}</span>
               </td>
               <td style={{ padding:"10px 14px", whiteSpace:"nowrap" }}>
-                <a href={`/dashboard/courtiers/${broker.slug}`} style={{ display:"flex", alignItems:"center", gap:9, textDecoration:"none", color:"var(--text)" }}>
+                <a href={`/comparatif/dashboard/courtiers/${broker.slug}`} style={{ display:"flex", alignItems:"center", gap:9, textDecoration:"none", color:"var(--text)" }}>
                   {(broker as any).logo_url
                     ? <img src={(broker as any).logo_url} alt={broker.name} style={{ width:22, height:22, borderRadius:5, objectFit:"contain", border:"1px solid var(--border)", flexShrink:0 }} />
                     : <div style={{ width:22, height:22, borderRadius:5, backgroundColor:"var(--accent)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}><span style={{ fontSize:9, fontWeight:700, color:"#fff" }}>{broker.name[0]}</span></div>
