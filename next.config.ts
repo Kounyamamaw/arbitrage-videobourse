@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
       {
         // LP = page tous les acteurs (plus de landing Framer)
         source: '/',
-        destination: '/dashboard/courtiers',
+        destination: '/src/app/dashboard/courtiers',
       },
     ];
   },
