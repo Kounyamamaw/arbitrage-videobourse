@@ -33,8 +33,9 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        // La landing page de l'app = page tous les acteurs
         source: '/',
-        destination: '/index.html',
+        destination: '/dashboard/courtiers',
       },
     ];
   },

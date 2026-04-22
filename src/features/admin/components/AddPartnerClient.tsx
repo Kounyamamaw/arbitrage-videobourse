@@ -375,7 +375,7 @@ export function AddPartnerClient() {
               </div>
               {/* Ligne 2 mobile: actions (sm: aligne à droite dans la même ligne) */}
               <div className="flex items-center gap-1 sm:ml-auto">
-                <a href={`/dashboard/courtiers/${p.slug}`} className="text-xs text-primary hover:underline px-1">Fiche</a>
+                <a href={`/comparatif/dashboard/courtiers/${p.slug}`} className="text-xs text-primary hover:underline px-1">Fiche</a>
                 <button onClick={() => openEdit(p)} className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-primary"><IconPencil className="size-3.5" /></button>
                 <a href={p.affiliate_url || p.website} target="_blank" rel="noopener noreferrer" className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground"><IconExternalLink className="size-3.5" /></a>
                 <button onClick={() => handleDelete(p.id)} className="flex size-7 items-center justify-center rounded-lg hover:bg-muted text-muted-foreground hover:text-red-500"><IconTrash className="size-3.5" /></button>

@@ -86,9 +86,9 @@ function DynamicBrokerActions({ router }: { router: ReturnType<typeof useRouter>
   const [brokerActions, setBrokerActions] = useState<Action[]>([]);
 
   useEffect(() => {
-    fetch('/api/brokers')
+    fetch('/api/brokers?kbar=1')
       .then((r) => r.json())
-      .then((data: Array<{ slug: string; name: string; tagline?: string; category?: string }>) => {
+      .then((data: Array<{ slug: string; name: string; tagline?: string; category?: string; is_visible?: boolean }>) => {
         if (!Array.isArray(data)) return;
         const actions: Action[] = data.map((broker) => ({
           id: `broker-${broker.slug}`,

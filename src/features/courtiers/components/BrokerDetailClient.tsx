@@ -579,7 +579,7 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
           <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, backgroundColor: "var(--accent-light)", border: "1px solid var(--accent-mid)", display: "flex", alignItems: "flex-start", gap: 10 }}>
             <span style={{ fontSize: 15, lineHeight: 1, flexShrink: 0 }}>💡</span>
             <p style={{ fontSize: 12, color: "var(--accent-text)", lineHeight: 1.6, margin: 0 }}>
-              <strong>Interface ProRealTime (PRT)</strong> disponible avec ce compte. Notre lien d&apos;affiliation crée un compte IBKR accessible via l&apos;app PRT — les frais et solutions restent ceux d&apos;Interactive Brokers, l&apos;interface est celle de ProRealTime.
+              <strong>Interface ProRealTime (PRT)</strong>{" "}disponible avec ce compte. Notre lien d&apos;affiliation crée un compte IBKR accessible via l&apos;app PRT — les frais et solutions restent ceux d&apos;Interactive Brokers, l&apos;interface est celle de ProRealTime.
             </p>
           </div>
         )}

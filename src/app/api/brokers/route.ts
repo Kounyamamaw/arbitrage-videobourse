@@ -5,14 +5,19 @@ import { supabaseAdmin as supabase } from '@/lib/supabase';
 // is_visible: seuls les courtiers visibles sont renvoyés (côté public)
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const category = searchParams.get('category');
+  const category    = searchParams.get('category');
   const accountType = searchParams.get('accountType');
+  const isKbar      = searchParams.get('kbar') === '1'; // kbar inclut les brokers cachés
 
   let query = supabase
     .from('brokers')
     .select('*')
-    .eq('is_visible', true)            // ← filtre visibilité
     .order('score_overall', { ascending: false });
+
+  // Filtre visibilité — désactivé pour la kbar (recherche globale)
+  if (!isKbar) {
+    query = query.eq('is_visible', true);
+  }
 
   if (category && category !== 'all') {
     query = query.eq('category', category);

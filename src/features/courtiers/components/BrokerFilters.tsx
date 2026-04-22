@@ -15,12 +15,13 @@ const CATEGORIES = [
 ];
 
 const ACCOUNTS = [
-  { value: "all", label: "Toutes"    },
-  { value: "PEA", label: "PEA"       },
-  { value: "CTO", label: "CTO"       },
-  { value: "AV",  label: "AV"        },
-  { value: "PER", label: "PER"       },
-  { value: "cfd", label: "CFD FOREX" },
+  { value: "all",             label: "Toutes"            },
+  { value: "PEA",             label: "PEA"               },
+  { value: "CTO",             label: "CTO"               },
+  { value: "AV",              label: "Assurance Vie"     },
+  { value: "PER",             label: "PER"               },
+  { value: "FUTURES OPTIONS", label: "Futures Options"   },
+  { value: "cfd",             label: "CFD FOREX"         },
 ];
 
 const SORTS = [
