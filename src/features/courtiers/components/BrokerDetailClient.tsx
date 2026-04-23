@@ -428,6 +428,11 @@ function FeeTier({ tiers, market }: { tiers: { min: number; max: number | null; 
 export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: Broker; allBrokers: Broker[] }) {
   const [activeMarket, setActiveMarket] = useState<"FR" | "EU" | "US">("FR");
 
+  // Disclaimer conditionnel par broker
+  const isPepperstone = rawBroker.slug === 'pepperstone';
+  const disclaimerFontSize = isPepperstone ? 13 : 12;
+  const disclaimerColor = isPepperstone ? "var(--text)" : "var(--text-faint)";
+
   // Auto-calculate scores from real data
   const autoScores = useMemo(() => {
     const { calculateAutoScores } = require("@/lib/auto-score");
@@ -825,8 +830,8 @@ export function BrokerDetailClient({ broker: rawBroker, allBrokers }: { broker: 
         alignItems: "flex-start",
       }}>
         <Info size={13} style={{ color: "var(--text-faint)", flexShrink: 0, marginTop: 1 }} />
-        <p style={{ fontSize: 12, color: "var(--text-faint)", lineHeight: 1.6 }}>
-          Données collectées depuis les pages tarifaires officielles de {broker.name}.
+        <p style={{ fontSize: disclaimerFontSize, color: disclaimerColor, lineHeight: 1.6 }}>
+          Données collectées depuis les pages tarifaires officielles de {rawBroker.name}.
           Certains frais peuvent varier selon les conditions de marché ou les offres commerciales en cours.
           Lien affilié — notre classement reste 100% indépendant.
           Dernière vérification : mars 2025.
