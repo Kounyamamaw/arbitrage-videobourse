@@ -39,6 +39,11 @@ export function FireDCACalculator({ broker }: Props) {
   const [years, setYears] = useState(20);
   const [initialCapital, setInitialCapital] = useState(0);
 
+  // Disclaimer : style spécifique pour Pepperstone
+  const isPepperstone = broker.slug === 'pepperstone';
+  const disclaimerFontSize = isPepperstone ? 13 : 11;
+  const disclaimerColor = isPepperstone ? "var(--text)" : "var(--text-faint)";
+
   // Estimate annual brokerage cost for this broker
   const estimatedAnnualFees = useMemo(() => {
     const fees = broker.fees?.FR;
@@ -328,7 +333,7 @@ export function FireDCACalculator({ broker }: Props) {
       <div style={{
         padding: "10px 14px", borderRadius: 9,
         backgroundColor: "var(--bg)", border: "1px solid var(--border)",
-        fontSize: 11, color: "var(--text-faint)", lineHeight: 1.55,
+        fontSize: disclaimerFontSize, color: disclaimerColor, lineHeight: 1.55,
       }}>
         Simulation indicative basée sur un taux de rendement constant. Les performances passées ne préjugent pas des performances futures. Les frais utilisés sont ceux de {broker.name} sur le marché français.
       </div>
