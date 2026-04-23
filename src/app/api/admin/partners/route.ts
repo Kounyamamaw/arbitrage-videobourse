@@ -13,8 +13,8 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const broker = {
-    id: body.slug || body.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-    slug: body.slug || body.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    id: body.slug || body.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-'),
+    slug: body.slug || body.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-'),
     name: body.name,
     category: body.category || 'broker',
     website: body.website || '',

@@ -399,7 +399,7 @@ export function AddPartnerClient() {
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <Field label="Nom *">
                   <input value={form.name}
-                    onChange={e => { set("name", e.target.value); if (!editingSlug) set("slug", e.target.value.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/-+$/,"")); }}
+                    onChange={e => { set("name", e.target.value); if (!editingSlug) set("slug", e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/-+$/,"")); }}
                     className={ic} placeholder="Trade Republic" />
                 </Field>
                 <Field label="Slug (URL) *">
