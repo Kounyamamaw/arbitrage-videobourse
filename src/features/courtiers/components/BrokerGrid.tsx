@@ -330,6 +330,7 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
   const cols = TABLE_COLS[category] || TABLE_COLS.broker;
   const [sortCol, setSortCol] = useState<string>("score");
   const [sortAsc, setSortAsc] = useState(false);
+  const [openTooltip, setOpenTooltip] = useState<string | null>(null);
 
   const handleSort = (key: string) => {
     if (sortCol === key) setSortAsc(p => !p);
@@ -380,11 +381,26 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
                 <span style={{ display:"inline-flex", alignItems:"center", gap:4 }}>
                   {col.label}<SortIcon key={col.key} />
                   {col.tooltip && (
-                    <span className="th-tip-wrap" onClick={(e) => e.stopPropagation()}>
-                      ?<span className="th-tip">{col.tooltip}</span>
+                    <span
+                      className="th-tip-wrap"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenTooltip(openTooltip === col.key ? null : col.key);
+                      }}
+                    >
+                      ?
+                      {/* Desktop : bulle CSS au hover */}
+                      <span className="th-tip">{col.tooltip}</span>
                     </span>
                   )}
                 </span>
+                {/* Mobile : bulle React au clic, avec croix */}
+                {col.tooltip && openTooltip === col.key && (
+                  <div className="th-tip-mobile" onClick={(e) => e.stopPropagation()}>
+                    <span>{col.tooltip}</span>
+                    <button onClick={(e) => { e.stopPropagation(); setOpenTooltip(null); }}>×</button>
+                  </div>
+                )}
               </th>
             ))}
           </tr>
