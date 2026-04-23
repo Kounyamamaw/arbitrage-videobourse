@@ -274,22 +274,24 @@ export function BrokerGrid() {
 }
 
 // ── TABLE_COLS ─────────────────────────────────────────────────────────────
-type TableCol = { key: string; label: string; getValue: (b: Broker) => string; };
+type TableCol = { key: string; label: string; tooltip?: string; getValue: (b: Broker) => string; };
 
 const TABLE_COLS: Record<string, TableCol[]> = {
   broker: [
-    { key:"fr",      label:"Frais France",    getValue:(b) => { const t=(b.fees as any)?.FR?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
-    { key:"us",      label:"Frais USA",       getValue:(b) => { const t=(b.fees as any)?.US?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
-    { key:"eu",      label:"Frais Europe",    getValue:(b) => { const t=(b.fees as any)?.EU?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
-    { key:"custody", label:"Droits garde",    getValue:(b) => { if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
-    { key:"fx",      label:"Frais change",    getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
+    { key:"fr",        label:"Frais France",    getValue:(b) => { const t=(b.fees as any)?.FR?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
+    { key:"us",        label:"Frais USA",       getValue:(b) => { const t=(b.fees as any)?.US?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
+    { key:"eu",        label:"Frais Europe",    getValue:(b) => { const t=(b.fees as any)?.EU?.[0]; if(!t) return"—"; return t.amount===0?"Gratuit":t.type==="flat"?`${t.amount}€`:`${t.amount}%`; }},
+    { key:"custody",   label:"Droits garde",    getValue:(b) => { if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
+    { key:"fx",        label:"Frais change",    getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
+    { key:"cash_rate", label:"Rémun. cash",     tooltip:"Intérêt sur vos dépôts en euros", getValue:(b) => { const r=(b.fees as any)?.cash_rate; if(r==null) return"—"; if(r===0) return"0%"; return`${r}%`; }},
   ],
   neobanque: [
-    { key:"abo",     label:"Abonnement",      getValue:(b) => { const f=b.fees as any; if(f?.standard?.montant===0) return"Gratuit"; if(f?.standard?.montant!=null) return`${f.standard.montant}€/mois`; return"—"; }},
-    { key:"retrait", label:"Retrait",         getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
-    { key:"etranger",label:"Étranger",        getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"Gratuit" },
-    { key:"plafond", label:"Plafond retrait", getValue:(b) => { const f=b.fees as any; if(f?.retrait_especes_standard?.montant) return`${f.retrait_especes_standard.montant}€/mois`; return"—"; }},
-    { key:"extra",   label:"Service add.",    getValue:(b) => { const extras=[]; if((b as any).has_dca) extras.push("DCA"); if((b as any).has_fractions) extras.push("Fractions"); return extras.length?extras.join(", "):"—"; } },
+    { key:"abo",       label:"Abonnement",      getValue:(b) => { const f=b.fees as any; if(f?.standard?.montant===0) return"Gratuit"; if(f?.standard?.montant!=null) return`${f.standard.montant}€/mois`; return"—"; }},
+    { key:"retrait",   label:"Retrait",         getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
+    { key:"etranger",  label:"Étranger",        getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"Gratuit" },
+    { key:"plafond",   label:"Plafond retrait", getValue:(b) => { const f=b.fees as any; if(f?.retrait_especes_standard?.montant) return`${f.retrait_especes_standard.montant}€/mois`; return"—"; }},
+    { key:"extra",     label:"Service add.",    getValue:(b) => { const extras=[]; if((b as any).has_dca) extras.push("DCA"); if((b as any).has_fractions) extras.push("Fractions"); return extras.length?extras.join(", "):"—"; } },
+    { key:"cash_rate", label:"Rémun. cash",     tooltip:"Intérêt sur vos dépôts en euros", getValue:(b) => { const r=(b.fees as any)?.cash_rate; if(r==null) return"—"; if(r===0) return"0%"; return`${r}%`; }},
   ],
   bank: [
     { key:"annual",   label:"Frais annuel",  getValue:(b) => { const fees=(b.fees||{}) as any; const tc=fees.tenue_compte; if(tc?.montant!=null) return tc.montant===0?"Gratuit":`${tc.montant}€/an`; if(b.custody_fee===0) return"Gratuit"; const u=(b as any).custody_fee_details==="%"?"%/an":"€/an"; return`${b.custody_fee}${u}`; } },
@@ -299,18 +301,20 @@ const TABLE_COLS: Record<string, TableCol[]> = {
     { key:"cloture",  label:"Clôture",       getValue:(b) => (b as any).account_closing_fee?`${(b as any).account_closing_fee}€`:"Gratuit" },
   ],
   cfd: [
-    { key:"spread",   label:"Spread",        getValue:(b) => { const f=b.fees as any; if(f?.spread_forex?.montant!=null) return`${f.spread_forex.montant} pip`; if(f?.spread_indices?.montant!=null) return`${f.spread_indices.montant} pt`; return"—"; }},
-    { key:"overnight",label:"Overnight",     getValue:(b) => { const f=b.fees as any; if(f?.overnight?.montant!=null) return`${f.overnight.montant}%`; return"—"; }},
-    { key:"fx",       label:"Frais change",  getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
-    { key:"retrait",  label:"Retrait",       getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
-    { key:"inact",    label:"Inactivité",    getValue:(b) => b.inactivity_fee===0?"Aucun":`${b.inactivity_fee}€/mois` },
+    { key:"spread",    label:"Spread",        getValue:(b) => { const f=b.fees as any; if(f?.spread_forex?.montant!=null) return`${f.spread_forex.montant} pip`; if(f?.spread_indices?.montant!=null) return`${f.spread_indices.montant} pt`; return"—"; }},
+    { key:"overnight", label:"Overnight",     getValue:(b) => { const f=b.fees as any; if(f?.overnight?.montant!=null) return`${f.overnight.montant}%`; return"—"; }},
+    { key:"fx",        label:"Frais change",  getValue:(b) => b.currency_fee?`${b.currency_fee}%`:"—" },
+    { key:"retrait",   label:"Retrait",       getValue:(b) => b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—" },
+    { key:"inact",     label:"Inactivité",    getValue:(b) => b.inactivity_fee===0?"Aucun":`${b.inactivity_fee}€/mois` },
+    { key:"cash_rate", label:"Rémun. cash",   tooltip:"Intérêt sur vos dépôts en euros", getValue:(b) => { const r=(b.fees as any)?.cash_rate; if(r==null) return"—"; if(r===0) return"0%"; return`${r}%`; }},
   ],
   crypto: [
-    { key:"spread",   label:"Maker/Taker",   getValue:(b) => { const f=b.fees as any; if(f?.maker?.montant!=null&&f?.taker?.montant!=null) return`${f.maker.montant}%/${f.taker.montant}%`; if(f?.trading_spot?.montant!=null) return`${f.trading_spot.montant}%`; if(f?.crypto_spread?.montant!=null) return`~${f.crypto_spread.montant}%`; return"—"; }},
-    { key:"retrait",  label:"Retrait",       getValue:(b) => { const f=b.fees as any; if(f?.retrait_fiat?.montant!=null) return`${f.retrait_fiat.montant}€`; return b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—"; }},
-    { key:"fx",       label:"Frais change",  getValue:(b) => { const f=b.fees as any; if(f?.depot_carte?.montant!=null) return`${f.depot_carte.montant}%`; return b.currency_fee?`${b.currency_fee}%`:"—"; }},
-    { key:"overnight",label:"Overnight",     getValue:(b) => { const f=b.fees as any; if(f?.overnight?.montant!=null) return`${f.overnight.montant}%`; return"—"; }},
-    { key:"inact",    label:"Inactivité",    getValue:(b) => b.inactivity_fee===0?"Aucun":`${b.inactivity_fee}€/mois` },
+    { key:"spread",    label:"Maker/Taker",   getValue:(b) => { const f=b.fees as any; if(f?.maker?.montant!=null&&f?.taker?.montant!=null) return`${f.maker.montant}%/${f.taker.montant}%`; if(f?.trading_spot?.montant!=null) return`${f.trading_spot.montant}%`; if(f?.crypto_spread?.montant!=null) return`~${f.crypto_spread.montant}%`; return"—"; }},
+    { key:"retrait",   label:"Retrait",       getValue:(b) => { const f=b.fees as any; if(f?.retrait_fiat?.montant!=null) return`${f.retrait_fiat.montant}€`; return b.withdrawal_fee===0?"Gratuit":b.withdrawal_fee?`${b.withdrawal_fee}€`:"—"; }},
+    { key:"fx",        label:"Frais change",  getValue:(b) => { const f=b.fees as any; if(f?.depot_carte?.montant!=null) return`${f.depot_carte.montant}%`; return b.currency_fee?`${b.currency_fee}%`:"—"; }},
+    { key:"overnight", label:"Overnight",     getValue:(b) => { const f=b.fees as any; if(f?.overnight?.montant!=null) return`${f.overnight.montant}%`; return"—"; }},
+    { key:"inact",     label:"Inactivité",    getValue:(b) => b.inactivity_fee===0?"Aucun":`${b.inactivity_fee}€/mois` },
+    { key:"cash_rate", label:"Rémun. cash",   tooltip:"Intérêt sur vos dépôts en euros", getValue:(b) => { const r=(b.fees as any)?.cash_rate; if(r==null) return"—"; if(r===0) return"0%"; return`${r}%`; }},
   ],
   insurance: [
     { key:"entree",   label:"Droit entrée",  getValue:(b) => { const f=b.fees as any; if(f?.entree?.montant!=null) return`${f.entree.montant}%`; return"Gratuit"; }},
@@ -372,8 +376,15 @@ function BrokerTableView({ brokers, category }: { brokers: Broker[]; category: s
             <th style={{ padding:"10px 14px", textAlign:"left", fontSize:11, fontWeight:700, color:"var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap" }}>Intermédiaire</th>
             {cols.map(col => (
               <th key={col.key} onClick={() => handleSort(col.key)}
-                style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === col.key ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", cursor:"pointer", userSelect:"none" }}>
-                {col.label}<SortIcon key={col.key} />
+                style={{ padding:"10px 10px", textAlign:"right", fontSize:11, fontWeight:700, color: sortCol === col.key ? "var(--accent)" : "var(--text-faint)", textTransform:"uppercase", letterSpacing:"0.05em", whiteSpace:"nowrap", cursor:"pointer", userSelect:"none", position:"relative" }}>
+                <span style={{ display:"inline-flex", alignItems:"center", gap:4 }}>
+                  {col.label}<SortIcon key={col.key} />
+                  {col.tooltip && (
+                    <span className="th-tip-wrap" onClick={(e) => e.stopPropagation()}>
+                      ?<span className="th-tip">{col.tooltip}</span>
+                    </span>
+                  )}
+                </span>
               </th>
             ))}
           </tr>
